@@ -5,11 +5,6 @@ App.util.chomp = function (raw_text) {
   return raw_text.replace(/(\n|\r)+$/, '');
 };
 
-App.KEY_BACKSPACE = 8;
-App.KEY_TAB = 9;
-App.KEY_SINGLE_QUOTE = 39;
-App.KEY_RETURN = 13;
-
 App.TypingText = Ember.Object.extend({
   full_string: null,
   mistakes: [],
@@ -24,7 +19,11 @@ App.TypingText = Ember.Object.extend({
   focusNagClass: 'focus-nag',
 
   focused: false,
+  finished: false,
 
+  // 
+  // rendering bookkeeping
+  //
   beforeCursor: function () {
     return this.full_string.substr(0, this.cursor_pos);
   }.property('cursor_pos'),
@@ -47,6 +46,9 @@ App.TypingText = Ember.Object.extend({
     return this.full_string.substr(adjustedCursor + 1);
   }.property('cursor_pos', 'mistakes.length'),
 
+  // 
+  // synthesized typing quality data
+  //
   wpm: function () {
     if (this.start_time === null) { return 0; }
 
@@ -75,7 +77,14 @@ App.TypingText = Ember.Object.extend({
     return (raw_acc * 100).toFixed(0);
   }.property('cursor_pos', 'total_mistakes'),
 
+  // 
+  // user actions
+  //
   typeOn: function (chr) {
+    if (this.finished) {
+      return;
+    }
+
     if (this.start_time === null) {
       this.set('start_time', (new Date()).getTime());
 
@@ -84,10 +93,6 @@ App.TypingText = Ember.Object.extend({
         self.set('wpm_ticks', self.wpm_ticks + 1);
       }, 250);
       this.set('wpm_timer_id', timer_id);
-    }
-
-    if (this.isFinished()) {
-      return;
     }
 
     var cursor_matches = this.full_string.substr(this.get('cursor_pos'), 1) == chr;
@@ -103,13 +108,10 @@ App.TypingText = Ember.Object.extend({
       }
     }
 
-    if (this.isFinished()) {
+    if (this.cursor_pos === this.full_string.length) {
+      this.set('finished', true);
       window.clearInterval(this.wpm_timer_id);
     }
-  },
-
-  isFinished: function () {
-    return (this.cursor_pos === this.full_string.length);
   },
 
   tabPressed: function () {
@@ -120,6 +122,10 @@ App.TypingText = Ember.Object.extend({
   },
 
   backUp: function () {
+    if (this.finished) {
+      return;
+    }
+
     if (this.cursor_pos === 0 && this.mistakes.length === 0) {
       return;
     }
@@ -143,6 +149,12 @@ App.AccuracyDisplay = Em.View.extend({
 
   textBinding: 'App.typingAreaController.current_snippet'
 });
+
+App.KEY_BACKSPACE     = 8;
+App.KEY_TAB           = 9;
+App.KEY_RETURN        = 13;
+App.KEY_SINGLE_QUOTE  = 39;
+App.KEY_FORWARD_SLASH = 47;
 
 App.TypingArea = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet',
@@ -206,6 +218,13 @@ App.centerFocusNag = function () {
 App.typingAreaController = Ember.Object.create({
   current_snippet: null,
 
+  finishedObserver: function () {
+    if (this.current_snippet.finished) {
+      // save score here
+      this.newSnippet();
+    }
+  }.observes('current_snippet.finished'),
+
   newSnippet: function () {
     var self = this;
     $.get('/snippets/random', function (snippet_str) {
@@ -215,6 +234,7 @@ App.typingAreaController = Ember.Object.create({
       // TODO centerFocusNag behavior needs to happen properly on first draw
       //   Not this way. this is a hack. this is sad.
       setTimeout(function () { App.centerFocusNag(); }, 10);
+      setTimeout(function () { $('.' + self.current_snippet.className).focus(); }, 10);
     });
   },
 
@@ -242,8 +262,9 @@ App.setPreventDefaultForKey = function (e) {
   // in OSX, 'delete' goes back a page. undesirable!
   if (e.which == App.KEY_BACKSPACE)       { e.preventDefault();   }
 
-  // in firefox, single quote does a "quick search"
-  if (e.which == App.KEY_SINGLE_QUOTE)  { e.preventDefault();   }
+  // in firefox, single quote and forward slash do a "quick search"
+  if (e.which == App.KEY_SINGLE_QUOTE)    { e.preventDefault();   }
+  if (e.which == App.KEY_FORWARD_SLASH)   { e.preventDefault();   }
 
   // tab shouldn't take us out of the typing window
   if (e.which == App.KEY_TAB)             { e.preventDefault();   }
