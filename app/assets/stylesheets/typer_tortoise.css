@@ -87,3 +87,7 @@ header h1 {
 .focus-nag-hidden {
 		visibility: hidden;
 }
+
+.log-in {
+    float: right;
+}
