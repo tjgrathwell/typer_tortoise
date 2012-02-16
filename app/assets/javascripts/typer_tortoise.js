@@ -13,12 +13,15 @@ App.KEY_RETURN = 13;
 App.TypingText = Ember.Object.extend({
   full_string: null,
   mistakes: [],
+  total_mistakes: 0,
   cursor_pos: 0,
 
   start_time: null,
   wpm_timer_id: null,
   wpm_ticks: null,
+
   className: 'type-panel',
+  focusNagClass: 'focus-nag',
 
   focused: false,
 
@@ -59,6 +62,19 @@ App.TypingText = Ember.Object.extend({
     return wpm_raw.toFixed();
   }.property('wpm_ticks'),
 
+  accuracy: function () {
+    if (this.cursor_pos === 0) {
+      return 100;
+    }
+
+    if (this.cursor_pos < this.total_mistakes) {
+      return 0;
+    }
+
+    var raw_acc = (this.cursor_pos - this.total_mistakes) / this.cursor_pos;
+    return (raw_acc * 100).toFixed(0);
+  }.property('cursor_pos', 'total_mistakes'),
+
   typeOn: function (chr) {
     if (this.start_time === null) {
       this.set('start_time', (new Date()).getTime());
@@ -79,6 +95,7 @@ App.TypingText = Ember.Object.extend({
     if (no_mistakes && cursor_matches) {
       this.set('cursor_pos', this.cursor_pos + 1);
     } else {
+      this.set('total_mistakes', this.total_mistakes + 1);
       if (chr === ' ') {
         this.mistakes.pushObject('&nbsp;');
       } else {
@@ -115,35 +132,21 @@ App.TypingText = Ember.Object.extend({
   }
 });
 
-App.typingAreaController = Ember.Object.create({
-  current_snippet: null,
+App.WPMDisplay = Em.View.extend({
+  tagName: 'span',
 
-  newSnippet: function () {
-    var self = this;
-    $.get('/snippet', function (snippet_str) {
-      snippet_str = App.util.chomp(snippet_str);
-      self.set('current_snippet', App.TypingText.create({full_string: snippet_str}));
-    });
-  },
-
-  focusChanged: function () {
-    if (!this.current_snippet.focused) {
-      App.centerFocusNag();
-    }
-  }.observes('current_snippet.focused')
+  textBinding: 'App.typingAreaController.current_snippet'
 });
 
-App.typingAreaController.newSnippet();
+App.AccuracyDisplay = Em.View.extend({
+  tagName: 'span',
 
-App.WPMDisplay = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet'
 });
 
 App.TypingArea = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet',
   isFocusedBinding: 'App.typingAreaController.current_snippet.focused',
-
-  focusNagClass: 'focus-nag',
 
   isBlurry: function () {
     return !this.get('isFocused');
@@ -170,10 +173,9 @@ App.TypingArea = Em.View.extend({
     }
 
     var chr = String.fromCharCode(e.which);
-    if (chr === '\r') {
-      // normalize newline
-      chr = '\n';
-    }
+
+    // normalize newlines
+    if (chr === '\r') { chr = '\n'; }
 
     this.text.typeOn(chr);
   },
@@ -182,17 +184,14 @@ App.TypingArea = Em.View.extend({
   focusOut: function (e) { this.text.set('focused', false); }
 });
 
-App.NewSampleButton = Em.View.extend({
-  click: function(e) {
-    App.typingAreaController.newSnippet();
-  }
-});
-
+// center the focus nag on the typing area
 App.centerFocusNag = function () {
-  // center the focus nag on the typing area
-  // TODO these class names should be pulled from somewhere else
-  var text_area = $('.type-panel');
-  var focus_nag = $('.focus-nag');
+  if (App.typingAreaController.current_snippet === null) {
+    return;
+  }
+
+  var text_area = $('.' + App.typingAreaController.current_snippet.className);
+  var focus_nag = $('.' + App.typingAreaController.current_snippet.focusNagClass);
   if (text_area.length === 0 || focus_nag.length === 0) {
     return;
   }
@@ -204,9 +203,31 @@ App.centerFocusNag = function () {
   });
 };
 
-// TODO centerFocusNag behavior needs to happen on first draw as well.
+App.typingAreaController = Ember.Object.create({
+  current_snippet: null,
 
-// some help with character codes:
+  newSnippet: function () {
+    var self = this;
+    $.get('/snippets/random', function (snippet_str) {
+      snippet_str = App.util.chomp(snippet_str);
+      self.set('current_snippet', App.TypingText.create({full_string: snippet_str}));
+
+      // TODO centerFocusNag behavior needs to happen properly on first draw
+      //   Not this way. this is a hack. this is sad.
+      setTimeout(function () { App.centerFocusNag(); }, 10);
+    });
+  },
+
+  focusChanged: function () {
+    if (!this.current_snippet.focused) {
+      App.centerFocusNag();
+    }
+  }.observes('current_snippet.focused')
+});
+
+App.typingAreaController.newSnippet();
+
+// some reference for character codes:
 // var chr_from_int = String.fromCharCode(34);
 // var int_from_chr = '"'.charCodeAt(0)
 

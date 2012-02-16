@@ -1,7 +1,7 @@
 TyperTortoise::Application.routes.draw do
   root :to => 'application#index'
 
-  match '/snippet' => 'application#snippet'
+  match '/snippets/random' => 'snippets#random'
 
   match '/auth/:provider/callback', to: 'sessions#create'
   match '/logout', to: 'sessions#destroy'

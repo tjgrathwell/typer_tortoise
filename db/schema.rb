@@ -11,12 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120216205915) do
+ActiveRecord::Schema.define(:version => 20120216215859) do
 
   create_table "identities", :force => true do |t|
     t.string   "provider"
     t.string   "uid"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "snippets", :force => true do |t|
+    t.string   "full_text"
+    t.string   "category"
+    t.string   "short_desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

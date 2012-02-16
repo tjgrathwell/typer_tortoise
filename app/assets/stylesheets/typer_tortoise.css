@@ -37,7 +37,7 @@
 		text-decoration: underline;
 }
 
-.wpm-counter {
+.stat-counter {
 		width: 10em;
 		margin-top: 20px;
 		padding: 5px;
@@ -46,10 +46,12 @@
 		border-bottom-style: solid;
 		border-width: 1px;		
 
+    display: inline-block;
+
 		background-color: rgba(100, 100, 100, .2)
 }
 
-.wpm-counter strong {
+.stat-counter strong {
 		font-size: 400%;
 		color: gray;
 }

@@ -5,3 +5,23 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Snippet.create({
+  category: 'ruby',
+  short_desc: 'boring if statement',
+  full_text: <<eos
+if (condition) {
+  puts "hello world"
+}
+eos
+});
+
+Snippet.create({
+  category: 'ruby',
+  short_desc: 'boring each statement',
+  full_text: <<eos
+things.each do |thing|
+  thing.bleep_bloop
+end
+eos
+});

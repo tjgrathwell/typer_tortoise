@@ -39,10 +39,7 @@ class SessionsController < ApplicationController
 
         self.current_user = new_user
 
-        redirect_to root_url
-
-        # TODO
-        #redirect_to new_user_url, notice: "Please finish registering"
+        redirect_to root_url, notice: "User created! Signed in!"
       end
     end
   end
