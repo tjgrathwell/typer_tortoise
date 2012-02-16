@@ -117,13 +117,20 @@ App.TypingText = Ember.Object.extend({
 
 App.typingAreaController = Ember.Object.create({
   current_snippet: null,
+
   newSnippet: function () {
     var self = this;
     $.get('/snippet', function (snippet_str) {
       snippet_str = App.util.chomp(snippet_str);
       self.set('current_snippet', App.TypingText.create({full_string: snippet_str}));
     });
-  }
+  },
+
+  focusChanged: function () {
+    if (!this.current_snippet.focused) {
+      App.centerFocusNag();
+    }
+  }.observes('current_snippet.focused')
 });
 
 App.typingAreaController.newSnippet();
@@ -196,12 +203,6 @@ App.centerFocusNag = function () {
     left: text_area_offset.left + ((text_area.width() / 2) - (focus_nag.width() / 2))
   });
 };
-
-App.typingAreaController.addObserver('current_snippet.focused', function () {
-  if (!this.current_snippet.focused) {
-    App.centerFocusNag();
-  }
-});
 
 // TODO centerFocusNag behavior needs to happen on first draw as well.
 
