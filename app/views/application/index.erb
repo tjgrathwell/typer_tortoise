@@ -1,0 +1,27 @@
+<div class="container">
+  <header>
+    <h1>typer tortoise</h1>
+    <small>are you faster than a tortoise??</small>
+  </header>
+  <script type="text/x-handlebars">
+    <div>
+      {{#view App.TypingArea}}
+        <div {{bindAttr class="focusNagClass isFocused:focus-nag-hidden"}}>
+          Click the text to start typing!
+        </div>
+        <!-- white space becomes super-significant in this area -->
+        <div {{bindAttr class="text.className isBlurry:type-panel-unfocused"}} tabindex="0"
+          ><b>{{text.beforeCursor}}</b><span class="type-cursor">{{text.atCursor}}</span><span class="type-mistakes">{{#each text.mistakes}}{{this}}{{/each}}</span>{{text.afterCursor}}</div>
+      {{/view}}
+    </div>
+    {{#view App.WPMDisplay}}
+      <div class="wpm-counter offset6"><strong>{{text.wpm}}</strong> wpm</div>
+    {{/view}}
+  </script>
+
+  <script type="text/x-handlebars">
+    {{#view App.NewSampleButton}}
+      <input type="button" value="New Sample" />
+    {{/view}}
+  </script>
+</div>

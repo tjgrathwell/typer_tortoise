@@ -1,4 +1,8 @@
 TyperTortoise::Application.routes.draw do
+  root :to => 'application#index'
+
+  match '/snippet' => 'application#snippet'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

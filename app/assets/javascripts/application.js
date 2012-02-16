@@ -6,4 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require ember-0.9.4.min
+//= require bootstrap.min
+//= require typer_tortoise

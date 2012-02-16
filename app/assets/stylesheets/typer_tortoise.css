@@ -1,0 +1,89 @@
+.type-panel {
+		margin-top: 20px;
+
+		width: 600px;
+		font-size: 150%;
+
+		background-color: rgba(240, 240, 240, .75);
+
+		border-radius: 10px;
+		border-color: black;
+		border-style: solid;
+		border-width: 3px;
+
+		white-space: pre;
+
+		padding: 5px;
+		color: grey;
+
+		outline: none;
+}
+
+.type-panel-unfocused {
+		opacity: .2;
+}
+
+.type-panel b {
+		color: #ccc;
+}
+
+.type-panel .type-cursor {
+		color: green;
+		text-decoration: underline;
+}
+
+.type-panel .type-mistakes {
+		color: red;
+		text-decoration: underline;
+}
+
+.wpm-counter {
+		width: 10em;
+		margin-top: 20px;
+		padding: 5px;
+		border-color: gray;
+		border-top-style: solid;
+		border-bottom-style: solid;
+		border-width: 1px;		
+
+		background-color: rgba(100, 100, 100, .2)
+}
+
+.wpm-counter strong {
+		font-size: 400%;
+		color: gray;
+}
+
+header {
+		width: 50%;
+		margin: 0px;
+		background-color: rgba(173, 216, 230, .75);
+		padding: 10px;
+
+		border-width: 2px;
+		border-color: #82B6DD;
+
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+
+		border-left-style: solid;
+		border-bottom-style: solid;
+		border-right-style: solid;
+}
+
+header h1 {
+		font-size: 300%;
+}
+
+.focus-nag {
+		z-index: 10;
+		padding: 10px;
+		display: inline-block;
+		font-size: 200%;
+		position: absolute;
+		background-color: rgb(240, 240, 240);
+}
+
+.focus-nag-hidden {
+		visibility: hidden;
+}
