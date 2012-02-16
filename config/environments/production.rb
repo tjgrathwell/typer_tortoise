@@ -12,10 +12,10 @@ TyperTortoise::Application.configure do
   config.serve_static_assets = false
 
   # Don't compress JavaScripts and CSS
-  config.assets.compress = false
+  config.assets.compress = false # not default
 
-  # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = false
+  # Fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = true # not default
 
   # Generate digests for assets URLs
   config.assets.digest = true
