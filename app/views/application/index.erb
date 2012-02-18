@@ -36,4 +36,18 @@
       {{/view}}
     </div>
   </script>
+
+  <script type="text/x-handlebars">
+    <h3>Your Scores</h3>
+    <ul>
+    {{#each App.scoresController}}
+      {{#view App.ScoreListView contentBinding="this"}}
+        <li>
+        {{#with content}}
+          Snippet {{snippet_id}}: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
+        {{/with}}
+      {{/view}}
+    {{/each}}
+    </ul>
+  </script>
 </div>

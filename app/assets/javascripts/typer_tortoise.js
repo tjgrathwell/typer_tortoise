@@ -5,6 +5,12 @@ App.util.chomp = function (raw_text) {
   return raw_text.replace(/(\n|\r)+$/, '');
 };
 
+App.Score = Ember.Object.extend({
+  wpm: null,
+  accuracy: null,
+  snippet_id: null
+});
+
 App.TypingText = Ember.Object.extend({
   full_string: null,
   snippet_id: null,
@@ -37,7 +43,7 @@ App.TypingText = Ember.Object.extend({
 
     var this_char = this.full_string.substr(this.cursor_pos, 1);
     if (this_char === '\n') {
-      return " [RET]" + this_char;
+      return "\u21b5" + this_char; // 21b5 is the "return key" symbol
     } else {
       return this_char;
     }
@@ -139,14 +145,13 @@ App.TypingText = Ember.Object.extend({
     }
   },
 
-  //
-  // formats
-  //
-  asJson: function () {
+  getScore: function () {
+    // TODO returning an actual Score model here causes infinite recursion.
+    // Bit of a bummer.
     return {
-      'snippet_id': this.snippet_id,
-      'wpm': this.get('wpm'),
-      'accuracy': this.get('accuracy')
+      snippet_id: this.snippet_id,
+      wpm: this.get('wpm'),
+      accuracy: this.get('accuracy')
     };
   }
 });
@@ -239,7 +244,8 @@ App.typingAreaController = Ember.Object.create({
   }.observes('current_snippet.finished'),
 
   saveScore: function () {
-    $.post('/scores', this.current_snippet.asJson());
+    App.scoresController.add(this.current_snippet.getScore());
+    $.post('/scores', this.current_snippet.getScore());
   },
 
   newSnippet: function () {
@@ -265,6 +271,16 @@ App.typingAreaController = Ember.Object.create({
 });
 
 App.typingAreaController.newSnippet();
+
+App.scoresController = Ember.ArrayController.create({
+  content: [],
+
+  add: function (score) {
+    this.pushObject(score);
+  }
+});
+
+App.ScoreListView = Ember.View.extend({});
 
 // some reference for character codes:
 // var chr_from_int = String.fromCharCode(34);
