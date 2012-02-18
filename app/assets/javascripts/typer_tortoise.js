@@ -7,6 +7,8 @@ App.util.chomp = function (raw_text) {
 
 App.TypingText = Ember.Object.extend({
   full_string: null,
+  snippet_id: null,
+
   mistakes: [],
   total_mistakes: 0,
   cursor_pos: 0,
@@ -135,6 +137,17 @@ App.TypingText = Ember.Object.extend({
     } else {
       this.set('cursor_pos', this.cursor_pos - 1);
     }
+  },
+
+  //
+  // formats
+  //
+  asJson: function () {
+    return {
+      'snippet_id': this.snippet_id,
+      'wpm': this.get('wpm'),
+      'accuracy': this.get('accuracy')
+    };
   }
 });
 
@@ -220,16 +233,22 @@ App.typingAreaController = Ember.Object.create({
 
   finishedObserver: function () {
     if (this.current_snippet.finished) {
-      // save score here
+      this.saveScore();
       this.newSnippet();
     }
   }.observes('current_snippet.finished'),
 
+  saveScore: function () {
+    $.post('/scores', this.current_snippet.asJson());
+  },
+
   newSnippet: function () {
     var self = this;
-    $.get('/snippets/random', function (snippet_str) {
-      snippet_str = App.util.chomp(snippet_str);
-      self.set('current_snippet', App.TypingText.create({full_string: snippet_str}));
+    $.get('/snippets/random.json', function (snippet_json) {
+      self.set('current_snippet', App.TypingText.create({
+        full_string: App.util.chomp(snippet_json['full_text']),
+        snippet_id: snippet_json['id']
+      }));
 
       // TODO centerFocusNag behavior needs to happen properly on first draw
       //   Not this way. this is a hack. this is sad.

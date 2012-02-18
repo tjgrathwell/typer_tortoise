@@ -6,6 +6,8 @@ TyperTortoise::Application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create'
   match '/logout', to: 'sessions#destroy'
 
+  post '/scores', to: 'scores#create'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
