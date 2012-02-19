@@ -1,0 +1,64 @@
+def numeric_compare(x, y):
+    if x>y:
+        return 1
+    elif x==y:
+        return 0
+    else: # x<y
+        return -1
+|||||=====|||||
+class Spam:
+    def __init__(self, spam, eggs):
+        self.spam = spam
+        self.eggs = eggs
+    def __cmp__(self, other):
+        return cmp(self.spam+self.eggs, other.spam+other.eggs)
+    def __str__(self):
+        return str(self.spam + self.eggs)
+|||||=====|||||
+@window.event
+def on_draw():
+    window.clear()
+    game.draw()
+    if fps_display: fps_display.draw()
+|||||=====|||||
+def testToRomanCase(self):
+    """toRoman should always return uppercase"""
+    for integer in range(1, 4000):
+        numeral = roman.toRoman(integer)
+        self.assertEqual(numeral, numeral.upper())
+|||||=====|||||
+class DefaultErrorHandler(urllib2.HTTPDefaultErrorHandler):
+    def http_error_default(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPError(
+            req.get_full_url(), code, msg, headers, fp)
+        result.status = code
+        return result
+|||||=====|||||
+from SOAPpy import WSDL
+
+# you'll need to configure these two values;
+# see http://www.google.com/apis/
+WSDLFILE = '/path/to/copy/of/GoogleSearch.wsdl'
+APIKEY = 'YOUR_GOOGLE_API_KEY'
+
+_server = WSDL.Proxy(WSDLFILE)
+def search(q):
+    """Search Google and return list of {title, link, description}"""
+    results = _server.doGoogleSearch(
+        APIKEY, q, 0, 10, False, "", False, "", "utf-8", "utf-8")
+    return [{"title": r.title.encode("utf-8"),
+             "link": r.URL.encode("utf-8"),
+             "description": r.snippet.encode("utf-8")}
+            for r in results.resultElements]
+|||||=====|||||
+from sgmllib import SGMLParser
+
+class URLLister(SGMLParser):
+    def reset(self):
+        SGMLParser.reset(self)
+        self.urls = []
+
+    def start_a(self, attrs):
+        href = [v for k, v in attrs if k=='href']
+        if href:
+            self.urls.extend(href)

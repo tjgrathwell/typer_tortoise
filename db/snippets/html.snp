@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>jQuery for Designers - Ajax Form Validation Example</title>
+    <style type="text/css" media="screen">
+|||||=====|||||
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Google</title>
+    </head>
+|||||=====|||||
+<td align="center" nowrap="nowrap">
+   <input name="hl" type="hidden" value="en" />
+   <input type="hidden" name="ie" value="ISO-8859-1" />
+   <input autocomplete="off" maxlength="2048" name="q" size="55"
+          title="Google Search" value="" />
+   <br />
+   <input name="btnG" type="submit" value="Google Search" />
+   <input name="btnI" type="submit" value="I'm Feeling Lucky" />
+</td>
+|||||=====|||||
+<div id="jump">
+    <a href="#main-articles">Stories</a>
+    <br>
+    <a href="#blocks">Slash Boxes</a>
+    <br>
+    <a href="#comments">Comments</a>
+</div>
+|||||=====|||||
+<input type="hidden" name="returnto" value="//slashdot.org/">
+
+<input type="hidden" name="op" value="userlogin">
+<input type="password" name="upasswd" size="20">
+<label class="checkbox">
+    <input type="checkbox" name="login_temp" value="yes">
+    Public Terminal
+</label>

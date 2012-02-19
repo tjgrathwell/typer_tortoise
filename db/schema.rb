@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120217000447) do
+ActiveRecord::Schema.define(:version => 20120218235940) do
 
   create_table "identities", :force => true do |t|
     t.string   "provider"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20120217000447) do
   end
 
   create_table "snippets", :force => true do |t|
-    t.string   "full_text"
+    t.text     "full_text",  :limit => 255
     t.string   "category"
     t.string   "short_desc"
     t.datetime "created_at"

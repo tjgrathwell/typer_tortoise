@@ -1,0 +1,87 @@
+@a = (1, 3, 5, 6, 7, 8);
+@b = (2, 3, 5, 7, 9);
+
+@union = @isect = @diff = ();
+%union = %isect = ();
+%count = ();
+|||||=====|||||
+foreach $e (@a) { $union{$e} = 1 }
+
+foreach $e (@b) {
+    if ( $union{$e} ) { $isect{$e} = 1 }
+    $union{$e} = 1;
+}
+@union = keys %union;
+@isect = keys %isect;
+|||||=====|||||
+@isect = @diff = @union = ();
+
+foreach $e (@a, @b) { $count{$e}++ }
+
+foreach $e (keys %count) {
+    push(@union, $e);
+    push @{ $count{$e} == 2 ? \@isect : \@diff }, $e;
+}
+|||||=====|||||
+sub naive_shuffle {                             # don't do this
+    for (my $i = 0; $i < @_; $i++) {
+        my $j = int rand @_;                    # pick random element
+        ($_[$i], $_[$j]) = ($_[$j], $_[$i]);    # swap 'em
+    }
+}
+|||||=====|||||
+# fisher_yates_shuffle:
+# generate a random permutation of @array in place
+sub fisher_yates_shuffle {
+    my $array = shift;
+    my $i;
+    for ($i = @$array; --$i; ) {
+        my $j = int rand ($i+1);
+        next if $i == $j;
+        @$array[$i,$j] = @$array[$j,$i];
+    }
+}
+|||||=====|||||
+use DBI;
+
+$dbh = DBI->connect('DBI:driver:database', 'username', 'auth',
+            { RaiseError => 1, AutoCommit => 1});
+$dbh->do($SQL);
+$sth = $dbh->prepare($SQL);
+$sth->execute();
+while (@row = $sth->fetchrow_array) {
+    # ...
+}
+$sth->finish();
+$dbh->disconnect();
+|||||=====|||||
+BEGIN {
+    print "<TABLE>";
+    $_ = encode_entities(scalar <>);
+    s/\n\s+/ /g;  # continuation lines
+    while ( /^(\S+?:)\s*(.*)$/gm ) {                # parse heading
+        print "<TR><TH ALIGN='LEFT'>$1</TH><TD>$2</TD></TR>\n";
+    }
+    print "</TABLE><HR>";
+}
+|||||=====|||||
+opendir(DIR, $dirname) or die "can't opendir $dirname: $!";
+while (defined($file = readdir(DIR))) {
+    # do something with "$dirname/$file"
+}
+closedir(DIR);
+|||||=====|||||
+foreach $file (@NAMES) {
+    my $newname = $file;
+    # change $newname
+    rename($file, $newname) or
+        warn "Couldn't rename $file to $newname: $!\n";
+}
+|||||=====|||||
+%merged = ();
+while ( ($k,$v) = each(%A) ) {
+    $merged{$k} = $v;
+}
+while ( ($k,$v) = each(%B) ) {
+    $merged{$k} = $v;
+}

@@ -1,0 +1,22 @@
+class Person
+  attr_reader :name, :age
+  def initialize(name, age)
+    @name, @age = name, age
+  end
+  def <=>(person) # Comparison operator for sorting
+    @age <=> person.age
+  end
+  def to_s
+    "#@name (#@age)"
+  end
+end
+|||||=====|||||
+class User < ActiveRecord::Base
+  has_many :authorizations
+end
+
+class Authorization < ActiveRecord::Base
+  belongs_to :user
+  validates_presence_of :user_id, :uid, :provider
+  validates_uniqueness_of :uid, :scope => :provider
+end

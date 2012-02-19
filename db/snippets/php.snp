@@ -1,0 +1,74 @@
+// main submit logic
+if (@$_REQUEST['action'] == 'register') {
+    $resp = check_username($_REQUEST['username']);
+
+    if ($resp['ok']) {
+        $message = 'All details fine';
+    } else {
+        $message = 'There was a problem with your registration details';
+        $error = $resp;
+    }
+} else if (@$_REQUEST['action'] == 'check_username' && isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    // means it was requested via Ajax
+    echo json_encode(check_username($_REQUEST['username']));
+    exit; // only print out the json version of the response
+}
+|||||=====|||||
+<?php
+
+$a = 3;
+
+if ($a <= 5) {
+    echo "value is smaller or equal to 5";
+} else {
+    echo "value is greater than 5";
+}
+
+?>
+|||||=====|||||
+function check_username($username) {
+    global $taken_usernames;
+    $resp = array();
+    $username = trim($username);
+    if (!$username) {
+        $resp = array('ok' => false, 'msg' => "Please specify a username");
+    } else if (!preg_match('/^[a-z0-9\.\-_]+$/', $username)) {
+        $resp = array('ok' => false, "msg" => "Your username can only contain alphanumerics and period, dash and underscore (.-_)");
+    } else if (in_array($username, $taken_usernames)) {
+        $resp = array("ok" => false, "msg" => "The selected username is not available");
+    } else {
+        $resp = array("ok" => true, "msg" => "This username is free");
+    }
+
+    return $resp;
+}
+|||||=====|||||
+<?
+// foreach example - loop through each entry in an array
+
+$metals = array("copper","iron","gold","cobalt");
+
+foreach ( $metals as $element ) {
+
+    echo "This element is: $element<BR>";
+
+}
+?>
+|||||=====|||||
+<?php
+
+  echo mt_rand() . "\n";
+  echo mt_rand() . "\n";
+
+  //generate random number between 5 and 15
+  echo mt_rand(5, 15);
+
+?>
+|||||=====|||||
+<?php
+// Redirect browser
+header("Location: http://www.example.com/");
+
+// stop executing this script
+exit;
+?>

@@ -8,6 +8,8 @@ TyperTortoise::Application.routes.draw do
 
   post '/scores', to: 'scores#create'
 
+  resources :snippets
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

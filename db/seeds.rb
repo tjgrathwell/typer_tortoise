@@ -6,22 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Snippet.create({
-  category: 'ruby',
-  short_desc: 'boring if statement',
-  full_text: <<eos
-if (condition) {
-  puts "hello world"
-}
-eos
-});
+snip_files = Dir.glob('./db/snippets/*.snp')
 
-Snippet.create({
-  category: 'ruby',
-  short_desc: 'boring each statement',
-  full_text: <<eos
-things.each do |thing|
-  thing.bleep_bloop
+snip_files.each do |filename|
+  category = filename.match('(\w+)\.snp')[1]
+
+  contents = File.read(filename)
+  snippets = contents.split('|||||=====|||||')
+  snippets.each do |snippet|
+    Snippet.create({
+      category: category,
+      full_text: snippet.strip()
+    })
+  end
 end
-eos
-});
