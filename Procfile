@@ -1,2 +1,4 @@
-typer_tortoise_dev: rails s
+web: bundle exec thin start -p $PORT
+
+dev: rails s
 log: tail -f log/development.log
