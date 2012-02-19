@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20120218235940) do
   end
 
   create_table "snippets", :force => true do |t|
-    t.text     "full_text",  :limit => 255
+    t.text     "full_text"
     t.string   "category"
     t.string   "short_desc"
     t.datetime "created_at"
