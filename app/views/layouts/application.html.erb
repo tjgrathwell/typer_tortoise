@@ -23,7 +23,24 @@
 </head>
 <body>
 
+<div class="container">
+  <header>
+    <h1>typer tortoise</h1>
+    <small>are you faster than a tortoise??</small>
+    <div class="log-in">
+      <% if signed_in? %>
+        Logged in as <strong><%= current_user.name %></strong>.
+        <%= link_to "Log out?", "/logout" %>
+      <% else %>
+        You aren't logged in.
+        <%= link_to "Sign in with Twitter", "/auth/twitter" %>
+      <% end %>
+    </div>
+  </header>
+
 <%= yield %>
+
+</div>
 
   <%= javascript_include_tag "application" %>
 </body>

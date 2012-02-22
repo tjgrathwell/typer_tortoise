@@ -19,6 +19,8 @@ App.TypingText = Ember.Object.extend({
   total_mistakes: 0,
   cursor_pos: 0,
 
+  _tab_size: null,
+
   start_time: null,
   wpm_timer_id: null,
   wpm_ticks: null,
@@ -29,7 +31,7 @@ App.TypingText = Ember.Object.extend({
   focused: false,
   finished: false,
 
-  // 
+  //
   // rendering bookkeeping
   //
   beforeCursor: function () {
@@ -54,7 +56,7 @@ App.TypingText = Ember.Object.extend({
     return this.full_string.substr(adjustedCursor + 1);
   }.property('cursor_pos', 'mistakes.length'),
 
-  // 
+  //
   // synthesized typing quality data
   //
   wpm: function () {
@@ -85,7 +87,7 @@ App.TypingText = Ember.Object.extend({
     return (raw_acc * 100).toFixed(0);
   }.property('cursor_pos', 'total_mistakes'),
 
-  // 
+  //
   // user actions
   //
   typeOn: function (chr) {
@@ -97,7 +99,7 @@ App.TypingText = Ember.Object.extend({
       this.set('start_time', (new Date()).getTime());
 
       var self = this;
-      var timer_id = window.setInterval(function () { 
+      var timer_id = window.setInterval(function () {
         self.set('wpm_ticks', self.wpm_ticks + 1);
       }, 250);
       this.set('wpm_timer_id', timer_id);
@@ -122,11 +124,29 @@ App.TypingText = Ember.Object.extend({
     }
   },
 
+  _tabSize: function () {
+    if (this._tab_size) {
+      return this._tab_size;
+    }
+
+    var indents = [];
+
+    var lines = this.full_string.split('\n');
+    $.each(lines, function (i, line) {
+      var match = line.match('^(\\s+)');
+      if (match) {
+        indents.push(match[1].length);
+      }
+    });
+
+    this._tab_size = indents[0];
+    return this._tab_size;
+  },
+
   tabPressed: function () {
-    this.typeOn(' ');
-    this.typeOn(' ');
-    this.typeOn(' ');
-    this.typeOn(' ');
+    for (var i = 0; i < this._tabSize(); i++) {
+      this.typeOn(' ');
+    }
   },
 
   backUp: function () {

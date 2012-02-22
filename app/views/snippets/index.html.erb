@@ -1,8 +1,14 @@
-<h1>Listing snippets</h1>
+<br />
+
+<h1>All Snippets</h1>
+
+<br />
+<br />
 
 <table>
   <tr>
-    <th>Full text</th>
+    <th>Category</th>
+    <th>Text</th>
     <th></th>
     <th></th>
     <th></th>
@@ -10,7 +16,8 @@
 
 <% @snippets.each do |snippet| %>
   <tr>
-    <td><%= truncate(snippet.full_text, :length => 100) %></td>
+    <td><strong><%= snippet.category %></strong></td>
+    <td><%= truncate(snippet.full_text, :length => 50) %></td>
     <td><%= link_to 'Show', snippet %></td>
     <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
     <td><%= link_to 'Destroy', snippet, confirm: 'Are you sure?', method: :delete %></td>

@@ -6,11 +6,13 @@ gem 'rails', '3.1.1'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 group :development, :test do
+  gem 'jasmine'
   gem 'sqlite3'
   gem 'rspec-rails'
 end
 
 group :test do
+  gem 'therubyracer'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'spork'
@@ -32,8 +34,6 @@ group :assets do
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
 end
-
-gem 'therubyracer'
 
 gem 'thin'
 
