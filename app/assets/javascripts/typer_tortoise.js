@@ -293,8 +293,6 @@ App.typingAreaController = Ember.Object.create({
   }.observes('current_snippet.focused')
 });
 
-App.typingAreaController.newSnippet();
-
 App.scoresController = Ember.ArrayController.create({
   content: [],
 
@@ -311,8 +309,6 @@ App.scoresController = Ember.ArrayController.create({
 });
 
 App.ScoreListView = Ember.View.extend({});
-
-App.scoresController.loadScores();
 
 // some reference for character codes:
 // var chr_from_int = String.fromCharCode(34);
@@ -337,6 +333,13 @@ App.setPreventDefaultForKey = function (e) {
   if (e.which == App.KEY_TAB)             { e.preventDefault();   }
 };
 
-$(document).bind('keyPress keyDown', function (e) {
-  App.setPreventDefaultForKey(e);
-});
+// entry point
+if (window.location.pathname === '/') {
+  $(document).bind('keyPress keyDown', function (e) {
+    App.setPreventDefaultForKey(e);
+  });
+
+  App.typingAreaController.newSnippet();
+
+  App.scoresController.loadScores();
+}

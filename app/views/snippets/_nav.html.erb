@@ -1,0 +1,20 @@
+<nav>
+  <ul class="nav-options">
+    <li><%= link_to 'Home', root_path %>
+    <% if !['index'].include? action_name %>
+      <li><%= link_to 'Index', snippets_path %>
+    <% end %>
+    <% if !['new', 'show', 'index'].include? action_name %>
+      <li><%= link_to 'View', @snippet %>
+    <% end %>
+    <% if !['new', 'edit', 'index'].include? action_name %>
+      <li><%= link_to 'Edit', edit_snippet_path(@snippet) %>
+    <% end %>
+    <% if !['new', 'index'].include? action_name %>
+      <li><%= link_to 'Play', root_path %>
+    <% end %>
+    <% if !['new'].include? action_name %>
+      <li><%= link_to 'Add a Snippet', new_snippet_path %>
+    <% end %>
+  </ul>
+</nav>

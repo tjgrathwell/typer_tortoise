@@ -12,8 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :full_text %><br />
-    <%= f.text_area :full_text %>
+    <%= f.text_area(:full_text, :rows => 20, :cols => nil, :class => 'snippet-editor') %>
   </div>
   <div class="actions">
     <%= f.submit %>

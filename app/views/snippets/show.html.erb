@@ -1,10 +1,8 @@
+<%= render 'nav' %>
+
 <p id="notice"><%= notice %></p>
 
 <p>
   A snippet in the <strong><%= @snippet.category %></strong> category.
   <pre><%= @snippet.full_text %></pre>
 </p>
-
-
-<%= link_to 'Edit', edit_snippet_path(@snippet) %> |
-<%= link_to 'Back', snippets_path %>

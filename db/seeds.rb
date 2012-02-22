@@ -14,7 +14,7 @@ snip_files.each do |filename|
   contents = File.read(filename)
   snippets = contents.split('|||||=====|||||')
   snippets.each do |snippet|
-    Snippet.create({
+    Snippet.find_or_create_by_full_text({
       category: category,
       full_text: snippet.strip()
     })

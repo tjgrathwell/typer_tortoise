@@ -1,11 +1,8 @@
-<br />
+<%= link_to 'Home', root_path %> |
 
-<h1>All Snippets</h1>
+<%= render 'nav' %>
 
-<br />
-<br />
-
-<table>
+<table class="snippets">
   <tr>
     <th>Category</th>
     <th>Text</th>
@@ -24,7 +21,3 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New Snippet', new_snippet_path %>
