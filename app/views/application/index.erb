@@ -3,8 +3,8 @@
     <h1>typer tortoise</h1>
     <small>are you faster than a tortoise??</small>
     <div class="log-in">
-      <% if current_user %>
-        You are logged in as <%= current_user.name %>.
+      <% if signed_in? %>
+        Logged in as <strong><%= current_user.name %></strong>.
         <%= link_to "Log out?", "/logout" %>
       <% else %>
         You aren't logged in.
@@ -27,7 +27,7 @@
       {{/view}}
     </div>
 
-    <div class="offset4">
+    <div class="full-score-display">
       {{#view App.WPMDisplay}}
         <span class="stat-counter"><strong>{{text.wpm}}</strong> wpm</span>
       {{/view}}
@@ -39,17 +39,19 @@
 
   <script type="text/x-handlebars">
     {{#if App.scoresController.content.length}}
-    <h3>Your Scores</h3>
+    <div class="player-scores">
+      <h3>Your Scores</h3>
+      <ul>
+      {{#each App.scoresController}}
+        {{#view App.ScoreListView contentBinding="this"}}
+          <li>
+          {{#with content}}
+            <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
+          {{/with}}
+        {{/view}}
+      {{/each}}
+      </ul>
+    </div>
     {{/if}}
-    <ul>
-    {{#each App.scoresController}}
-      {{#view App.ScoreListView contentBinding="this"}}
-        <li>
-        {{#with content}}
-          <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
-        {{/with}}
-      {{/view}}
-    {{/each}}
-    </ul>
   </script>
 </div>

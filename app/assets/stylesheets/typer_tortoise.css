@@ -1,9 +1,16 @@
+body, html {
+    background-image: url('/assets/project_papper.png');
+}
+
 .type-panel {
 		margin-top: 20px;
+    margin-bottom: 20px;
 
 		font-size: 150%;
+    font-family: Monaco, monospace;
 
-		background-color: rgba(240, 240, 240, .75);
+		background-color: rgba(0, 0, 0, .75);
+    color: #F8F8F8;
 
 		border-radius: 10px;
 		border-color: black;
@@ -13,7 +20,6 @@
 		white-space: pre;
 
 		padding: 5px;
-		color: grey;
 
 		outline: none;
 }
@@ -36,23 +42,27 @@
 		text-decoration: underline;
 }
 
+.full-score-display {
+    float: right;
+}
+
 .stat-counter {
 		width: 10em;
-		margin-top: 20px;
 		padding: 5px;
-		border-color: gray;
+
+		border-width: 2px;
+		border-color: #82B6DD;
+
 		border-top-style: solid;
 		border-bottom-style: solid;
-		border-width: 1px;		
 
     display: inline-block;
 
-		background-color: rgba(100, 100, 100, .2)
+		background-color: rgba(173, 216, 230, .75);
 }
 
 .stat-counter strong {
 		font-size: 400%;
-		color: gray;
 }
 
 header {
@@ -74,6 +84,7 @@ header {
 
 header h1 {
 		font-size: 300%;
+    font-weight: bold;
 }
 
 .focus-nag {
@@ -87,6 +98,19 @@ header h1 {
 
 .focus-nag-hidden {
 		visibility: hidden;
+}
+
+.player-scores {
+    width: 30%;
+
+    border-style: solid;
+		border-width: 2px;
+		border-color: #82B6DD;
+    border-radius: 10px;
+
+    padding: 10px;
+
+		background-color: rgba(173, 216, 230, .75);
 }
 
 .log-in {
