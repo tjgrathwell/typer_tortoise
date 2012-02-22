@@ -38,13 +38,15 @@
   </script>
 
   <script type="text/x-handlebars">
+    {{#if App.scoresController.content.length}}
     <h3>Your Scores</h3>
+    {{/if}}
     <ul>
     {{#each App.scoresController}}
       {{#view App.ScoreListView contentBinding="this"}}
         <li>
         {{#with content}}
-          Snippet {{snippet_id}}: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
+          <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
         {{/with}}
       {{/view}}
     {{/each}}

@@ -6,7 +6,10 @@ TyperTortoise::Application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create'
   match '/logout', to: 'sessions#destroy'
 
+  get '/scores', to: 'scores#show'
   post '/scores', to: 'scores#create'
+
+  match '/users/:user_id/scores', to: 'users#show_scores'
 
   resources :snippets
 

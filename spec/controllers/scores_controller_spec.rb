@@ -3,15 +3,51 @@ require 'spec_helper'
 describe ScoresController do
 
   before(:each) do
-    @user = Factory(:user)
     @snippet = Factory(:snippet)
+    @score_data = {
+      'wpm' => 19,
+      'accuracy' => 29,
+      'snippet_id' => @snippet.id,
+    }
   end
 
   describe "POST 'scores'" do
-    it "should be successful" do
-      post 'scores'
-      response.should be_success
+
+    before(:each) do
+      @user = test_sign_in(Factory(:user))
+    end
+
+    describe "failure" do
+      it "should not create a score object for empty data" do
+        lambda do
+          post :create, :score => { }
+        end.should_not change(Score, :count)
+      end
+
+      it "should not create a score object for data that does not validate" do
+        lambda do
+          post :create, :score => @score_data.merge(:wpm => -10)
+        end.should_not change(Score, :count)
+      end
+    end
+
+    describe "success" do
+      it "should create a score object" do
+        lambda do
+          post :create, :score => @score_data
+        end.should change(Score, :count).by(1)
+      end
     end
   end
 
+  describe "when not signed in" do
+
+    it "should return an empty response" do
+      lambda do
+        post :create, :score => @score_data.merge(:wpm => -10)
+
+        response.body.should == ''
+      end.should_not change(Score, :count)
+    end
+  end
 end

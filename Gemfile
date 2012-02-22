@@ -15,7 +15,7 @@ group :test do
   gem 'capybara'
   gem 'spork'
   gem 'guard-spork'
-  gem 'win32-process'
+  gem 'win32-process', :platforms => :mswin
   gem 'guard-rspec'
 end
 
@@ -32,6 +32,8 @@ group :assets do
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
 end
+
+gem 'therubyracer'
 
 gem 'thin'
 

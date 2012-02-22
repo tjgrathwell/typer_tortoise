@@ -145,6 +145,9 @@ App.TypingText = Ember.Object.extend({
     }
   },
 
+  //
+  // output
+  //
   getScore: function () {
     // TODO returning an actual Score model here causes infinite recursion.
     // Bit of a bummer.
@@ -245,7 +248,7 @@ App.typingAreaController = Ember.Object.create({
 
   saveScore: function () {
     App.scoresController.add(this.current_snippet.getScore());
-    $.post('/scores', this.current_snippet.getScore());
+    $.post('/scores', {'score': this.current_snippet.getScore()});
   },
 
   newSnippet: function () {
@@ -275,12 +278,21 @@ App.typingAreaController.newSnippet();
 App.scoresController = Ember.ArrayController.create({
   content: [],
 
+  loadScores: function (score) {
+    var self = this;
+    $.get('/scores/', function (json) {
+      self.set('content', json);
+    });
+  },
+
   add: function (score) {
     this.pushObject(score);
   }
 });
 
 App.ScoreListView = Ember.View.extend({});
+
+App.scoresController.loadScores();
 
 // some reference for character codes:
 // var chr_from_int = String.fromCharCode(34);
