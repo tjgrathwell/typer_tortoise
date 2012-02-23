@@ -2,7 +2,7 @@ var App = Em.Application.create();
 
 App.util = {};
 App.util.chomp = function (raw_text) {
-  return raw_text.replace(/(\n|\r)+$/, '');
+  return raw_text.replace(/\r/g, '').replace(/\n+$/, '');
 };
 
 App.Score = Ember.Object.extend({
@@ -261,6 +261,10 @@ App.typingAreaController = Ember.Object.create({
 
   finishedObserver: function () {
     if (this.current_snippet.finished) {
+      if (App.pageToken().match('/play')) {
+        // reset the URL from specific to root to indicate "random play mode" has resumed
+        App.setPageToken('/');
+      }
       this.saveScore();
       this.newSnippet();
     }
@@ -271,15 +275,21 @@ App.typingAreaController = Ember.Object.create({
     $.post('/scores', {'score': this.current_snippet.getScore()});
   },
 
-  newSnippet: function () {
+  newSnippet: function (snippet_num) {
     var self = this;
-    $.get('/snippets/random.json', function (snippet_json) {
+
+    var url = '/snippets/random.json';
+    if (snippet_num) {
+      url = '/snippets/' + snippet_num + '.json';
+    }
+
+    $.get(url, function (snippet_json) {
       self.set('current_snippet', App.TypingText.create({
         full_string: App.util.chomp(snippet_json['full_text']),
         snippet_id: snippet_json['id']
       }));
 
-      // TODO centerFocusNag behavior needs to happen properly on first draw
+      // TODO centerFocusNag/focusing behavior needs to happen properly on first draw
       //   Not this way. this is a hack. this is sad.
       setTimeout(function () { App.centerFocusNag(); }, 10);
       setTimeout(function () { $('.' + self.current_snippet.className).focus(); }, 10);
@@ -333,13 +343,27 @@ App.setPreventDefaultForKey = function (e) {
   if (e.which == App.KEY_TAB)             { e.preventDefault();   }
 };
 
+App.pageToken = function () {
+  return window.location.pathname;
+};
+
+App.setPageToken = function (token) {
+  history.pushState({}, '', token);
+};
+
 // entry point
-if (window.location.pathname === '/') {
+if (App.pageToken() === '/' || App.pageToken().match('/play') ) {
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });
 
-  App.typingAreaController.newSnippet();
+  var path = App.pageToken();
+  if (path.match('/play')) {
+    var snippet_num = path.match('/snippets/(\\d+)/play')[1];
+    App.typingAreaController.newSnippet(snippet_num);
+  } else {
+    App.typingAreaController.newSnippet();
+  }
 
   App.scoresController.loadScores();
 }

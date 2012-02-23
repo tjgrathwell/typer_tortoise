@@ -36,6 +36,13 @@ class SnippetsController < ApplicationController
     end
   end
 
+  # GET /snippets/1/play
+  def play
+    @snippet = Snippet.find(params[:id])
+
+    # play.html.erb
+  end
+
   # GET /snippets/new
   # GET /snippets/new.json
   def new

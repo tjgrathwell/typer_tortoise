@@ -1,17 +1,18 @@
 TyperTortoise::Application.routes.draw do
   root :to => 'application#index'
 
-  match '/snippets/random' => 'snippets#random'
+  match '/snippets/random'         => 'snippets#random'
 
-  match '/auth/:provider/callback', to: 'sessions#create'
-  match '/logout', to: 'sessions#destroy'
+  match '/auth/:provider/callback' => 'sessions#create'
+  match '/logout'                  => 'sessions#destroy'
 
-  get '/scores', to: 'scores#show'
-  post '/scores', to: 'scores#create'
+  get '/scores'                    => 'scores#show'
+  post '/scores'                   => 'scores#create'
 
-  match '/users/:user_id/scores', to: 'users#show_scores'
+  match '/users/:user_id/scores'   => 'users#show_scores'
 
   resources :snippets
+  get '/snippets/:id/play'         => 'snippets#play'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

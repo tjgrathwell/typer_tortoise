@@ -11,7 +11,7 @@
       <li><%= link_to 'Edit', edit_snippet_path(@snippet) %>
     <% end %>
     <% if !['new', 'index'].include? action_name %>
-      <li><%= link_to 'Play', root_path %>
+      <li><%= link_to 'Play', :controller => "snippets", :action => 'play', :id => @snippet.id %>
     <% end %>
     <% if !['new'].include? action_name %>
       <li><%= link_to 'Add a Snippet', new_snippet_path %>
