@@ -25,11 +25,11 @@
 
 <div class="container">
   <header>
-    <h1>typer tortoise</h1>
+    <h1><%= link_to 'typer tortoise', root_path %></h1>
     <small>are you faster than a tortoise??</small>
     <div class="log-in">
       <% if signed_in? %>
-        Logged in as <strong><%= current_user.name %></strong>.
+        Logged in as <strong><%= link_to current_user.name, current_user %></strong>.
         <%= link_to "Log out?", "/logout" %>
       <% else %>
         You aren't logged in.

@@ -2,6 +2,19 @@ body, html {
     background-image: url('/assets/project_papper.png');
 }
 
+h1 {
+    font-size: 200%;
+}
+
+.blue-round {
+    border-style: solid;
+		border-width: 2px;
+		border-color: #82B6DD;
+		border-radius: 10px;
+
+		background-color: rgba(173, 216, 230, .75);
+}
+
 .type-panel {
 		margin-top: 20px;
     margin-bottom: 20px;
@@ -89,16 +102,17 @@ header h1 {
     font-weight: bold;
 }
 
+header h1 a:link,
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    color: #333;
+    text-decoration:none;
+}
+
 nav {
     display: inline-block;
     padding: 5px;
-
-    border-style: solid;
-		border-width: 2px;
-		border-color: #82B6DD;
-		border-radius: 10px;
-
-		background-color: rgba(173, 216, 230, .75);
 
     margin-bottom: 20px;
 }
@@ -116,8 +130,12 @@ nav ul.nav-options li:first-child {
     margin-left: 0px;
 }
 
+div.user-scores {
+    display: inline-block;
+    padding: 5px;
+}
 
-table.snippets th, table.snippets td {
+table.thin-border th, table.thin-border td {
     border: 1px solid black;
     padding: 4px;
 }
@@ -141,15 +159,7 @@ textarea.snippet-editor {
 
 .player-scores {
     width: 30%;
-
-    border-style: solid;
-		border-width: 2px;
-		border-color: #82B6DD;
-    border-radius: 10px;
-
     padding: 10px;
-
-		background-color: rgba(173, 216, 230, .75);
 }
 
 .log-in {

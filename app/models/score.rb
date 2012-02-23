@@ -1,6 +1,4 @@
 class Score < ActiveRecord::Base
-  attr_accessible :wpm, :accuracy, :user_id, :snippet_id
-
   belongs_to :user
   has_one :snippet
 

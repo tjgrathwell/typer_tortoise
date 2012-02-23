@@ -1,0 +1,32 @@
+<nav class="blue-round">
+  <ul class="nav-options">
+    <li><%= link_to 'Home', root_path %>
+    <% if !['index'].include? action_name %>
+      <li><%= link_to 'Index', users_path %>
+    <% end %>
+  </ul>
+</nav>
+
+<h1><%= @user.name %></h1>
+
+<% @scores_by_category.keys.each do |category| %>
+  <div class="blue-round user-scores">
+    <h2>Category: <%= category %></h2>
+
+    <table class="thin-border scores">
+      <tr>
+        <th>Snippet ID</th>
+        <th>WPM</th>
+        <th>Accuracy</th>
+      </tr>
+
+    <% @scores_by_category[category].each do |score| %>
+      <tr>
+        <td><%= link_to score.snippet_id, snippet_path(score.snippet_id) %></td>
+        <td><%= score.wpm %>%</td>
+        <td><%= score.accuracy %></td>
+      </tr>  
+    <% end %>
+    </table>
+  </div>
+<% end %>
