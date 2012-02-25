@@ -7,10 +7,6 @@ class SnippetsController < ApplicationController
 
     selected_snip = Snippet.random(preferred_category_ids)
     
-    if !selected_snip
-      raise
-    end
-
     respond_to do |format|
       format.json { render :json => selected_snip.to_json }
       format.html { render :text => selected_snip.full_text }

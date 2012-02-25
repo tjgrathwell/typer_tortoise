@@ -2,7 +2,13 @@ class Snippet < ActiveRecord::Base
   belongs_to :category
   has_many :scores
 
-  def self.random(preferred_category_ids)
+  def self.random(preferred_category_ids=[])
+    preferred_category_ids.each do |id|
+      unless id.to_s.match(/^\d+$/)
+        raise ArgumentError, "Arguments to random must be numeric, '#{id.inspect}' isn't."
+      end
+    end
+
     all_snips = Snippet.all
 
     if all_snips.empty?
