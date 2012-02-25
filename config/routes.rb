@@ -7,6 +7,9 @@ TyperTortoise::Application.routes.draw do
   get  '/scores'                   => 'scores#show'
   post '/scores'                   => 'scores#create'
 
+  get  '/categories'               => 'categories#show'
+  post '/categories'               => 'categories#overwrite'
+
   resources :users, :only => [:index, :show] do
     get 'scores', :on => :member
   end

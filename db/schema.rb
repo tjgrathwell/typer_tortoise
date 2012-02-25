@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120218235940) do
+ActiveRecord::Schema.define(:version => 20120224065846) do
+
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "category_preferences", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "identities", :force => true do |t|
     t.string   "provider"
@@ -32,10 +45,10 @@ ActiveRecord::Schema.define(:version => 20120218235940) do
 
   create_table "snippets", :force => true do |t|
     t.text     "full_text"
-    t.string   "category"
     t.string   "short_desc"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "category_id"
   end
 
   create_table "users", :force => true do |t|

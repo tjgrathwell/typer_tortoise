@@ -9,6 +9,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'sqlite3'
   gem 'rspec-rails'
+  #gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 group :test do
@@ -47,7 +48,4 @@ gem 'jquery-rails'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
 

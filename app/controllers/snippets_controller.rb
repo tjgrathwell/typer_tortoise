@@ -1,10 +1,13 @@
 class SnippetsController < ApplicationController
   def random
-    all_snips = Snippet.all
-    selected_snip = nil
-    if (all_snips.length > 0)
-      selected_snip = all_snips.sample
-    else
+    preferred_category_ids = []
+    if signed_in?
+      preferred_category_ids = current_user.category_preferences.map { |p| p.category_id }
+    end
+
+    selected_snip = Snippet.random(preferred_category_ids)
+    
+    if !selected_snip
       raise
     end
 

@@ -37,7 +37,7 @@ h1 {
 		outline: none;
 }
 
-.type-panel-unfocused {
+.type-panel.unfocused {
 		opacity: .2;
 }
 
@@ -153,7 +153,7 @@ textarea.snippet-editor {
 		background-color: rgb(240, 240, 240);
 }
 
-.focus-nag-hidden {
+.hidden {
 		visibility: hidden;
 }
 
@@ -162,6 +162,46 @@ textarea.snippet-editor {
     padding: 10px;
 }
 
-.log-in {
+.user-options {
     float: right;
+}
+
+.prefs-popup-bg {
+    position: absolute;
+    z-index: 50;
+    background-color: rgba(100, 100, 100, .8);
+    left: 0px;
+    top: 0px;
+}
+
+.prefs-link span {
+    color: #607890;
+}
+
+.prefs-link span:hover {
+    color: #036;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.prefs-popup {
+    padding: 10px;
+    position: absolute;
+    z-index: 100;
+		background-color: rgba(173, 216, 230, .9);
+}
+
+.prefs-popup ul {
+    list-style-type: none;
+}
+
+.prefs-popup input {
+    position: relative;
+    display: inline;
+}
+
+.prefs-popup label {
+    position: relative;
+    display: inline;
+    margin-left: .5em;
 }

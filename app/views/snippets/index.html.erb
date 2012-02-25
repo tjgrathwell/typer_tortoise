@@ -11,7 +11,7 @@
 
 <% @snippets.each do |snippet| %>
   <tr>
-    <td><strong><%= snippet.category %></strong></td>
+    <td><strong><%= snippet.category.name %></strong></td>
     <td><%= truncate(snippet.full_text, :length => 50) %></td>
     <td><%= link_to 'Show', snippet %></td>
     <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>

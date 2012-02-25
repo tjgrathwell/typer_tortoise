@@ -7,10 +7,8 @@ class UsersController < ApplicationController
 
     @scores_by_category = {}
     @user.scores.each do |score|
-      # here's some n*m performance that's not so good. handwritten sql in the future?
-      # also, trying score.snippet tried to fetch a snippet by score_id, which is odd.
-      snippet = Snippet.find(score.snippet_id)
-      (@scores_by_category[snippet.category] ||= []).push(score)
+      # i wonder how the performance of this is? does rails have some kind of prefetch?
+      (@scores_by_category[score.snippet.category.name] ||= []).push(score)
     end
   end
 
@@ -23,6 +21,7 @@ class UsersController < ApplicationController
     unless (@user)
       deny_access
     end
+
     respond_to do |format|
       format.json { render json: @user.scores }
     end

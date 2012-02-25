@@ -1,12 +1,12 @@
 <script type="text/x-handlebars">
   <div>
     {{#view App.TypingArea}}
-      <div {{bindAttr class="text.focusNagClass isFocused:focus-nag-hidden"}}>
+      <div {{bindAttr class="text.focusNagClass isFocused:hidden"}}>
         Click the text to start typing!
       </div>
 
       <!-- white space becomes super-significant in this area -->
-      <div {{bindAttr class="text.className isBlurry:type-panel-unfocused"}} tabindex="0"
+      <div {{bindAttr class="text.className isBlurry:unfocused"}} tabindex="0"
         ><b>{{text.beforeCursor}}</b><span class="type-cursor">{{text.atCursor}}</span><span class="type-mistakes">{{#each text.mistakes}}{{this}}{{/each}}</span>{{text.afterCursor}}</div>
 
     {{/view}}

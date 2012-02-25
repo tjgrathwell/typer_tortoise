@@ -1,17 +1,34 @@
 var App = Em.Application.create();
 
+//
+//  utilities
+//
+
 App.util = {};
 App.util.chomp = function (raw_text) {
   return raw_text.replace(/\r/g, '').replace(/\n+$/, '');
 };
 
-App.Score = Ember.Object.extend({
+//
+//  history handling
+//
+
+App.history = Em.Object.create({
+  pageToken:    function ()      { return window.location.pathname; },
+  setPageToken: function (token) { return history.pushState({}, '', token); }
+});
+
+//
+//  models
+//
+
+App.Score = Em.Object.extend({
   wpm: null,
   accuracy: null,
   snippet_id: null
 });
 
-App.TypingText = Ember.Object.extend({
+App.TypingText = Em.Object.extend({
   full_string: null,
   snippet_id: null,
 
@@ -30,6 +47,25 @@ App.TypingText = Ember.Object.extend({
 
   focused: false,
   finished: false,
+
+  _tabSize: function () {
+    if (this._tab_size) {
+      return this._tab_size;
+    }
+
+    var indents = [];
+
+    var lines = this.full_string.split('\n');
+    $.each(lines, function (i, line) {
+      var match = line.match('^(\\s+)');
+      if (match) {
+        indents.push(match[1].length);
+      }
+    });
+
+    this._tab_size = indents[0];
+    return this._tab_size;
+  },
 
   //
   // rendering bookkeeping
@@ -124,25 +160,6 @@ App.TypingText = Ember.Object.extend({
     }
   },
 
-  _tabSize: function () {
-    if (this._tab_size) {
-      return this._tab_size;
-    }
-
-    var indents = [];
-
-    var lines = this.full_string.split('\n');
-    $.each(lines, function (i, line) {
-      var match = line.match('^(\\s+)');
-      if (match) {
-        indents.push(match[1].length);
-      }
-    });
-
-    this._tab_size = indents[0];
-    return this._tab_size;
-  },
-
   tabPressed: function () {
     for (var i = 0; i < this._tabSize(); i++) {
       this.typeOn(' ');
@@ -179,6 +196,13 @@ App.TypingText = Ember.Object.extend({
   }
 });
 
+App.CategoryPrefs = Em.Object.extend({
+});
+
+//
+//  views
+//
+
 App.WPMDisplay = Em.View.extend({
   tagName: 'span',
 
@@ -190,12 +214,6 @@ App.AccuracyDisplay = Em.View.extend({
 
   textBinding: 'App.typingAreaController.current_snippet'
 });
-
-App.KEY_BACKSPACE     = 8;
-App.KEY_TAB           = 9;
-App.KEY_RETURN        = 13;
-App.KEY_SINGLE_QUOTE  = 39;
-App.KEY_FORWARD_SLASH = 47;
 
 App.TypingArea = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet',
@@ -237,33 +255,32 @@ App.TypingArea = Em.View.extend({
   focusOut: function (e) { this.text.set('focused', false); }
 });
 
-// center the focus nag on the typing area
-App.centerFocusNag = function () {
-  if (App.typingAreaController.current_snippet === null) {
-    return;
-  }
-
-  var text_area = $('.' + App.typingAreaController.current_snippet.className);
-  var focus_nag = $('.' + App.typingAreaController.current_snippet.focusNagClass);
-  if (text_area.length === 0 || focus_nag.length === 0) {
-    return;
-  }
-
-  var text_area_offset = text_area.offset();
-  focus_nag.css({
-    top:  text_area_offset.top + ((text_area.height() / 2) - (focus_nag.height() / 2)),
-    left: text_area_offset.left + ((text_area.width() / 2) - (focus_nag.width() / 2))
-  });
-};
-
-App.typingAreaController = Ember.Object.create({
+App.typingAreaController = Em.Object.create({
   current_snippet: null,
+
+  centerFocusNag: function () {
+    // center the focus nag on the typing area
+
+    if (this.current_snippet === null) { return; }
+
+    var text_area = $('.' + this.current_snippet.className);
+    var focus_nag = $('.' + this.current_snippet.focusNagClass);
+
+    if (text_area.length === 0 || focus_nag.length === 0) { return; }
+
+    var text_area_offset = text_area.offset();
+    focus_nag.css({
+      top:  text_area_offset.top + ((text_area.height() / 2) - (focus_nag.height() / 2)),
+      left: text_area_offset.left + ((text_area.width() / 2) - (focus_nag.width() / 2))
+    });
+  },
 
   finishedObserver: function () {
     if (this.current_snippet.finished) {
-      if (App.pageToken().match('/play')) {
-        // reset the URL from specific to root to indicate "random play mode" has resumed
-        App.setPageToken('/');
+      if (App.history.pageToken().match('/play')) {
+        // reset the URL from pointing at a specific snippet (/snippets/15/play)
+        // to the root URL (/) to indicate "random play mode" has resumed
+        App.history.setPageToken('/');
       }
       this.saveScore();
       this.newSnippet();
@@ -272,7 +289,7 @@ App.typingAreaController = Ember.Object.create({
 
   saveScore: function () {
     App.scoresController.add(this.current_snippet.getScore());
-    $.post('/scores', {'score': this.current_snippet.getScore()});
+    $.post('/scores', {score: this.current_snippet.getScore()});
   },
 
   newSnippet: function (snippet_num) {
@@ -291,19 +308,19 @@ App.typingAreaController = Ember.Object.create({
 
       // TODO centerFocusNag/focusing behavior needs to happen properly on first draw
       //   Not this way. this is a hack. this is sad.
-      setTimeout(function () { App.centerFocusNag(); }, 10);
+      setTimeout(function () { self.centerFocusNag(); }, 10);
       setTimeout(function () { $('.' + self.current_snippet.className).focus(); }, 10);
     });
   },
 
   focusChanged: function () {
     if (!this.current_snippet.focused) {
-      App.centerFocusNag();
+      this.centerFocusNag();
     }
   }.observes('current_snippet.focused')
 });
 
-App.scoresController = Ember.ArrayController.create({
+App.scoresController = Em.ArrayController.create({
   content: [],
 
   loadScores: function (score) {
@@ -318,11 +335,106 @@ App.scoresController = Ember.ArrayController.create({
   }
 });
 
-App.ScoreListView = Ember.View.extend({});
+App.ScoreListView = Em.View.extend({});
+
+//
+//  category preferences stuff
+//    TODO -- this is a first draft and clearly needs some revision
+//    possibly something that would make a 'popup' more generic
+//    (or at least use less views / shady callbacks / global goofiness)
+//
+
+App.prefsLink = Em.View.extend({
+  classNames: ['prefs-link'],
+
+  showPreferences: function () {
+    if ($('.prefs-popup').length > 0) { return; }
+
+    App.categoryPrefController.loadCategories(function () {
+      var popup_view = App.prefsPopup.create({});
+      popup_view.appendTo('.container');
+    });
+  }
+});
+
+App.prefsPopup = Em.View.extend({
+  templateName: 'prefs-popup'
+});
+
+App.prefsPopupContent = Em.View.extend({
+  classNames: ['blue-round', 'prefs-popup'],
+
+  category_prefs: null,
+
+  didInsertElement: function () {
+    this.$().css({
+      left: $('.container').position().left + 40,
+      top: $(window).height() / 4,
+    });
+  },
+
+  wasSaved: function () {
+    this.get('parentView').destroy();
+  }
+});
+
+App.prefsPopupBackground = Em.View.extend({
+  classNames: ['prefs-popup-bg'],
+
+  didInsertElement: function () {
+    this.$().css({
+      height: $(document).height(),
+      width: $(document).width()           
+    });
+  },
+
+  click: function () {
+    this.get('parentView').destroy();
+  }
+});
+
+App.prefsSaveButton = Em.View.extend({
+  click: function (e) {
+    var self = this;
+    App.categoryPrefController.saveCategories(function () {
+      self.get('parentView').wasSaved();                                                
+    });
+  }
+});
+
+App.categoryPrefController = Em.ArrayController.create({
+  content: [],
+
+  saveCategories: function (finished_cb) {
+    var self = this;
+    var selected_categories = $('.prefs-popup input:checked').map(function () { 
+      return $(this).attr('value'); }
+    );
+    $.post('/categories', {categories: selected_categories.toArray()}, finished_cb);
+  },
+
+  loadCategories: function (finished_cb) {
+    var self = this;
+    $.get('/categories', function (json) {
+      self.set('content', json);
+      finished_cb();
+    });
+  }
+});
+
+//
+//  key handling
+//
 
 // some reference for character codes:
-// var chr_from_int = String.fromCharCode(34);
-// var int_from_chr = '"'.charCodeAt(0)
+//   var chr_from_int = String.fromCharCode(34);
+//   var int_from_chr = '"'.charCodeAt(0)
+
+App.KEY_BACKSPACE     = 8;
+App.KEY_TAB           = 9;
+App.KEY_RETURN        = 13;
+App.KEY_SINGLE_QUOTE  = 39;
+App.KEY_FORWARD_SLASH = 47;
 
 App.notAKeypress = function (e) {
   if (e.which == App.KEY_BACKSPACE) { return true; }
@@ -343,21 +455,16 @@ App.setPreventDefaultForKey = function (e) {
   if (e.which == App.KEY_TAB)             { e.preventDefault();   }
 };
 
-App.pageToken = function () {
-  return window.location.pathname;
-};
+//
+//  entry point
+//
 
-App.setPageToken = function (token) {
-  history.pushState({}, '', token);
-};
-
-// entry point
-if (App.pageToken() === '/' || App.pageToken().match('/play') ) {
+if (App.history.pageToken() === '/' || App.history.pageToken().match('/play') ) {
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });
 
-  var path = App.pageToken();
+  var path = App.history.pageToken();
   if (path.match('/play')) {
     var snippet_num = path.match('/snippets/(\\d+)/play')[1];
     App.typingAreaController.newSnippet(snippet_num);

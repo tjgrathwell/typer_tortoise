@@ -1,6 +1,6 @@
 class Score < ActiveRecord::Base
   belongs_to :user
-  has_one :snippet
+  belongs_to :snippet
 
   validates :wpm, :accuracy, :user_id, :presence => true
 

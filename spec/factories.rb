@@ -1,11 +1,20 @@
 FactoryGirl.define do
   factory :user do
-    name     "Robert Typesmith"
+    sequence :name do |n|
+      name "Test User #{n}"
+    end
+  end
+
+  factory :category do
+    sequence :name do |n| 
+      "test_snippet_category_#{n}"
+    end
   end
 
   factory :snippet do
-    short_desc     "a_test_snippet"
-    full_text      "lorem ipsum dolor etc"
-    category       "test_cat"
+    category
+    sequence :full_text do |n| 
+      "lorem ipsum dolor #{n}"
+    end
   end
 end

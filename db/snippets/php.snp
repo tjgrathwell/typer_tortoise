@@ -8,7 +8,8 @@ if (@$_REQUEST['action'] == 'register') {
         $message = 'There was a problem with your registration details';
         $error = $resp;
     }
-} else if (@$_REQUEST['action'] == 'check_username' && isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+} else if (@$_REQUEST['action'] == 'check_username' &&
+           isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     // means it was requested via Ajax
     echo json_encode(check_username($_REQUEST['username']));
     exit; // only print out the json version of the response
@@ -33,7 +34,9 @@ function check_username($username) {
     if (!$username) {
         $resp = array('ok' => false, 'msg' => "Please specify a username");
     } else if (!preg_match('/^[a-z0-9\.\-_]+$/', $username)) {
-        $resp = array('ok' => false, "msg" => "Your username can only contain alphanumerics and period, dash and underscore (.-_)");
+        $bad_chars = "Your username can only contain alphanumerics and period," +
+                     " dash and underscore (.-_)";
+        $resp = array('ok' => false, "msg" => $bad_chars);
     } else if (in_array($username, $taken_usernames)) {
         $resp = array("ok" => false, "msg" => "The selected username is not available");
     } else {

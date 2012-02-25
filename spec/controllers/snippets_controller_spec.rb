@@ -6,26 +6,55 @@ describe SnippetsController do
     @snippet = Factory(:snippet)
   end
 
-  describe "GET 'random'" do
-    it "should return a snippet as plaintext" do
-      get 'random'
-      response.should be_success
-
+  describe "GET '/snippets/random'" do
+    it "should return a random snippet as plaintext" do
+      get :random
       response.body.should == @snippet.full_text
     end
   end
 
-  describe "GET 'random.json'" do
-    it "should return the snippet as json" do
-      get 'random', :format => :json
-      response.should be_success
+  describe "GET '/snippets/random.json'" do
+    it "should return a random snippet as json" do
+      get :random, :format => :json
+      response.body.should == @snippet.to_json
+    end
 
-      parsed_body = JSON.parse(response.body)
+    it "should work if you're logged in with no category preferences" do
+      user = Factory(:user)
+      test_sign_in(user)
       
-      parsed_body['category'].should == @snippet.category
-      parsed_body['short_desc'].should == @snippet.short_desc
-      parsed_body['full_text'].should == @snippet.full_text
-      parsed_body['id'].should == @snippet.id
+      get :random, :format => :json
+      response.body.should == @snippet.to_json
+    end
+
+    it "should only return snippets in the user's preferences" do
+      user = Factory(:user)
+      test_sign_in(user)
+
+      category = Factory(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = Factory(:snippet,
+        :category => category,
+        :full_text => 'cynicism-interpersonal',
+      )
+      CategoryPreference.create(:user => user, :category => category)
+
+      # let's play fight the randomness
+      10.times do
+        get :random, :format => :json
+        response.body.should == snippet_too.to_json
+      end
+    end
+  end
+
+  describe "GET '/snippets/:id.json'" do
+    it "should return a particular snippet" do
+      snippet_two = Factory(:snippet)
+
+      get :show, :format => :json, :id => @snippet.id
+      response.body.should == @snippet.to_json
+
+      get :show, :format => :json, :id => snippet_two.id
+      response.body.should == snippet_two.to_json
     end
   end
 end
