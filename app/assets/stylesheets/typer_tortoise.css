@@ -6,6 +6,10 @@ h1 {
     font-size: 200%;
 }
 
+.center-text {
+    text-align: center;
+}
+
 .blue-round {
     border-style: solid;
 		border-width: 2px;
@@ -191,6 +195,11 @@ textarea.snippet-editor {
     position: absolute;
     z-index: 100;
 		background-color: rgba(173, 216, 230, .9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset
+}
+
+.prefs-popup button {
+    margin-top: 10px;
 }
 
 .prefs-popup ul {

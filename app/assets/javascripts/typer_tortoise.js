@@ -219,9 +219,6 @@ App.TypingText = Em.Object.extend({
   }
 });
 
-App.CategoryPrefs = Em.Object.extend({
-});
-
 //
 //  views
 //
@@ -316,6 +313,14 @@ App.typingAreaController = Em.Object.create({
     $.post('/scores', {score: this.current_snippet.getScore()});
   },
 
+  changeSnippetToCategory: function (category_ids) {
+    if (category_ids.indexOf(this.current_snippet.category_id) >= 0) {
+      return;
+    }
+
+    this.newSnippet();
+  },
+
   newSnippet: function (snippet_num) {
     var self = this;
 
@@ -332,7 +337,8 @@ App.typingAreaController = Em.Object.create({
     $.get(url, params, function (snippet_json) {
       self.set('current_snippet', App.TypingText.create({
         full_string: App.util.chomp(snippet_json['full_text']),
-        snippet_id: snippet_json['id']
+        snippet_id: snippet_json['id'],
+        category_id: snippet_json['category_id']
       }));
 
       // TODO centerFocusNag/focusing behavior needs to happen properly on first draw
@@ -377,12 +383,13 @@ App.prefsLink = Em.View.extend({
   classNames: ['prefs-link'],
 
   showPreferences: function () {
-    if ($('.prefs-popup').length > 0) { return; }
+    App.categoryPrefController.showPreferences();
+  }
+});
 
-    App.categoryPrefController.loadCategories(function () {
-      var popup_view = App.prefsPopup.create({});
-      popup_view.appendTo('.container');
-    });
+App.prefsSaveButton = Em.Button.extend({
+  click: function (e) {
+    App.categoryPrefController.saveCategories();
   }
 });
 
@@ -408,30 +415,37 @@ App.prefsPopupContent = Em.View.extend({
       top: $(window).height() / 4
     });
   },
-
-  wasSaved: function () {
-    this.get('parentView').destroy();
-  }
-});
-
-App.prefsSaveButton = Em.View.extend({
-  click: function (e) {
-    var self = this;
-    App.categoryPrefController.saveCategories(function () {
-      self.get('parentView').wasSaved();                                                
-    });
-  }
 });
 
 App.categoryPrefController = Em.ArrayController.create({
   content: [],
+  prefs_popup: null,
 
-  saveCategories: function (finished_cb) {
+  popupOnPage: function () {
+    var prefs_popup = this.get('prefs_popup');
+    if (prefs_popup) { return true; }
+    return false;
+  },
+
+  showPreferences: function () {
     var self = this;
-    var selected_categories = $('.prefs-popup input:checked').map(function () { 
-      return $(this).attr('value'); }
-    );
-    $.post('/categories', {categories: selected_categories.toArray()}, finished_cb);
+    this.loadCategories(function () {
+      var popup_view = App.prefsPopup.create({});
+      self.set('prefs_popup', popup_view);
+      popup_view.appendTo('.container');
+    });
+  },
+
+  saveCategories: function () {
+    var self = this;
+    var selected_categories = this.prefs_popup.$().find('input:checked').map(function () { 
+      return parseInt($(this).attr('value'), 10); }
+    ).toArray();
+    $.post('/categories', {categories: selected_categories}, function () {
+      self.get('prefs_popup').destroy();
+      self.set('prefs_popup', null);
+      App.typingAreaController.changeSnippetToCategory(selected_categories);
+    });
   },
 
   loadCategories: function (finished_cb) {
@@ -458,6 +472,14 @@ App.KEY_SINGLE_QUOTE  = 39;
 App.KEY_FORWARD_SLASH = 47;
 
 App.notAKeypress = function (e) {
+  // Pressing 'ctrl-t' to open a new tab still sends that 't'
+  //   to the typing area before the new tab opens, meaning
+  //   you can unintentionally start 'typing' when you're
+  //   really going away to do something else.
+  // Don't accept any keystrokes with modifiers to avoid
+  //   all these sort of problems.
+  if (e.ctrlKey || e.altKey || e.metaKey) { return true; }
+
   if (e.which == App.KEY_BACKSPACE) { return true; }
   // tab in keypress shows as 0
   if (e.which == 0)                 { return true; }
