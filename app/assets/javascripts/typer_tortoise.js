@@ -70,26 +70,49 @@ App.TypingText = Em.Object.extend({
   //
   // rendering bookkeeping
   //
+  hasMistakes: function () {
+    return (this.mistakes.length > 0);
+  }.property('mistakes.length'),
+
   beforeCursor: function () {
     return this.full_string.substr(0, this.cursor_pos);
   }.property('cursor_pos'),
 
   atCursor: function () {
     if (this.mistakes.length > 0) {
-      return '';
+      return this.mistakes.join('');
     }
 
     var this_char = this.full_string.substr(this.cursor_pos, 1);
     if (this_char === '\n') {
-      return "\u21b5" + this_char; // 21b5 is the "return key" symbol
-    } else {
-      return this_char;
+      // show the "return key" symbol instead of just the (invisible) newline char
+      return "\u21b5";
     }
+
+    return this_char;
   }.property('cursor_pos', 'mistakes.length'),
 
   afterCursor: function () {
-    var adjustedCursor = this.cursor_pos + this.mistakes.length;
-    return this.full_string.substr(adjustedCursor + 1);
+    var adjustedCursor;
+
+    // For mistakes to not clobber the newline character (which causes
+    //   an unpleasant visual effect) we need to make sure to preserve
+    //   any \n between (cursor_pos) and (cursor_pos + mistakes.length)
+    var clobberedArea = this.full_string.substr(this.cursor_pos, this.mistakes.length);
+    if (clobberedArea.indexOf('\n') >= 0) {
+      adjustedCursor = this.cursor_pos + clobberedArea.indexOf('\n');
+    } else {
+      adjustedCursor = this.cursor_pos + this.mistakes.length;
+    }
+
+    var this_char = this.full_string.substr(this.cursor_pos, 1);
+    if (this.mistakes.length === 0 && this_char !== '\n') {
+      // If we have no mistakes, one character is reserved for the 'atCursor' point.
+      // EXCEPT if that character is a newline: the newline always comes in the
+      //   afterCursor section, so we leave the cursor alone.
+      adjustedCursor += 1;
+    }
+    return this.full_string.substr(adjustedCursor);
   }.property('cursor_pos', 'mistakes.length'),
 
   //
@@ -218,6 +241,7 @@ App.AccuracyDisplay = Em.View.extend({
 App.TypingArea = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet',
   isFocusedBinding: 'App.typingAreaController.current_snippet.focused',
+  typeCursorClass: 'type-cursor',
 
   isBlurry: function () {
     return !this.get('isFocused');

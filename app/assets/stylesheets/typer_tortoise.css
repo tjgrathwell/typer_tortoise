@@ -41,8 +41,8 @@ h1 {
 		opacity: .2;
 }
 
-.type-panel b {
-		color: #ccc;
+.type-panel .before-cursor {
+		color: #888;
 }
 
 .type-panel .type-cursor {
@@ -50,7 +50,7 @@ h1 {
 		text-decoration: underline;
 }
 
-.type-panel .type-mistakes {
+.type-cursor.has-mistakes {
 		color: red;
 		text-decoration: underline;
 }

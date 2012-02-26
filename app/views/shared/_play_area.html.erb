@@ -7,7 +7,7 @@
 
       <!-- white space becomes super-significant in this area -->
       <div {{bindAttr class="text.className isBlurry:unfocused"}} tabindex="0"
-        ><b>{{text.beforeCursor}}</b><span class="type-cursor">{{text.atCursor}}</span><span class="type-mistakes">{{#each text.mistakes}}{{this}}{{/each}}</span>{{text.afterCursor}}</div>
+        ><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class="typeCursorClass text.hasMistakes"}}>{{text.atCursor}}</span>{{text.afterCursor}}</div>
 
     {{/view}}
   </div>
