@@ -16,17 +16,19 @@ describe Snippet do
     end
 
     it 'gives you a snippet from the category you ask for' do
-      Snippet.random([2]).should == @snippets[1]
+      Snippet.random(:category_ids => [2]).should == @snippets[1]
     end
 
     it 'asserts if given anything other than an integer' do
-      lambda do
-        Snippet.random([nil])
-      end.should raise_error(ArgumentError)
+      [:category_ids, :exclude].each do |arg|
+        lambda do
+          Snippet.random(arg => [nil])
+        end.should raise_error(ArgumentError)
 
-      lambda do
-        Snippet.random(['qualified-pleasant'])
-      end.should raise_error(ArgumentError)
+        lambda do
+          Snippet.random(arg => ['qualified-pleasant'])
+        end.should raise_error(ArgumentError)
+      end
     end
   end
 

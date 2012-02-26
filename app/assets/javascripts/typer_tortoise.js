@@ -300,7 +300,12 @@ App.typingAreaController = Em.Object.create({
       url = '/snippets/' + snippet_num + '.json';
     }
 
-    $.get(url, function (snippet_json) {
+    var params = {};
+    if (this.current_snippet) {
+      params['last_seen'] = this.current_snippet.snippet_id;
+    }
+
+    $.get(url, params, function (snippet_json) {
       self.set('current_snippet', App.TypingText.create({
         full_string: App.util.chomp(snippet_json['full_text']),
         snippet_id: snippet_json['id']
@@ -369,8 +374,8 @@ App.prefsPopup = Em.View.extend({
 App.prefsPopupContent = Em.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
-  click: function () {
-    this.stopPropagation();
+  click: function (e) {
+    e.stopPropagation();
   },
 
   didInsertElement: function () {

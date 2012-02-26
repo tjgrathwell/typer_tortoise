@@ -1,11 +1,12 @@
 class SnippetsController < ApplicationController
   def random
-    preferred_category_ids = []
+    category_ids = []
     if signed_in?
-      preferred_category_ids = current_user.category_preferences.map { |p| p.category_id }
+      category_ids = current_user.category_preferences.map { |p| p.category_id }
     end
 
-    selected_snip = Snippet.random(preferred_category_ids)
+    exclude = params[:last_seen] ? [params[:last_seen]] : []
+    selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
     
     respond_to do |format|
       format.json { render :json => selected_snip.to_json }

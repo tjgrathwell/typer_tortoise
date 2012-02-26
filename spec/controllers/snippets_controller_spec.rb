@@ -44,6 +44,20 @@ describe SnippetsController do
         response.body.should == snippet_too.to_json
       end
     end
+
+    it "should not return the snippet specified by the 'last_seen' parameter" do
+      category = Factory(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = Factory(:snippet,
+        :category => category,
+        :full_text => 'cynicism-interpersonal',
+      )
+
+      10.times do
+        get :random, :format => :json, :last_seen => @snippet.id
+        response.body.should == snippet_too.to_json
+      end      
+    end
+
   end
 
   describe "GET '/snippets/:id.json'" do
