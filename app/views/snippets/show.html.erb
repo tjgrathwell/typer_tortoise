@@ -20,8 +20,8 @@
   <% @snippet.scores.each do |score| %>
     <tr>
       <td><%= link_to score.user.name, user_path(score.user_id) %></td>
-      <td><%= score.wpm %>%</td>
-      <td><%= score.accuracy %></td>
+      <td><%= score.wpm %></td>
+      <td><%= score.accuracy %>%</td>
     </tr>
   <% end %>
   </table>

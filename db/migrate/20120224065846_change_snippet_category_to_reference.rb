@@ -4,10 +4,6 @@ class ChangeSnippetCategoryToReference < ActiveRecord::Migration
       t.references :category
     end
 
-    Snippet.all.each do |snippet|
-      snippet.update_attributes(:category_id => Category.find_by_name(snippet.category).id)
-    end
-
     remove_column :snippets, :category
   end
 

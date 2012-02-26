@@ -167,11 +167,13 @@ textarea.snippet-editor {
 }
 
 .prefs-popup-bg {
-    position: absolute;
+    position: fixed;
     z-index: 50;
     background-color: rgba(100, 100, 100, .8);
     left: 0px;
     top: 0px;
+    bottom: 0px;
+    right: 0px;
 }
 
 .prefs-link span {

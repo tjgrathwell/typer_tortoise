@@ -28,7 +28,6 @@
 <body>
 
 <script type="text/x-handlebars" data-template-name="prefs-popup">
-  {{view App.prefsPopupBackground}}
   {{#view App.prefsPopupContent}}
     <h2><% if signed_in? %><%= current_user.name %><% end %>'s preferences:</h2>
     <ul>

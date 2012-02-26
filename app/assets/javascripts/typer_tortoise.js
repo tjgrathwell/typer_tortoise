@@ -358,37 +358,29 @@ App.prefsLink = Em.View.extend({
 });
 
 App.prefsPopup = Em.View.extend({
-  templateName: 'prefs-popup'
+  templateName: 'prefs-popup',
+  classNames: ['prefs-popup-bg'],
+
+  click: function () {
+    this.destroy();
+  }
 });
 
 App.prefsPopupContent = Em.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
-  category_prefs: null,
+  click: function () {
+    this.stopPropagation();
+  },
 
   didInsertElement: function () {
     this.$().css({
       left: $('.container').position().left + 40,
-      top: $(window).height() / 4,
+      top: $(window).height() / 4
     });
   },
 
   wasSaved: function () {
-    this.get('parentView').destroy();
-  }
-});
-
-App.prefsPopupBackground = Em.View.extend({
-  classNames: ['prefs-popup-bg'],
-
-  didInsertElement: function () {
-    this.$().css({
-      height: $(document).height(),
-      width: $(document).width()           
-    });
-  },
-
-  click: function () {
     this.get('parentView').destroy();
   }
 });
