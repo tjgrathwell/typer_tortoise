@@ -1,0 +1,657 @@
+ZZhttps://github.com/joyent/node/blob/master/lib/assert.js
+assert.notDeepEqual = function notDeepEqual(actual, expected, message) {
+  if (_deepEqual(actual, expected)) {
+    fail(actual, expected, message, 'notDeepEqual', assert.notDeepEqual);
+  }
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/buffer.js
+SlowBuffer.prototype.hexSlice = function(start, end) {
+  var len = this.length;
+
+  if (!start || start < 0) start = 0;
+  if (!end || end < 0 || end > len) end = len;
+
+  var out = '';
+  for (var i = start; i < end; i++) {
+    out += toHex(this[i]);
+  }
+  return out;
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/child_process.js
+function kill() {
+  killed = true;
+  child.kill(options.killSignal);
+  process.nextTick(function() {
+    exithandler(null, options.killSignal);
+  });
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/child_process.js
+function setStreamOption(name, index, options) {
+  // Skip if we already have options.stdinStream
+  if (options[name]) return;
+
+  if (options.customFds &&
+      typeof options.customFds[index] == 'number' &&
+      options.customFds[index] !== -1) {
+    if (options.customFds[index] === index) {
+      options[name] = null;
+    } else {
+      throw new Error('customFds not yet supported');
+    }
+  } else {
+    options[name] = createPipe();
+  }
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/dgram.js
+Socket.prototype.address = function() {
+  this._healthCheck();
+
+  var address = this._handle.getsockname();
+  if (!address)
+    throw errnoException(errno, 'getsockname');
+
+  return address;
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/dgram.js
+function onMessage(handle, nread, buf, rinfo) {
+  var self = handle.socket;
+
+  if (nread == -1) {
+    self.emit('error', errnoException(errno, 'recvmsg'));
+  }
+  else {
+    rinfo.size = buf.length; // compatibility
+    self.emit('message', buf, rinfo);
+  }
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/dns.js
+function makeAsync(callback) {
+  if (typeof callback !== 'function') {
+    return callback;
+  }
+  return function asyncCallback() {
+    if (asyncCallback.immediately) {
+      // The API already returned, we can invoke the callback immediately.
+      callback.apply(null, arguments);
+    } else {
+      var args = arguments;
+      process.nextTick(function() {
+        callback.apply(null, args);
+      });
+    }
+  };
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/events.js
+EventEmitter.prototype.listeners = function(type) {
+  if (!this._events) this._events = {};
+  if (!this._events[type]) this._events[type] = [];
+  if (!isArray(this._events[type])) {
+    this._events[type] = [this._events[type]];
+  }
+  return this._events[type];
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/fs.js
+fs.symlink = function(destination, path, type_, callback) {
+  var type = (typeof(type_) == 'string' ? type_ : null);
+  var callback_ = arguments[arguments.length - 1];
+  callback = (typeof(callback_) == 'function' ? callback_ : null);
+  binding.symlink(pathModule._makeLong(destination),
+                  pathModule._makeLong(path), type, callback);
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/fs.js
+function close() {
+  fs.close(self.fd, function(err) {
+    if (err) {
+      if (cb) cb(err);
+      self.emit('error', err);
+      return;
+    }
+
+    if (cb) cb(null);
+    self.emit('close');
+  });
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/fs.js
+WriteStream.prototype.end = function(data, encoding, cb) {
+  if (typeof(data) === 'function') {
+    cb = data;
+  } else if (typeof(encoding) === 'function') {
+    cb = encoding;
+    this.write(data);
+  } else if (arguments.length > 0) {
+    this.write(data, encoding);
+  }
+  this.writable = false;
+  this._queue.push([fs.close, cb]);
+  this.flush();
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/http.js
+OutgoingMessage.prototype.getHeader = function(name) {
+  if (arguments.length < 1) {
+    throw new Error('`name` is required for getHeader().');
+  }
+
+  if (!this._headers) return;
+
+  var key = name.toLowerCase();
+  return this._headers[key];
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/http.js
+ServerResponse.prototype.detachSocket = function(socket) {
+  assert(socket._httpMessage == this);
+  socket.removeListener('close', onServerResponseClose);
+  socket._httpMessage = null;
+  this.socket = this.connection = null;
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/http.js
+var onSocket = function() {
+  if (self.socket.writable) {
+    if (method) {
+      self.socket[method].apply(self.socket, arguments_);
+    }
+    if (cb) { cb(); }
+  } else {
+    self.socket.once('connect', function() {
+      if (method) {
+        self.socket[method].apply(self.socket, arguments_);
+      }
+      if (cb) { cb(); }
+    });
+  }
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/module.js
+// given a path check a the file exists with any of the set extensions
+function tryExtensions(p, exts) {
+  for (var i = 0, EL = exts.length; i < EL; i++) {
+    var filename = tryFile(p + exts[i]);
+
+    if (filename) {
+      return filename;
+    }
+  }
+  return false;
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/module.js
+var start = request.substring(0, 2);
+if (start !== './' && start !== '..') {
+  var paths = modulePaths;
+  if (parent) {
+    if (!parent.paths) parent.paths = [];
+    paths = parent.paths.concat(paths);
+  }
+  return [request, paths];
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/path.js
+for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+  var path = (i >= 0) ? arguments[i] : process.cwd();
+
+  // Skip empty and invalid entries
+  if (typeof path !== 'string' || !path) {
+    continue;
+  }
+
+  resolvedPath = path + '/' + resolvedPath;
+  resolvedAbsolute = path.charAt(0) === '/';
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/readline.js
+Interface.prototype.setPrompt = function(prompt, length) {
+  this._prompt = prompt;
+  if (length) {
+    this._promptLength = length;
+  } else {
+    var lines = prompt.split(/[\r\n]/);
+    var lastLine = lines[lines.length - 1];
+    this._promptLength = Buffer.byteLength(lastLine);
+  }
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/readline.js
+Interface.prototype._onLine = function(line) {
+  if (this._questionCallback) {
+    var cb = this._questionCallback;
+    this._questionCallback = null;
+    this.setPrompt(this._oldPrompt);
+    cb(line);
+  } else {
+    this.emit('line', line);
+  }
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/readline.js
+switch (key.name) {
+  case 'b': // backward word
+    this._wordLeft();
+    break;
+
+  case 'f': // forward word
+    this._wordRight();
+    break;
+
+  case 'd': // delete forward word
+  case 'delete':
+    this._deleteWordRight();
+    break;
+
+  case 'backspace': // delete backwards to a word boundary
+    this._deleteWordLeft();
+    break;
+}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/repl.js
+abs = path.resolve(dir, name);
+try {
+  if (fs.statSync(abs).isDirectory()) {
+    group.push(subdir + name + '/');
+    subfiles = fs.readdirSync(abs);
+    for (s = 0; s < subfiles.length; s++) {
+      if (indexRe.test(subfiles[s])) {
+        group.push(subdir + name);
+      }
+    }
+  }
+} catch (e) {}
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/timers.js
+exports.clearTimeout = function(timer) {
+  if (timer && (timer.ontimeout || timer._onTimeout)) {
+    timer.ontimeout = timer._onTimeout = null;
+    if (timer instanceof Timer) {
+      timer.close(); // for after === 0
+    } else {
+      exports.unenroll(timer);
+    }
+  }
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/zlib.js
+Zlib.prototype.end = function end(chunk, cb) {
+  var self = this;
+  this._ending = true;
+  var ret = this.write(chunk, function() {
+    self.emit('end');
+    if (cb) cb();
+  });
+  this._ended = true;
+  return ret;
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/util.js
+exports.print = function() {
+  for (var i = 0, len = arguments.length; i < len; ++i) {
+    process.stdout.write(String(arguments[i]));
+  }
+};
+|||||=====|||||
+ZZhttps://github.com/joyent/node/blob/master/lib/url.js
+var chop = rest.length;
+for (var i = 0, l = delims.length; i < l; i++) {
+  var c = rest.indexOf(delims[i]);
+  if (c !== -1) {
+    chop = Math.min(c, chop);
+  }
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/sizzle/master/sizzle.js
+// Make sure no comments are found
+if ( div.getElementsByTagName("*").length > 0 ) {
+  Expr.find.TAG = function( match, context ) {
+    var results = context.getElementsByTagName( match[1] );
+
+    // Filter out possible comments
+    if ( match[1] === "*" ) {
+      var tmp = [];
+
+      for ( var i = 0; results[i]; i++ ) {
+        if ( results[i].nodeType === 1 ) {
+          tmp.push( results[i] );
+        }
+      }
+
+      results = tmp;
+    }
+
+    return results;
+  };
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/traversing.js
+if ( typeof selector !== "string" ) {
+  return jQuery( selector ).filter(function() {
+    for ( i = 0, l = self.length; i < l; i++ ) {
+      if ( jQuery.contains( self[ i ], this ) ) {
+        return true;
+      }
+    }
+  });
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/callbacks.js
+// Convert String-formatted flags into Object-formatted ones and store in cache
+function createFlags( flags ) {
+	var object = flagsCache[ flags ] = {},
+		i, length;
+	flags = flags.split( /\s+/ );
+	for ( i = 0, length = flags.length; i < length; i++ ) {
+		object[ flags[i] ] = true;
+	}
+	return object;
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/ajax/script.js
+// Attach handlers for all browsers
+script.onload = script.onreadystatechange = function( _, isAbort ) {
+
+  if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
+
+    // Handle memory leak in IE
+    script.onload = script.onreadystatechange = null;
+
+    // Remove the script
+    if ( head && script.parentNode ) {
+      head.removeChild( script );
+    }
+
+    // Dereference the script
+    script = undefined;
+
+    // Callback if not abort
+    if ( !isAbort ) {
+      callback( 200, "success" );
+    }
+  }
+};
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+removeProp: function( name ) {
+  name = jQuery.propFix[ name ] || name;
+  return this.each(function() {
+    // try/catch handles cases where IE balks (such as removing a property on window)
+    try {
+      this[ name ] = undefined;
+      delete this[ name ];
+    } catch( e ) {}
+  });
+},
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+for ( i = 0, l = this.length; i < l; i++ ) {
+  elem = this[ i ];
+
+  if ( elem.nodeType === 1 && elem.className ) {
+    if ( value ) {
+      className = (" " + elem.className + " ").replace( rclass, " " );
+      for ( c = 0, cl = classNames.length; c < cl; c++ ) {
+        className = className.replace(" " + classNames[ c ] + " ", " ");
+      }
+      elem.className = jQuery.trim( className );
+
+    } else {
+      elem.className = "";
+    }
+  }
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+set: function( elem, value ) {
+  var values = jQuery.makeArray( value );
+
+  jQuery(elem).find("option").each(function() {
+    this.selected = jQuery.inArray( jQuery(this).val(), values ) >= 0;
+  });
+
+  if ( !values.length ) {
+    elem.selectedIndex = -1;
+  }
+  return values;
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+ZZ// Use this for any attribute in IE6/7
+ZZ// This fixes almost every IE6/7 issue
+nodeHook = jQuery.valHooks.button = {
+  get: function( elem, name ) {
+    var ret;
+    ret = elem.getAttributeNode( name );
+    return ret && ( fixSpecified[ name ] ? ret.nodeValue !== "" : ret.specified ) ?
+      ret.nodeValue :
+      undefined;
+  },
+  set: function( elem, value, name ) {
+    // Set the existing or create a new attribute node
+    var ret = elem.getAttributeNode( name );
+    if ( !ret ) {
+      ret = document.createAttribute( name );
+      elem.setAttributeNode( ret );
+    }
+    return ( ret.nodeValue = value + "" );
+  }
+};
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+ZZ// Set width and height to auto instead of 0 on empty string( Bug #8150 )
+ZZ// This is for removals
+jQuery.each([ "width", "height" ], function( i, name ) {
+  jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+    set: function( elem, value ) {
+      if ( value === "" ) {
+        elem.setAttribute( name, "auto" );
+        return value;
+      }
+    }
+  });
+});
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+// Some attributes require a special call on IE
+if ( !jQuery.support.hrefNormalized ) {
+  jQuery.each([ "href", "src", "width", "height" ], function( i, name ) {
+    jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+      get: function( elem ) {
+        var ret = elem.getAttribute( name, 2 );
+        return ret === null ? undefined : ret;
+      }
+    });
+  });
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/attributes.js
+jQuery.each([ "radio", "checkbox" ], function() {
+  jQuery.valHooks[ this ] = jQuery.extend( jQuery.valHooks[ this ], {
+    set: function( elem, value ) {
+      if ( jQuery.isArray( value ) ) {
+        return ( elem.checked = jQuery.inArray( jQuery(elem).val(), value ) >= 0 );
+      }
+    }
+  });
+});
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/core.js
+// Handle when the DOM is ready
+ready: function( wait ) {
+  // Either a released hold or an DOMready/load event and not yet ready
+  if ( (wait === true && !--jQuery.readyWait) || (wait !== true && !jQuery.isReady) ) {
+    // Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+    if ( !document.body ) {
+      return setTimeout( jQuery.ready, 1 );
+    }
+
+    // Remember that the DOM is ready
+    jQuery.isReady = true;
+
+    // If a normal DOM Ready event fired, decrement, and wait if need be
+    if ( wait !== true && --jQuery.readyWait > 0 ) {
+      return;
+    }
+
+    // If there are functions bound, to execute
+    readyList.fireWith( document, [ jQuery ] );
+
+    // Trigger any bound ready events
+    if ( jQuery.fn.trigger ) {
+      jQuery( document ).trigger( "ready" ).off( "ready" );
+    }
+  }
+},
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/core.js
+each: function( object, callback, args ) {
+  var name, i = 0,
+    length = object.length,
+    isObj = length === undefined || jQuery.isFunction( object );
+
+  if ( args ) {
+    if ( isObj ) {
+      for ( name in object ) {
+        if ( callback.apply( object[ name ], args ) === false ) {
+          break;
+        }
+      }
+    } else {
+      for ( ; i < length; ) {
+        if ( callback.apply( object[ i++ ], args ) === false ) {
+          break;
+        }
+      }
+    }
+
+  // A special, fast, case for the most common use of each
+  } else {
+    if ( isObj ) {
+      for ( name in object ) {
+        if ( callback.call( object[ name ], name, object[ name ] ) === false ) {
+          break;
+        }
+      }
+    } else {
+      for ( ; i < length; ) {
+        if ( callback.call( object[ i ], i, object[ i++ ] ) === false ) {
+          break;
+        }
+      }
+    }
+  }
+
+  return object;
+},
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/core.js
+// Use native String.trim function wherever possible
+trim: trim ?
+  function( text ) {
+    return text == null ?
+      "" :
+      trim.call( text );
+  } :
+
+  // Otherwise use our own trimming functionality
+  function( text ) {
+    return text == null ?
+      "" :
+      text.toString().replace( trimLeft, "" ).replace( trimRight, "" );
+  },
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/core.js
+merge: function( first, second ) {
+  var i = first.length,
+    j = 0;
+
+  if ( typeof second.length === "number" ) {
+    for ( var l = second.length; j < l; j++ ) {
+      first[ i++ ] = second[ j ];
+    }
+
+  } else {
+    while ( second[j] !== undefined ) {
+      first[ i++ ] = second[ j++ ];
+    }
+  }
+
+  first.length = i;
+
+  return first;
+},
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/data.js
+data = jQuery.data( elem );
+
+if ( elem.nodeType === 1 && !jQuery._data( elem, "parsedAttrs" ) ) {
+  attr = elem.attributes;
+  for ( l = attr.length; i < l; i++ ) {
+    name = attr[i].name;
+
+    if ( name.indexOf( "data-" ) === 0 ) {
+      name = jQuery.camelCase( name.substring(5) );
+
+      dataAttr( elem, name, data[ name ] );
+    }
+  }
+  jQuery._data( elem, "parsedAttrs", true );
+}
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/dimensions.js
+// innerHeight and innerWidth
+jQuery.fn[ "inner" + name ] = function() {
+  var elem = this[0];
+  return elem ?
+    elem.style ?
+    parseFloat( jQuery.css( elem, type, "padding" ) ) :
+    this[ type ]() :
+    null;
+};
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/dimensions.js
+// outerHeight and outerWidth
+jQuery.fn[ "outer" + name ] = function( margin ) {
+  var elem = this[0];
+  return elem ?
+    elem.style ?
+    parseFloat( jQuery.css( elem, type, margin ? "margin" : "border" ) ) :
+    this[ type ]() :
+    null;
+};
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/event.js
+stopPropagation: function() {
+  this.isPropagationStopped = returnTrue;
+
+  var e = this.originalEvent;
+  if ( !e ) {
+    return;
+  }
+  // if stopPropagation exists run it on the original event
+  if ( e.stopPropagation ) {
+    e.stopPropagation();
+  }
+  // otherwise set the cancelBubble property of the original event to true (IE)
+  e.cancelBubble = true;
+},
+|||||=====|||||
+ZZhttps://raw.github.com/jquery/jquery/master/src/manipulation.js
+after: function() {
+  if ( this[0] && this[0].parentNode ) {
+    return this.domManip(arguments, false, function( elem ) {
+      this.parentNode.insertBefore( elem, this.nextSibling );
+    });
+  } else if ( arguments.length ) {
+    var set = this.pushStack( this, "after", arguments );
+    set.push.apply( set, jQuery.clean(arguments) );
+    return set;
+  }
+},
