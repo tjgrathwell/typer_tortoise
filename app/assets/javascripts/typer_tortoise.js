@@ -374,15 +374,13 @@ App.ScoreListView = Em.View.extend({});
 
 //
 //  category preferences stuff
-//    TODO -- this is a first draft and clearly needs some revision
-//    possibly something that would make a 'popup' more generic
-//    (or at least use less views / shady callbacks / global goofiness)
 //
 
 App.prefsLink = Em.View.extend({
+  tagName: 'span',
   classNames: ['prefs-link'],
 
-  showPreferences: function () {
+  click: function () {
     App.categoryPrefController.showPreferences();
   }
 });
@@ -420,12 +418,6 @@ App.prefsPopupContent = Em.View.extend({
 App.categoryPrefController = Em.ArrayController.create({
   content: [],
   prefs_popup: null,
-
-  popupOnPage: function () {
-    var prefs_popup = this.get('prefs_popup');
-    if (prefs_popup) { return true; }
-    return false;
-  },
 
   showPreferences: function () {
     var self = this;
@@ -487,7 +479,7 @@ App.notAKeypress = function (e) {
 };
 
 App.setPreventDefaultForKey = function (e) {
-  // in OSX, 'delete' goes back a page. undesirable!
+  // in firefox delete/backspace goes back a page. undesirable!
   if (e.which == App.KEY_BACKSPACE)       { e.preventDefault();   }
 
   // in firefox, single quote and forward slash do a "quick search"

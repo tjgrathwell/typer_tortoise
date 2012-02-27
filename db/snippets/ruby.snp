@@ -20,3 +20,193 @@ class Authorization < ActiveRecord::Base
   validates_presence_of :user_id, :uid, :provider
   validates_uniqueness_of :uid, :scope => :provider
 end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / option_merger.rb
+def method_missing(method, *arguments, &block)
+  if arguments.last.is_a?(Proc)
+    proc = arguments.pop
+    arguments << lambda { |*args| @options.deep_merge(proc.call(*args)) }
+  else
+    arguments << (arguments.last.respond_to?(:to_hash) 
+                 ? @options.deep_merge(arguments.pop)
+                 : @options.dup)
+  end
+
+  @context.__send__(method, *arguments, &block)
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / xml_mini.rb
+def rename_key(key, options = {})
+  camelize = options[:camelize]
+  dasherize = !options.has_key?(:dasherize) || options[:dasherize]
+  if camelize
+    key = true == camelize ? key.camelize : key.camelize(camelize)
+  end
+  key = _dasherize(key) if dasherize
+  key
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / xml_mini.rb
+def _dasherize(key)
+  # $2 must be a non-greedy regex for this to work
+  left, middle, right = /\A(_*)(.*?)(_*)\Z/.match(key.strip)[1,3]
+  "#{left}#{middle.tr('_ ', '--')}#{right}"
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / time_with_zone.rb
+def +(other)
+ZZ  # If we're adding a Duration of variable length (i.e., years, months, days),
+ZZ  # move forward from #time, otherwise move forward from #utc, for accuracy when
+ZZ  # moving across DST boundaries
+  if duration_of_variable_length?(other)
+    method_missing(:+, other)
+  else
+    result = utc.acts_like?(:date) ? utc.since(other) : utc + other rescue utc.since(other)
+    result.in_time_zone(time_zone)
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / time_with_zone.rb
+def -(other)
+ZZ  # If we're subtracting a Duration of variable length (i.e., years, months, days),
+ZZ  # move backwards from #time, otherwise move backwards #utc, for accuracy when
+ZZ  # moving across DST boundaries
+  if other.acts_like?(:time)
+    utc.to_f - other.to_f
+  elsif duration_of_variable_length?(other)
+    method_missing(:-, other)
+  else
+    result = utc.acts_like?(:date) ? utc.ago(other) : utc - other rescue utc.ago(other)
+    result.in_time_zone(time_zone)
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / time_with_zone.rb
+def encode_with(coder)
+  if coder.respond_to?(:represent_object)
+    coder.represent_object(nil, utc)
+  else
+    coder.represent_scalar(nil, utc.strftime("%Y-%m-%d %H:%M:%S.%9NZ"))
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / tagged_logging.rb
+def tags_text
+  tags = current_tags
+  if tags.any?
+    tags.collect { |tag| "[#{tag}] " }.join
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / string_inquirer.rb
+module ActiveSupport
+ZZ  # Wrapping a string in this class gives you a prettier way to test
+ZZ  # for equality. The value returned by <tt>Rails.env</tt> is wrapped
+ZZ  # in a StringInquirer object so instead of calling this:
+ZZ  #
+ZZ  # Rails.env == "production"
+ZZ  #
+ZZ  # you can call this:
+ZZ  #
+ZZ  # Rails.env.production?
+ZZ  #
+  class StringInquirer < String
+    def method_missing(method_name, *arguments)
+      if method_name[-1, 1] == "?"
+        self == method_name[0..-2]
+      else
+        super
+      end
+    end
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / message_verifier.rb
+def verify(signed_message)
+  raise InvalidSignature if signed_message.blank?
+
+  data, digest = signed_message.split("--")
+  if data.present? && digest.present? && secure_compare(digest, generate_digest(data))
+    @serializer.load(::Base64.decode64(data))
+  else
+    raise InvalidSignature
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / log_subscriber.rb
+ZZ# Set color by using a string or one of the defined constants. If a third
+ZZ# option is set to true, it also adds bold to the string. This is based
+ZZ# on the Highline implementation and will automatically append CLEAR to the
+ZZ# end of the returned String.
+ZZ#
+def color(text, color, bold=false)
+  return text unless colorize_logging
+  color = self.class.const_get(color.to_s.upcase) if color.is_a?(Symbol)
+  bold = bold ? BOLD : ""
+  "#{bold}#{color}#{text}#{CLEAR}"
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / gzip.rb
+# Compresses a string using gzip.
+def self.compress(source)
+  output = Stream.new
+  gz = Zlib::GzipWriter.new(output)
+  gz.write(source)
+  gz.close
+  output.string
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / file_watcher.rb
+def trigger(files)
+  trigger_files = Hash.new { |h,k| h[k] = Hash.new { |h2,k2| h2[k2] = [] } }
+
+  files.each do |file, state|
+    @regex_matchers.each do |pattern, block|
+      trigger_files[block][state] << file if pattern === file
+    end
+  end
+
+  trigger_files.each do |block, payload|
+    block.call payload
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / file_update_checker.rb
+ZZ# Check if any of the entries were updated. If so, the updated_at
+ZZ# value is cached until the block is executed via +execute+ or +execute_if_updated+
+def updated?
+  current_updated_at = updated_at
+  if @last_update_at < current_updated_at
+    @updated_at = updated_at
+    true
+  else
+    false
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / cache.rb
+# Writes the value to the cache, with the key.
+#
+# Options are passed to the underlying cache implementation.
+def write(name, value, options = nil)
+  options = merged_options(options)
+  instrument(:write, name, options) do |payload|
+    entry = Entry.new(value, options)
+    write_entry(namespaced_key(name, options), entry, options)
+  end
+end
+|||||=====|||||
+ZZ rails / activesupport / lib / active_support / benchmarkable.rb
+def benchmark(message = "Benchmarking", options = {})
+  if logger
+    options.assert_valid_keys(:level, :silence)
+    options[:level] ||= :info
+
+    result = nil
+    ms = Benchmark.ms { result = options[:silence] ? logger.silence { yield } : yield }
+    logger.send(options[:level], '%s (%.1fms)' % [ message, ms ])
+    result
+  else
+    yield
+  end
+end

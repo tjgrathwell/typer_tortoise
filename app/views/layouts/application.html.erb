@@ -33,8 +33,8 @@
     <ul>
     {{#each App.categoryPrefController}}
       <li>
-        <input id="{{unbound this.name}}_pref_cb" {{bindAttr checked="this.enabled"}} type="checkbox" value="{{unbound this.id}}" />
-        <label for="{{unbound this.name}}_pref_cb">{{this.name}}</label>
+        <input id="{{unbound this.name}}_pref_cb" {{bindAttr checked="this.enabled"}} type="checkbox" value="{{unbound this.id}}"
+        /><label for="{{unbound this.name}}_pref_cb">{{this.name}}</label>
       </li>
     {{/each}}
     </ul>
@@ -52,7 +52,7 @@
         <ul>
           <li
              ><script type="text/x-handlebars">
-              {{#view App.prefsLink}}<span {{action "showPreferences"}}>Preferences</span>{{/view}}
+              {{#view App.prefsLink}}Preferences{{/view}}
             </script>
           <li><%= link_to "Log out", "/logout" %>
         </ul>

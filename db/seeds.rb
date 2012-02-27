@@ -14,6 +14,9 @@ snip_files.each do |filename|
   contents = File.read(filename)
   snippets = contents.split('|||||=====|||||')
   snippets.each do |snippet|
+    # remove "comments"
+    snippet = snippet.split("\n").select { |line| line !~ /^ZZ/ }.join("\n")
+
     Snippet.find_or_create_by_full_text({
       category_id: Category.find_or_create_by_name(category).id,
       full_text: snippet.strip()

@@ -24,7 +24,7 @@ h1 {
     margin-bottom: 20px;
 
 		font-size: 150%;
-    font-family: Monaco, monospace;
+    font-family: monospace;
 
 		background-color: rgba(0, 0, 0, .75);
     color: #F8F8F8;
@@ -180,11 +180,11 @@ textarea.snippet-editor {
     right: 0px;
 }
 
-.prefs-link span {
+.prefs-link {
     color: #607890;
 }
 
-.prefs-link span:hover {
+.prefs-link:hover {
     color: #036;
     text-decoration: underline;
     cursor: pointer;
@@ -214,5 +214,5 @@ textarea.snippet-editor {
 .prefs-popup label {
     position: relative;
     display: inline;
-    margin-left: .5em;
+    padding-left: .5em;
 }
