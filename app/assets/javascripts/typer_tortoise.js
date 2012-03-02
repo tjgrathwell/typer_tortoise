@@ -4,6 +4,16 @@ var App = Em.Application.create();
 //  utilities
 //
 
+jQuery.fn.centerOnParent = function () {
+  var parent = this.parent();
+  var parent_offset = parent.offset();
+  this.css({
+    top:  parent_offset.top  + ((parent.height() / 2) - (this.height() / 2)),
+    left: parent_offset.left + ((parent.width()  / 2) - (this.width()  / 2))
+  });
+  return this;
+}
+
 App.util = {};
 App.util.chomp = function (raw_text) {
   return raw_text.replace(/\r/g, '').replace(/\n+$/, '');
@@ -42,10 +52,6 @@ App.TypingText = Em.Object.extend({
   wpm_timer_id: null,
   wpm_ticks: null,
 
-  className: 'type-panel',
-  focusNagClass: 'focus-nag',
-
-  focused: false,
   finished: false,
 
   _tabSize: function () {
@@ -225,28 +231,41 @@ App.TypingText = Em.Object.extend({
 
 App.WPMDisplay = Em.View.extend({
   tagName: 'span',
+  classNames: ['stat-counter'],
 
   textBinding: 'App.typingAreaController.current_snippet'
 });
 
 App.AccuracyDisplay = Em.View.extend({
   tagName: 'span',
+  classNames: ['stat-counter'],
 
   textBinding: 'App.typingAreaController.current_snippet'
 });
 
+App.FocusNag = Em.View.extend({
+  classNameBindings: ['focusNagClass', 'isFocused:hidden'],
+  focusNagClass: 'focus-nag',
+
+  isFocusedBinding: 'parentView.focused',
+
+  centerOnTypingArea: function () {
+    if (this.$().length === 0) { return; }
+    this.$().centerOnParent();
+  },
+
+  focusChanged: function () {
+    if (!this.get('isFocused')) {
+      this.centerOnTypingArea();
+    }
+  }.observes('isFocused')
+});
+
 App.TypingArea = Em.View.extend({
   textBinding: 'App.typingAreaController.current_snippet',
-  isFocusedBinding: 'App.typingAreaController.current_snippet.focused',
   typeCursorClass: 'type-cursor',
 
-  isBlurry: function () {
-    return !this.get('isFocused');
-  }.property('isFocused'),
-
-  click: function (e) {
-    $('.' + this.text.className).focus();
-  },
+  focused: false,
 
   keyDown: function (e) {
     App.setPreventDefaultForKey(e);
@@ -272,29 +291,16 @@ App.TypingArea = Em.View.extend({
     this.text.typeOn(chr);
   },
 
-  focusIn:  function (e) { this.text.set('focused', true);  },
-  focusOut: function (e) { this.text.set('focused', false); }
+  snippetChanged: function () {
+    this.$().find('.type-panel').focus();
+  }.observes('text'),
+
+  focusIn:  function (e) { this.set('focused', true);  },
+  focusOut: function (e) { this.set('focused', false); }
 });
 
 App.typingAreaController = Em.Object.create({
   current_snippet: null,
-
-  centerFocusNag: function () {
-    // center the focus nag on the typing area
-
-    if (this.current_snippet === null) { return; }
-
-    var text_area = $('.' + this.current_snippet.className);
-    var focus_nag = $('.' + this.current_snippet.focusNagClass);
-
-    if (text_area.length === 0 || focus_nag.length === 0) { return; }
-
-    var text_area_offset = text_area.offset();
-    focus_nag.css({
-      top:  text_area_offset.top + ((text_area.height() / 2) - (focus_nag.height() / 2)),
-      left: text_area_offset.left + ((text_area.width() / 2) - (focus_nag.width() / 2))
-    });
-  },
 
   finishedObserver: function () {
     if (this.current_snippet.finished) {
@@ -340,19 +346,8 @@ App.typingAreaController = Em.Object.create({
         snippet_id: snippet_json['id'],
         category_id: snippet_json['category_id']
       }));
-
-      // TODO centerFocusNag/focusing behavior needs to happen properly on first draw
-      //   Not this way. this is a hack. this is sad.
-      setTimeout(function () { self.centerFocusNag(); }, 10);
-      setTimeout(function () { $('.' + self.current_snippet.className).focus(); }, 10);
     });
   },
-
-  focusChanged: function () {
-    if (!this.current_snippet.focused) {
-      this.centerFocusNag();
-    }
-  }.observes('current_snippet.focused')
 });
 
 App.scoresController = Em.ArrayController.create({
@@ -408,6 +403,7 @@ App.prefsPopupContent = Em.View.extend({
   },
 
   didInsertElement: function () {
+    this._super();
     this.$().css({
       left: $('.container').position().left + 40,
       top: $(window).height() / 4
@@ -430,7 +426,7 @@ App.categoryPrefController = Em.ArrayController.create({
 
   saveCategories: function () {
     var self = this;
-    var selected_categories = this.prefs_popup.$().find('input:checked').map(function () { 
+    var selected_categories = this.prefs_popup.$().find('input:checked').map(function () {
       return parseInt($(this).attr('value'), 10); }
     ).toArray();
     $.post('/categories', {categories: selected_categories}, function () {

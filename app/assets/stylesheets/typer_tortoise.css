@@ -24,7 +24,7 @@ h1 {
     margin-bottom: 20px;
 
 		font-size: 12pt;
-    font-family: monospace;
+    font-family: Consolas, Menlo, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 
 		background-color: rgba(0, 0, 0, .75);
     color: #F8F8F8;
@@ -39,10 +39,11 @@ h1 {
 		padding: 5px;
 
 		outline: none;
+		opacity: .2;
 }
 
-.type-panel.unfocused {
-		opacity: .2;
+.type-panel:focus {
+    opacity: 1;
 }
 
 .type-panel .before-cursor {
@@ -64,8 +65,9 @@ h1 {
 }
 
 .stat-counter {
-		width: 10em;
+		width: 2.5em;
 		padding: 5px;
+    margin-left: 5px;
 
 		border-width: 2px;
 		border-color: #82B6DD;
@@ -73,13 +75,16 @@ h1 {
 		border-top-style: solid;
 		border-bottom-style: solid;
 
+    font-weight: bold;
+		font-size: 400%;
+
     display: inline-block;
 
 		background-color: rgba(173, 216, 230, .75);
 }
 
-.stat-counter strong {
-		font-size: 400%;
+.stat-counter small {
+    font-size: 25%;
 }
 
 header {

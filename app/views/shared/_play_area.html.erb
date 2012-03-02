@@ -1,23 +1,17 @@
 <script type="text/x-handlebars">
-  <div>
-    {{#view App.TypingArea}}
-      <div {{bindAttr class="text.focusNagClass isFocused:hidden"}}>
-        Click the text to start typing!
-      </div>
+  {{#view App.TypingArea}}
+    <!-- white space becomes super-significant in this area -->
+    <div class="type-panel" tabindex="0"><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class="typeCursorClass text.hasMistakes"}}>{{text.atCursor}}</span>{{text.afterCursor}}</div>
 
-      <!-- white space becomes super-significant in this area -->
-      <div {{bindAttr class="text.className isBlurry:unfocused"}} tabindex="0"
-        ><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class="typeCursorClass text.hasMistakes"}}>{{text.atCursor}}</span>{{text.afterCursor}}</div>
-
-    {{/view}}
-  </div>
+    {{#view App.FocusNag}}Click the text to start typing!{{/view}}
+  {{/view}}
 
   <div class="full-score-display">
     {{#view App.WPMDisplay}}
-      <span class="stat-counter"><strong>{{text.wpm}}</strong> wpm</span>
+      {{text.wpm}}<small> wpm</small>
     {{/view}}
     {{#view App.AccuracyDisplay}}
-      <span class="stat-counter"><strong>{{text.accuracy}}%</strong></span>
+      {{text.accuracy}}%
     {{/view}}
   </div>
 </script>
