@@ -262,6 +262,7 @@ App.FocusNag = Em.View.extend({
 });
 
 App.TypingArea = Em.View.extend({
+  classNames: 'type-area-container',
   textBinding: 'App.typingAreaController.current_snippet',
   typeCursorClass: 'type-cursor',
 
@@ -292,6 +293,7 @@ App.TypingArea = Em.View.extend({
   },
 
   snippetChanged: function () {
+    this.$().fadeIn('slow');
     this.$().find('.type-panel').focus();
   }.observes('text'),
 

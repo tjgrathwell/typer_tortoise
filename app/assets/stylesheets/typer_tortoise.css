@@ -19,6 +19,10 @@ h1 {
 		background-color: rgba(173, 216, 230, .75);
 }
 
+.type-area-container {
+    display: none;
+}
+
 .type-panel {
 		margin-top: 20px;
     margin-bottom: 20px;
