@@ -27,7 +27,7 @@ describe("typing on a snippet", function() {
     }
   }
 
-  it("shouldn't change the text flow when you write over a newline", function() {
+  it("splits the snippet into many parts for the view to render", function() {
     var snippet_text = [
       'this snippet has',
       '  more than one line'
@@ -79,5 +79,37 @@ describe("typing on a snippet", function() {
     expect(text_model.get('beforeCursor')).toEqual('this snippet has');
     expect(text_model.get('atCursor'    )).toEqual("Z");
     expect(text_model.get('afterCursor' )).toEqual('\n  more than one line');
+  });
+});
+
+describe("category preferences controller", function () {
+  var enabledCategoryIds = function () {
+    return $.map(App.categoryPrefController.enabledCategories(), function (el) {
+      return el.id 
+    });
+  }
+
+  var categories_json = [
+    {id: 1, name: 'melodramatically-din',   enabled: false},
+    {id: 2, name: 'warrant-individualists', enabled: true},
+    {id: 3, name: 'overlaid-arachnids',     enabled: true}
+  ];
+  App.categoryPrefController.set('content', $.map(categories_json, function (el) {
+    return App.Category.create(el);
+  }))
+
+  it('allows you to ask for just the enabled categories', function () {
+    expect(enabledCategoryIds()).toEqual([2, 3]);
+  });
+
+  it('allows you to toggle categories on and off', function () {
+    App.categoryPrefController.setCategory(2, false);
+    expect(enabledCategoryIds()).toEqual([3]);
+  });
+
+  it('whines when you try to toggle a category it does not know', function () {
+    expect(function () {
+      App.categoryPrefController.setCategory(4, false);
+    }).toThrow(new Error("Couldn't find an object with id 4"));
   });
 });

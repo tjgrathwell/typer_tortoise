@@ -32,6 +32,16 @@ App.history = Em.Object.create({
 //  models
 //
 
+App.Category = Em.Object.extend({
+  id: null,
+  name: null,
+  enabled: null,
+
+  toJson: function () {
+    return {id: this.get('id')};
+  }
+});
+
 App.Score = Em.Object.extend({
   wpm: null,
   accuracy: null,
@@ -321,8 +331,9 @@ App.typingAreaController = Em.Object.create({
     $.post('/scores', {score: this.current_snippet.getScore()});
   },
 
-  changeSnippetToCategory: function (category_ids) {
+  changeCurrentSnippetForPreferences: function (category_ids) {
     if (category_ids.indexOf(this.current_snippet.category_id) >= 0) {
+      // if this snippet is already in the whitelist of categories, nothing to do
       return;
     }
 
@@ -332,9 +343,11 @@ App.typingAreaController = Em.Object.create({
   newSnippet: function (snippet_num) {
     var self = this;
 
-    var url = '/snippets/random.json';
+    var url;
     if (snippet_num) {
       url = '/snippets/' + snippet_num + '.json';
+    } else {
+      url = '/snippets/random.json';
     }
 
     var params = {};
@@ -400,6 +413,10 @@ App.prefsPopup = Em.View.extend({
 App.prefsPopupContent = Em.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
+  select: function (e) {
+    App.categoryPrefController.setCategory(parseInt(e.target.value, 10), e.target.checked);
+  },
+
   click: function (e) {
     e.stopPropagation();
   },
@@ -417,32 +434,51 @@ App.categoryPrefController = Em.ArrayController.create({
   content: [],
   prefs_popup: null,
 
-  showPreferences: function () {
-    var self = this;
-    this.loadCategories(function () {
-      var popup_view = App.prefsPopup.create({});
-      self.set('prefs_popup', popup_view);
-      popup_view.appendTo('.container');
-    });
+  findCategoryById: function (category_id) {
+    var content = this.get('content');
+    var length = content.length;
+    for (var i = 0; i < length; i++) {
+      if (content[i].get('id') === category_id) {
+        return content[i];
+      }
+    }
+    throw "Couldn't find an object with id " + category_id;
+  },
+
+  setCategory: function (category_id, enabled) {
+    this.findCategoryById(category_id).set('enabled', enabled);
+  },
+
+  enabledCategories: function () {
+    return $.grep(this.get('content'), function (el) { return el.enabled });
   },
 
   saveCategories: function () {
     var self = this;
-    var selected_categories = this.prefs_popup.$().find('input:checked').map(function () {
-      return parseInt($(this).attr('value'), 10); }
-    ).toArray();
-    $.post('/categories', {categories: selected_categories}, function () {
+    var categories = $.map(this.enabledCategories(), function (el) { return el.toJson(); });
+    $.post('/categories', {categories: categories}, function () {
       self.get('prefs_popup').destroy();
       self.set('prefs_popup', null);
-      App.typingAreaController.changeSnippetToCategory(selected_categories);
+      App.typingAreaController.changeCurrentSnippetForPreferences(selected_categories);
     });
   },
 
   loadCategories: function (finished_cb) {
     var self = this;
     $.get('/categories', function (json) {
-      self.set('content', json);
+      self.set('content', $.map(json, function (el) {
+        return App.Category.create(el);
+      }));
       finished_cb();
+    });
+  },
+
+  showPreferences: function () {
+    var self = this;
+    this.loadCategories(function () {
+      var popup_view = App.prefsPopup.create({});
+      self.set('prefs_popup', popup_view);
+      popup_view.appendTo('.container');
     });
   }
 });

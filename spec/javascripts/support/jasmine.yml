@@ -12,8 +12,8 @@
 #
 src_files:
 
-  - vendor/assets/javascripts//jquery.min.js
-  - vendor/assets/javascripts/ember-0.9.4.min.js
+  - vendor/assets/javascripts/jquery.min.js
+  - vendor/assets/javascripts/ember.js
   - app/assets/javascripts/typer_tortoise.js
 
 # stylesheets

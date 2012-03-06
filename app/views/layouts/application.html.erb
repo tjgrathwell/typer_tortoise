@@ -33,7 +33,7 @@
     <ul>
     {{#each App.categoryPrefController}}
       <li>
-        <input id="{{unbound this.name}}_pref_cb" {{bindAttr checked="this.enabled"}} type="checkbox" value="{{unbound this.id}}"
+        <input id="{{unbound this.name}}_pref_cb" {{action "select" on="change"}} {{bindAttr checked="this.enabled"}} type="checkbox" value="{{unbound this.id}}"
         /><label for="{{unbound this.name}}_pref_cb">{{this.name}}</label>
       </li>
     {{/each}}
