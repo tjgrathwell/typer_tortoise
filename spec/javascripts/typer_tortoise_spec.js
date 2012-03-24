@@ -14,6 +14,32 @@ describe("indentation guessing", function() {
   });
 });
 
+describe("snippet whitespace normalization", function () {
+  it("adds whitespace to empty lines to meet the expected indentation threshold", function () {
+    var snippet_text = [
+      'this snippet has',
+      '  an empty line',
+      '', // <= this one!
+      '  that will have two spaces on it',
+    ].join('\n');
+
+    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    expect(text_model.get('full_string')).toEqual(
+      'this snippet has\n  an empty line\n  \n  that will have two spaces on it'
+    );
+  });
+
+  it("removes trailing whitespace", function () {
+    var snippet_text = [
+      'who put the trailing   ',
+      '  whitespace in this? ',
+    ].join('\n');
+
+    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    expect(text_model.get('full_string')).toEqual('who put the trailing\n  whitespace in this?');
+  });
+});
+
 describe("typing on a snippet", function() {
 
   var type_on_snippet = function (model, str) {
@@ -21,10 +47,17 @@ describe("typing on a snippet", function() {
       model.typeOn(chr);
     });
   }
-  var backspace = function (model, times) {
+  var repeat = function (func, times) {
     for (var i = 0; i < times; i++) {
-      model.backUp();
+      func();
     }
+  }
+
+  var validate_snippet_properties = function (model, prop_hash) {
+    expect(model.get('hasMistakes' )).toEqual(prop_hash.hasMistakes);
+    expect(model.get('beforeCursor')).toEqual(prop_hash.beforeCursor);
+    expect(model.get('atCursor')    ).toEqual(prop_hash.atCursor);
+    expect(model.get('afterCursor' )).toEqual(prop_hash.afterCursor);
   }
 
   it("splits the snippet into many parts for the view to render", function() {
@@ -37,48 +70,133 @@ describe("typing on a snippet", function() {
 
     type_on_snippet(text_model, 'this snippet');
 
-    expect(text_model.get('hasMistakes' )).toEqual(false);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet');
-    expect(text_model.get('atCursor')    ).toEqual(' ');
-    expect(text_model.get('afterCursor' )).toEqual('has\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet',
+      atCursor     : ' ',
+      afterCursor  : 'has\n  more than one line'
+    });
 
     type_on_snippet(text_model, 'zz');
 
-    expect(text_model.get('hasMistakes' )).toEqual(true);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet');
-    expect(text_model.get('atCursor'    )).toEqual('zz');
-    expect(text_model.get('afterCursor' )).toEqual('as\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : true,
+      beforeCursor : 'this snippet',
+      atCursor     : 'zz',
+      afterCursor  : 'as\n  more than one line',
+    });
 
-    backspace(text_model, 2);
+    repeat(function () { text_model.backUp() }, 2);
 
-    expect(text_model.get('hasMistakes' )).toEqual(false);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet');
-    expect(text_model.get('atCursor'    )).toEqual(' ');
-    expect(text_model.get('afterCursor' )).toEqual('has\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet',
+      atCursor     : ' ',
+      afterCursor  : 'has\n  more than one line',
+    });
 
     var nine_as = 'aaaaaaaaa';
     type_on_snippet(text_model, nine_as);
 
-    expect(text_model.get('hasMistakes' )).toEqual(true);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet');
-    expect(text_model.get('atCursor'    )).toEqual(nine_as);
-    expect(text_model.get('afterCursor')).toEqual('\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : true,
+      beforeCursor : 'this snippet',
+      atCursor     : nine_as,
+      afterCursor  : '\n  more than one line',
+    });
 
-    backspace(text_model, 9);
+    repeat(function () { text_model.backUp() }, 9);
     type_on_snippet(text_model, ' has');
     
-    expect(text_model.get('hasMistakes' )).toEqual(false);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet has');
-    expect(text_model.get('atCursor'    )).toEqual("\u21b5");
-    expect(text_model.get('afterCursor' )).toEqual('\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet has',
+      atCursor     : "\u21b5",
+      afterCursor  : '\n  more than one line',
+    });
 
     // typo exactly on the newline character
     type_on_snippet(text_model, 'Z');
 
-    expect(text_model.get('hasMistakes' )).toEqual(true);
-    expect(text_model.get('beforeCursor')).toEqual('this snippet has');
-    expect(text_model.get('atCursor'    )).toEqual("Z");
-    expect(text_model.get('afterCursor' )).toEqual('\n  more than one line');
+    validate_snippet_properties(text_model, {
+      hasMistakes  : true,
+      beforeCursor : 'this snippet has',
+      atCursor     : 'Z',
+      afterCursor  : '\n  more than one line',
+    });
+  });
+
+  it("starts the next line at the same indentation level as the previous line", function() {
+    var snippet_text = [
+      'this snippet has',
+      '  two lines',
+      '  that are indented',
+      'and then another that is not'
+    ].join('\n');
+    
+    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    type_on_snippet(text_model, "this snippet has\n");
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet has\n',
+      atCursor     : ' ',
+      afterCursor  : ' two lines\n  that are indented\nand then another that is not',
+    });
+
+    type_on_snippet(text_model, '  two lines\n');
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet has\n  two lines\n  ',
+      atCursor     : 't',
+      afterCursor  : 'hat are indented\nand then another that is not',
+    });
+
+    type_on_snippet(text_model, 'that are indented\n');
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : true,
+      beforeCursor : 'this snippet has\n  two lines\n  that are indented\n',
+      atCursor     : '  ',
+      afterCursor  : 'd then another that is not',
+    });
+
+    // when there's multiple tab-widths worth of text, backspace should go back one tab width
+    text_model.backUp();
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : 'this snippet has\n  two lines\n  that are indented\n',
+      atCursor     : 'a',
+      afterCursor  : 'nd then another that is not',
+    });
+  });
+
+  it("doesn't consider auto-indentation on empty lines as a 'mistake'", function() {
+    var snippet_text = [
+      '  first line indented',
+      '', // second line empty
+      '  third line indented',
+    ].join('\n');
+    
+    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    type_on_snippet(text_model, "  first line indented\n");
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : '  first line indented\n  ',
+      atCursor     : "\u21b5",
+      afterCursor  : '\n  third line indented',
+    });
+
+    type_on_snippet(text_model, "\n");
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : '  first line indented\n  \n  ',
+      atCursor     : "t",
+      afterCursor  : 'hird line indented',
+    });
   });
 });
 
@@ -87,7 +205,7 @@ describe("category preferences controller", function () {
     return $.map(App.categoryPrefController.enabledCategories(), function (el) {
       return el.id 
     });
-  }
+  };
 
   var categories_json = [
     {id: 1, name: 'melodramatically-din',   enabled: false},

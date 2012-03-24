@@ -18,6 +18,17 @@ App.util = {};
 App.util.chomp = function (raw_text) {
   return raw_text.replace(/\r/g, '').replace(/\n+$/, '');
 };
+App.util.leadingWhitespaceCount = function (str) {
+  return str.match(/^(\s*)/)[1].length;
+};
+App.util.trailingWhitespaceCount = function (str) {
+  return str.match(/(\s*)$/)[1].length;
+};
+App.util.repeat = function (func, times) {
+  for (var i = 0; i < times; i++) {
+    func();
+  }
+};
 
 //
 //  history handling
@@ -51,26 +62,48 @@ App.Score = Em.Object.extend({
 App.TypingText = Em.Object.extend({
   full_string: null,
   snippet_id: null,
+  category_id: null,
 
-  mistakes: [],
-  total_mistakes: 0,
-  cursor_pos: 0,
+  init: function() {
+    this._super();
+    this.set('mistakes', []);
 
-  _tab_size: null,
+    this.set('total_mistakes', 0);
+    this.set('cursor_pos', 0);
 
-  start_time: null,
-  wpm_timer_id: null,
-  wpm_ticks: null,
+    this.set('start_time', null);
+    this.set('wpm_timer_id', null);
+    this.set('wpm_ticks', null);
 
-  finished: false,
+    this.set('finished', false);
+
+    this._normalizeSnippet();
+    this.set('_tab_size', this._tabSize());
+  },
+
+  _normalizeSnippet: function () {
+    var raw_lines = this.get('full_string').split('\n');
+
+    var prev_line_indent = 0;
+    var normalized = [];
+    $.each(raw_lines, function (ix, line) {
+      if (line.match(/^\s*$/)) {
+        // force empty normalized to have as much whitespace as the previous line is indented
+        normalized.push(new Array(prev_line_indent + 1).join(' '));
+      } else {
+        // delete trailing whitespace on non-empty lines
+        normalized.push(line.replace(/\s+$/, ''));
+      }
+      prev_line_indent = App.util.leadingWhitespaceCount(line);
+    });
+
+    this.set('full_string', normalized.join('\n'));
+  },
 
   _tabSize: function () {
-    if (this._tab_size) {
-      return this._tab_size;
-    }
-
     var indents = [];
 
+    // guess the indent size to be however deeply indented the first indented line is
     var lines = this.full_string.split('\n');
     $.each(lines, function (i, line) {
       var match = line.match('^(\\s+)');
@@ -79,8 +112,7 @@ App.TypingText = Em.Object.extend({
       }
     });
 
-    this._tab_size = indents[0];
-    return this._tab_size;
+    return indents[0];
   },
 
   //
@@ -162,58 +194,84 @@ App.TypingText = Em.Object.extend({
     return (raw_acc * 100).toFixed(0);
   }.property('cursor_pos', 'total_mistakes'),
 
+  _startWpmTimer: function () {
+    this.set('start_time', (new Date()).getTime());
+
+    var self = this;
+    var timer_id = window.setInterval(function () {
+      self.set('wpm_ticks', self.wpm_ticks + 1);
+    }, 250);
+
+    this.set('wpm_timer_id', timer_id);
+  },
+
+  _stopWpmTimer: function () {
+    this.set('finished', true);
+    window.clearInterval(this.wpm_timer_id);
+  },
+
+  _previousLineIndent: function () {
+    var lines = this.get('beforeCursor').split('\n');
+    if (lines.length < 2) return;
+
+    var prev_line = lines[lines.length - 2];
+    return App.util.leadingWhitespaceCount(prev_line);
+  },
+
+  _autoIndent: function () {
+    var spaces = this._previousLineIndent();
+    var self = this;
+    App.util.repeat(function () { self.typeOn(' ') }, spaces);
+  },
+
   //
   // user actions
   //
   typeOn: function (chr) {
-    if (this.finished) {
-      return;
-    }
+    if (this.finished) return;
 
-    if (this.start_time === null) {
-      this.set('start_time', (new Date()).getTime());
-
-      var self = this;
-      var timer_id = window.setInterval(function () {
-        self.set('wpm_ticks', self.wpm_ticks + 1);
-      }, 250);
-      this.set('wpm_timer_id', timer_id);
-    }
+    // start the wpm timer if this is the first character typed
+    if (this.start_time === null) this._startWpmTimer();
 
     var cursor_matches = this.full_string.substr(this.get('cursor_pos'), 1) == chr;
     var no_mistakes = this.mistakes.length == 0;
     if (no_mistakes && cursor_matches) {
       this.set('cursor_pos', this.cursor_pos + 1);
+      if (chr === '\n') {
+        this._autoIndent();
+      }
     } else {
       this.set('total_mistakes', this.total_mistakes + 1);
-      if (chr === ' ') {
-        this.mistakes.pushObject('&nbsp;');
-      } else {
-        this.mistakes.pushObject(chr);
-      }
+      this.mistakes.pushObject(chr);
     }
-
-    if (this.cursor_pos === this.full_string.length) {
-      this.set('finished', true);
-      window.clearInterval(this.wpm_timer_id);
-    }
+    
+    // clear the wpm timer if the snippet is finished
+    if (this.cursor_pos === this.full_string.length) this._stopWpmTimer();
   },
 
   tabPressed: function () {
-    for (var i = 0; i < this._tabSize(); i++) {
-      this.typeOn(' ');
-    }
+    var self = this;
+    App.util.repeat(function () { self.typeOn(' ') }, this.get('_tab_size'));
   },
 
   backUp: function () {
-    if (this.finished) {
-      return;
-    }
+    if (this.finished) return;
 
-    if (this.cursor_pos === 0 && this.mistakes.length === 0) {
-      return;
-    }
+    if (this.cursor_pos === 0 && this.mistakes.length === 0) return;
 
+    var lines = (this.get('beforeCursor') + this.get('atCursor')).split('\n');
+    var current_line = lines[lines.length-1];
+    // if there's at least one tab worth of trailing whitespace on this line,
+    //   'tab' backwards
+    if (App.util.trailingWhitespaceCount(current_line) >= this.get('_tab_size')) {
+      var self = this;
+      App.util.repeat(function () { self._backUp() }, this.get('_tab_size'));
+    } else {
+      this._backUp();
+    }
+  },
+
+  _backUp: function () {
     if (this.mistakes.length > 0) {
       this.mistakes.popObject();
     } else {
