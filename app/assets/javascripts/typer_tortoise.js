@@ -127,7 +127,7 @@ App.TypingText = Em.Object.extend({
 
     var prev_line_indent = 0;
     var normalized = [];
-    $.each(raw_lines, function (ix, line) {
+    raw_lines.forEach(function (line) {
       if (line.match(/^\s*$/)) {
         // force empty normalized to have as much whitespace as the previous line is indented
         normalized.push(new Array(prev_line_indent + 1).join(' '));
@@ -146,7 +146,7 @@ App.TypingText = Em.Object.extend({
 
     // guess the indent size to be however deeply indented the first indented line is
     var lines = this.full_string.split('\n');
-    $.each(lines, function (i, line) {
+    lines.forEach(function (line) {
       var match = line.match('^(\\s+)');
       if (match) {
         indents.push(match[1].length);
@@ -548,9 +548,10 @@ App.CategoryPrefController = Em.ArrayController.extend({
     if (!App.user && App.storage.supported) {
       var category_ids = App.storage.get('typer_tortoise.category_ids');
       if (category_ids) {
-        this.set('content', $.map(category_ids.split(','), function (cat_id) {
+        var categories = category_ids.split(',').map(function (cat_id) {
           return App.Category.create({id: parseInt(cat_id, 10), enabled: true});
-        }));
+        });
+        this.set('content', categories);
       }
     }
   },
@@ -571,17 +572,17 @@ App.CategoryPrefController = Em.ArrayController.extend({
   },
 
   disableAll: function () {
-    $.each(this.get('content'), (function (ix, category) { 
+    this.get('content').forEach(function (category) { 
       category.set('enabled', false)
-    }).bind(this));
+    });
   },
 
   enabledCategories: function () {
-    return $.grep(this.get('content'), function (el) { return el.enabled });
+    return this.get('content').filter(function (el) { return el.enabled });
   },
 
   enabledCategoryIds: function () {
-    return $.map(this.enabledCategories(), function (cat) { return cat.get('id') });
+    return this.enabledCategories().map(function (cat) { return cat.get('id') });
   },
 
   saveCategories: function (finished_cb) {
@@ -593,7 +594,7 @@ App.CategoryPrefController = Em.ArrayController.extend({
   },
 
   _saveCategoriesToServer: function (finished_cb) {
-    var categories = $.map(this.enabledCategories(), function (el) { return el.toJson(); });
+    var categories = this.enabledCategories().map(function (el) { return el.toJson(); });
     $.post('/categories', {categories: categories}, finished_cb);
   },
 
@@ -606,7 +607,7 @@ App.CategoryPrefController = Em.ArrayController.extend({
 
   loadCategories: function (finished_cb) {
     this._loadCategoriesFromServer((function (json) {
-      this.set('content', $.map(json, function (el) { return App.Category.create(el); }));
+      this.set('content', json.map(function (el) { return App.Category.create(el); }));
       if (!App.user) {
         this._loadCategoryPreferencesFromStorage();
       }
@@ -626,10 +627,10 @@ App.CategoryPrefController = Em.ArrayController.extend({
 
     this.disableAll();
 
-    var category_ids = $.map(category_id_csv.split(','), function (id) { return parseInt(id, 10) });
-    $.each(category_ids, (function (ix, cat_id) {
+    var category_ids = category_id_csv.split(',').map(function (id) { return parseInt(id, 10) });
+    category_ids.forEach(function (cat_id) {
       this.setCategory(cat_id, true);
-    }).bind(this));
+    }, this);
   },
 
   showPreferences: function () {
