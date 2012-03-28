@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  before_filter :authenticate
+  before_filter :authenticate, only: [:overwrite]
 
   def overwrite
     if !params[:categories] || params[:categories].length == 0
@@ -18,7 +18,11 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    enabled_categories = current_user.category_preferences.map { |pref| pref.category.name }.to_set
+    if signed_in?
+      enabled_categories = current_user.category_preferences.map { |pref| pref.category.name }.to_set
+    else
+      enabled_categories = []
+    end
 
     all_categories = Category.all.map { |c| c.attributes }
     all_categories.each do |category|

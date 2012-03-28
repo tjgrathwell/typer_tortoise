@@ -1,7 +1,7 @@
 var App = Em.Application.create();
 
 //
-//  utilities
+//  jQuery addons
 //
 
 jQuery.fn.centerOnParent = function () {
@@ -14,21 +14,62 @@ jQuery.fn.centerOnParent = function () {
   return this;
 }
 
+//
+//  utilities
+//
+
 App.util = {};
+
 App.util.chomp = function (raw_text) {
   return raw_text.replace(/\r/g, '').replace(/\n+$/, '');
 };
+
 App.util.leadingWhitespaceCount = function (str) {
   return str.match(/^(\s*)/)[1].length;
 };
+
 App.util.trailingWhitespaceCount = function (str) {
   return str.match(/(\s*)$/)[1].length;
 };
-App.util.repeat = function (func, times) {
+
+App.util.repeat = function (func, times, this_val) {
+  if (this_val) {
+    func = func.bind(this_val);
+  }
   for (var i = 0; i < times; i++) {
     func();
   }
 };
+
+//
+//  local storage
+//
+
+App.storage = {
+  supported: ("localStorage" in window && window["localStorage"] !== null),
+
+  get: function (key) {
+    return localStorage[key];
+  },
+
+  set: function (key, val) {
+    localStorage[key] = val;
+  },
+
+  clear: function () {
+    localStorage.clear();
+  },
+
+  remove: function (key) {
+    localStorage.removeItem(key);
+  }
+};
+
+//
+//  currently logged in user
+//
+
+App.user = null;
 
 //
 //  history handling
@@ -197,10 +238,9 @@ App.TypingText = Em.Object.extend({
   _startWpmTimer: function () {
     this.set('start_time', (new Date()).getTime());
 
-    var self = this;
-    var timer_id = window.setInterval(function () {
-      self.set('wpm_ticks', self.wpm_ticks + 1);
-    }, 250);
+    var timer_id = window.setInterval((function () {
+      this.set('wpm_ticks', this.wpm_ticks + 1);
+    }).bind(this), 250);
 
     this.set('wpm_timer_id', timer_id);
   },
@@ -220,8 +260,7 @@ App.TypingText = Em.Object.extend({
 
   _autoIndent: function () {
     var spaces = this._previousLineIndent();
-    var self = this;
-    App.util.repeat(function () { self.typeOn(' ') }, spaces);
+    App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
   },
 
   //
@@ -250,8 +289,7 @@ App.TypingText = Em.Object.extend({
   },
 
   tabPressed: function () {
-    var self = this;
-    App.util.repeat(function () { self.typeOn(' ') }, this.get('_tab_size'));
+    App.util.repeat(function () { this.typeOn(' ') }, this.get('_tab_size'), this);
   },
 
   backUp: function () {
@@ -264,8 +302,7 @@ App.TypingText = Em.Object.extend({
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
     if (App.util.trailingWhitespaceCount(current_line) >= this.get('_tab_size')) {
-      var self = this;
-      App.util.repeat(function () { self._backUp() }, this.get('_tab_size'));
+      App.util.repeat(function () { this._backUp() }, this.get('_tab_size'), this);
     } else {
       this._backUp();
     }
@@ -399,27 +436,29 @@ App.typingAreaController = Em.Object.create({
   },
 
   newSnippet: function (snippet_num) {
-    var self = this;
+    var params = {};
 
     var url;
     if (snippet_num) {
       url = '/snippets/' + snippet_num + '.json';
     } else {
       url = '/snippets/random.json';
+      if (!App.user) {
+        params['category_ids'] = App.categoryPrefController.enabledCategoryIds();
+      }
     }
 
-    var params = {};
     if (this.current_snippet) {
       params['last_seen'] = this.current_snippet.snippet_id;
     }
 
-    $.get(url, params, function (snippet_json) {
-      self.set('current_snippet', App.TypingText.create({
+    $.get(url, params, (function (snippet_json) {
+      this.set('current_snippet', App.TypingText.create({
         full_string: App.util.chomp(snippet_json['full_text']),
         snippet_id: snippet_json['id'],
         category_id: snippet_json['category_id']
       }));
-    });
+    }).bind(this));
   },
 });
 
@@ -427,10 +466,9 @@ App.scoresController = Em.ArrayController.create({
   content: [],
 
   loadScores: function (score) {
-    var self = this;
-    $.get('/scores/', function (json) {
-      self.set('content', json);
-    });
+    $.get('/scores/', (function (json) {
+      this.set('content', json);
+    }).bind(this));
   },
 
   add: function (score) {
@@ -455,7 +493,11 @@ App.prefsLink = Em.View.extend({
 
 App.prefsSaveButton = Em.Button.extend({
   click: function (e) {
-    App.categoryPrefController.saveCategories();
+    var pref_controller = App.categoryPrefController;
+    pref_controller.saveCategories(function () {
+      pref_controller.hidePreferences();
+      App.typingAreaController.changeCurrentSnippetForPreferences(pref_controller.enabledCategoryIds());
+    });
   }
 });
 
@@ -488,9 +530,30 @@ App.prefsPopupContent = Em.View.extend({
   },
 });
 
-App.categoryPrefController = Em.ArrayController.create({
+App.CategoryPrefController = Em.ArrayController.extend({
   content: [],
   prefs_popup: null,
+
+  init: function () {
+    // if category ids are in local storage, optimistically
+    //   load them into 'content' (as just ids, no 'name' attribute)
+    //   as if we know they're correct.
+    //
+    // this is to optimize the initial pageload so we don't have
+    //   to load /categories before /snippets/random.
+    //
+    // hopefully any discontinuities (a user with discontinued
+    //   categories in their localStorage prefs) will be cleared
+    //   up when that user next saves their prefs.
+    if (!App.user && App.storage.supported) {
+      var category_ids = App.storage.get('typer_tortoise.category_ids');
+      if (category_ids) {
+        this.set('content', $.map(category_ids.split(','), function (cat_id) {
+          return App.Category.create({id: parseInt(cat_id, 10), enabled: true});
+        }));
+      }
+    }
+  },
 
   findCategoryById: function (category_id) {
     var content = this.get('content');
@@ -507,39 +570,85 @@ App.categoryPrefController = Em.ArrayController.create({
     this.findCategoryById(category_id).set('enabled', enabled);
   },
 
+  disableAll: function () {
+    $.each(this.get('content'), (function (ix, category) { 
+      category.set('enabled', false)
+    }).bind(this));
+  },
+
   enabledCategories: function () {
     return $.grep(this.get('content'), function (el) { return el.enabled });
   },
 
-  saveCategories: function () {
-    var self = this;
+  enabledCategoryIds: function () {
+    return $.map(this.enabledCategories(), function (cat) { return cat.get('id') });
+  },
+
+  saveCategories: function (finished_cb) {
+    if (App.user) {
+      this._saveCategoriesToServer(finished_cb);
+    } else {
+      this._saveCategoriesToStorage(finished_cb);
+    }
+  },
+
+  _saveCategoriesToServer: function (finished_cb) {
     var categories = $.map(this.enabledCategories(), function (el) { return el.toJson(); });
-    $.post('/categories', {categories: categories}, function () {
-      self.get('prefs_popup').destroy();
-      self.set('prefs_popup', null);
-      App.typingAreaController.changeCurrentSnippetForPreferences(selected_categories);
-    });
+    $.post('/categories', {categories: categories}, finished_cb);
+  },
+
+  _saveCategoriesToStorage: function (finished_cb) {
+    if (!App.storage.supported) return;
+
+    App.storage.set('typer_tortoise.category_ids', this.enabledCategoryIds().join(',')); 
+    finished_cb();
   },
 
   loadCategories: function (finished_cb) {
-    var self = this;
-    $.get('/categories', function (json) {
-      self.set('content', $.map(json, function (el) {
-        return App.Category.create(el);
-      }));
-      finished_cb();
-    });
+    this._loadCategoriesFromServer((function (json) {
+      this.set('content', $.map(json, function (el) { return App.Category.create(el); }));
+      if (!App.user) {
+        this._loadCategoryPreferencesFromStorage();
+      }
+      if (finished_cb) finished_cb();
+    }).bind(this));
+  },
+
+  _loadCategoriesFromServer: function (success_cb) {
+    $.get('/categories', success_cb);
+  },
+
+  _loadCategoryPreferencesFromStorage: function () {
+    if (!App.storage.supported) return;
+    
+    var category_id_csv = App.storage.get('typer_tortoise.category_ids');
+    if (!category_id_csv) return;
+
+    this.disableAll();
+
+    var category_ids = $.map(category_id_csv.split(','), function (id) { return parseInt(id, 10) });
+    $.each(category_ids, (function (ix, cat_id) {
+      this.setCategory(cat_id, true);
+    }).bind(this));
   },
 
   showPreferences: function () {
-    var self = this;
-    this.loadCategories(function () {
-      var popup_view = App.prefsPopup.create({});
-      self.set('prefs_popup', popup_view);
-      popup_view.appendTo('.container');
-    });
+    this.loadCategories(this._showPopup.bind(this));
+  },
+
+  _showPopup: function () {
+    var popup_view = App.prefsPopup.create({});
+    this.set('prefs_popup', popup_view);
+    popup_view.appendTo('.container');
+  },
+
+  hidePreferences: function () {
+    this.get('prefs_popup').destroy();
+    this.set('prefs_popup', null);
   }
 });
+
+App.categoryPrefController = App.CategoryPrefController.create({});
 
 //
 //  key handling
@@ -586,7 +695,16 @@ App.setPreventDefaultForKey = function (e) {
 //  entry point
 //
 
-if (App.history.pageToken() === '/' || App.history.pageToken().match('/play') ) {
+App.start = function () {
+  if (App.user && App.storage.supported) {
+    // Kill localStorage prefs every time someone logs in properly.
+    App.storage.remove('typer_tortoise.category_ids');
+  }
+
+  if (App.history.pageToken() !== '/' && !App.history.pageToken().match('/play') ) {
+    return;
+  }
+
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });

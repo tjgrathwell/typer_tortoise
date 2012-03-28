@@ -6,12 +6,17 @@ class Snippet < ActiveRecord::Base
     defaults = {:category_ids => [], :exclude => []}
     options = defaults.merge(options)
 
-    (options[:exclude]+options[:category_ids]).each do |id|
-      unless id.to_s.match(/^\d+$/)
-        raise ArgumentError, "Arguments to random must be numeric, '#{id.inspect}' isn't."
+    [:exclude, :category_ids].each do |param|
+      unless options[param].respond_to? :each
+        raise ArgumentError, "Arguments to random must be iterable, '#{options[param]}' isn't."
       end
+      options[param].each do |id|
+        unless id.to_s.match(/^\d+$/)
+          raise ArgumentError, "Arguments to random must be numeric, '#{id.inspect}' isn't."
+        end
+      end
+      options[param].map! { |e| e.to_i }
     end
-    options[:exclude].map! { |e| e.to_i }
 
     all_snips = Snippet.all
 

@@ -1,42 +1,90 @@
+describe("repeat", function () {
+  it("calls a function (first arg) some number (second arg) of times", function () {
+    var counter = 1;
+    App.util.repeat(function () { counter++ }, 5);
+
+    expect(counter).toEqual(1 + 5);
+  });
+
+  it("takes 'this' as an optional third argument", function () {
+    var obj = {counter: 3};
+    App.util.repeat(function () { this.counter++ }, 4, obj);
+
+    expect(obj.counter).toEqual(3 + 4);
+  });
+});
+
+function lines () {
+  var arr = [];
+  for (var i=0; i < arguments.length; i++) {
+    arr.push(arguments[i]);
+  }
+  return arr.join('\n');
+}
+
 describe("indentation guessing", function() {
   it("should be able to guess the level of indentation", function() {
-    var two = "this is a fake\n  code snippet\n  with indendation\n    that should be two spaces";
-    var three = "this is a crazy\n   code snippet\n      with three\n   line indentation";
-    var four = "four spaces\n    is an okay number\n    for a program\n        to have";
+    var expectations = [];
 
-    var two_text = App.TypingText.create({full_string: two, snippet_id: 1});
-    var three_text = App.TypingText.create({full_string: three, snippet_id: 1});
-    var four_text = App.TypingText.create({full_string: four, snippet_id: 1});
+    expectations.push([2, lines(
+      'this is a fake',
+      '  code snippet',
+      '  with indendation',
+      '    that should be two spaces'
+    )]);
+    expectations.push([3, lines(
+      'this is a crazy',
+      '   code snippet',
+      '      with three',
+      '   line indentation'
+    )]);
+    expectations.push([4, lines(
+      'four spaces',
+      '    is an okay number',
+      '    for a program',
+      '        to have'
+    )]);
 
-    expect(two_text._tabSize()).toEqual(2);
-    expect(three_text._tabSize()).toEqual(3);
-    expect(four_text._tabSize()).toEqual(4);
+    expectations.forEach(function (testitem) {
+      var indent  = testitem[0];
+      var snippet = testitem[1];
+
+      var model = App.TypingText.create({full_string: snippet, snippet_id: 1});
+
+      expect(model._tabSize()).toEqual(indent);
+    });
   });
 });
 
 describe("snippet whitespace normalization", function () {
   it("adds whitespace to empty lines to meet the expected indentation threshold", function () {
-    var snippet_text = [
+    var snippet_text = lines(
       'this snippet has',
       '  an empty line',
       '', // <= this one!
-      '  that will have two spaces on it',
-    ].join('\n');
+      '  that will have two spaces on it'
+    );
 
     var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
-    expect(text_model.get('full_string')).toEqual(
-      'this snippet has\n  an empty line\n  \n  that will have two spaces on it'
-    );
+    expect(text_model.get('full_string')).toEqual(lines(
+      'this snippet has',
+      '  an empty line',
+      '  ',
+      '  that will have two spaces on it'
+    ));
   });
 
   it("removes trailing whitespace", function () {
-    var snippet_text = [
+    var snippet_text = lines(
       'who put the trailing   ',
-      '  whitespace in this? ',
-    ].join('\n');
+      '  whitespace in this? '
+    );
 
     var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
-    expect(text_model.get('full_string')).toEqual('who put the trailing\n  whitespace in this?');
+    expect(text_model.get('full_string')).toEqual(lines(
+      'who put the trailing',
+      '  whitespace in this?'
+    ));
   });
 });
 
@@ -61,10 +109,10 @@ describe("typing on a snippet", function() {
   }
 
   it("splits the snippet into many parts for the view to render", function() {
-    var snippet_text = [
+    var snippet_text = lines(
       'this snippet has',
       '  more than one line'
-    ].join('\n');
+    );
 
     var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
 
@@ -127,12 +175,12 @@ describe("typing on a snippet", function() {
   });
 
   it("starts the next line at the same indentation level as the previous line", function() {
-    var snippet_text = [
+    var snippet_text = lines(
       'this snippet has',
       '  two lines',
       '  that are indented',
       'and then another that is not'
-    ].join('\n');
+    );
     
     var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "this snippet has\n");
@@ -174,11 +222,11 @@ describe("typing on a snippet", function() {
   });
 
   it("doesn't consider auto-indentation on empty lines as a 'mistake'", function() {
-    var snippet_text = [
+    var snippet_text = lines(
       '  first line indented',
       '', // second line empty
-      '  third line indented',
-    ].join('\n');
+      '  third line indented'
+    );
     
     var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "  first line indented\n");
@@ -201,33 +249,79 @@ describe("typing on a snippet", function() {
 });
 
 describe("category preferences controller", function () {
-  var enabledCategoryIds = function () {
-    return $.map(App.categoryPrefController.enabledCategories(), function (el) {
-      return el.id 
-    });
-  };
+  var catController = App.CategoryPrefController.create();
 
   var categories_json = [
     {id: 1, name: 'melodramatically-din',   enabled: false},
     {id: 2, name: 'warrant-individualists', enabled: true},
     {id: 3, name: 'overlaid-arachnids',     enabled: true}
   ];
-  App.categoryPrefController.set('content', $.map(categories_json, function (el) {
+
+  catController.set('content', $.map(categories_json, function (el) {
     return App.Category.create(el);
   }))
 
   it('allows you to ask for just the enabled categories', function () {
-    expect(enabledCategoryIds()).toEqual([2, 3]);
+    expect(catController.enabledCategoryIds()).toEqual([2, 3]);
   });
 
   it('allows you to toggle categories on and off', function () {
-    App.categoryPrefController.setCategory(2, false);
-    expect(enabledCategoryIds()).toEqual([3]);
+    catController.setCategory(2, false);
+    expect(catController.enabledCategoryIds()).toEqual([3]);
   });
 
   it('whines when you try to toggle a category it does not know', function () {
     expect(function () {
-      App.categoryPrefController.setCategory(4, false);
+      catController.setCategory(4, false);
     }).toThrow(new Error("Couldn't find an object with id 4"));
+  });
+});
+
+describe("category preferences for a user that hasn't logged in", function () {
+  var storage_key_name = 'typer_tortoise.category_ids';
+
+  var categories_json = [
+    {id: 1, name: 'melodramatically-din',   enabled: false},
+    {id: 2, name: 'warrant-individualists', enabled: true},
+    {id: 3, name: 'overlaid-arachnids',     enabled: true}
+  ];
+
+  beforeEach(function () {
+    App.user = null;
+    App.storage.clear();
+  });
+
+  it('loads the selected categories from localstorage if available', function () {
+    var catController = App.CategoryPrefController.create();
+
+    spyOn(catController, '_loadCategoriesFromServer').andCallFake(function (cb) {
+      cb(categories_json);
+    });
+
+    expect(catController.enabledCategoryIds()).toEqual([]);
+
+    App.storage.set(storage_key_name, '1,3');
+    catController.loadCategories();
+
+    expect(catController.enabledCategoryIds()).toEqual([1,3]);
+  });
+
+  it('saves the selected categories into localstorage as csv', function () {
+    var catController = App.CategoryPrefController.create();
+
+    catController.set('content', $.map(categories_json, function (el) {
+      return App.Category.create(el);
+    }))
+
+    catController.saveCategories(function () {});
+
+    expect(App.storage.get(storage_key_name)).toEqual('2,3');
+  });
+
+  it('optimistically creates category objects from localStorage on init', function () {
+    App.storage.set(storage_key_name, '35,93');
+
+    var catController = App.CategoryPrefController.create();
+    expect(catController.enabledCategoryIds()).toEqual([35, 93]);
   });
 });

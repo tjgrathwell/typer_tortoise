@@ -17,6 +17,10 @@ snip_files.each do |filename|
     # remove "comments"
     snippet = snippet.split("\n").select { |line| line !~ /^ZZ/ }.join("\n")
 
+    if snippet =~ /\t/
+      raise "No tabs allowed in the snippet seeds (#{filename}):\n#{snippet}\n"
+    end
+
     Snippet.find_or_create_by_full_text({
       category_id: Category.find_or_create_by_name(category).id,
       full_text: snippet.strip()

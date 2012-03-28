@@ -345,13 +345,13 @@ if ( typeof selector !== "string" ) {
 ZZhttps://raw.github.com/jquery/jquery/master/src/callbacks.js
 // Convert String-formatted flags into Object-formatted ones and store in cache
 function createFlags( flags ) {
-	var object = flagsCache[ flags ] = {},
-		i, length;
-	flags = flags.split( /\s+/ );
-	for ( i = 0, length = flags.length; i < length; i++ ) {
-		object[ flags[i] ] = true;
-	}
-	return object;
+  var object = flagsCache[ flags ] = {},
+    i, length;
+  flags = flags.split( /\s+/ );
+  for ( i = 0, length = flags.length; i < length; i++ ) {
+    object[ flags[i] ] = true;
+  }
+  return object;
 }
 |||||=====|||||
 ZZhttps://raw.github.com/jquery/jquery/master/src/ajax/script.js

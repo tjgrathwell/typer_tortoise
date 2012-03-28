@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]--> <!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]--> <!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]--> <!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
 <head>
@@ -29,7 +28,7 @@
 
 <script type="text/x-handlebars" data-template-name="prefs-popup">
   {{#view App.prefsPopupContent}}
-    <h2><% if signed_in? %><%= current_user.name %><% end %>'s preferences:</h2>
+    <h2><% if signed_in? %><%= current_user.name %><% else %>Guest<% end %>'s preferences:</h2>
     <ul>
     {{#each App.categoryPrefController}}
       <li>
@@ -49,19 +48,20 @@
     <div class="user-options">
       <% if signed_in? %>
         Logged in as <strong><%= link_to current_user.name, current_user %></strong>.
-        <ul>
-          <li
-             ><script type="text/x-handlebars">
-              {{#view App.prefsLink}}Preferences{{/view}}
-            </script>
-          <li><%= link_to "Log out", "/logout" %>
-        </ul>
       <% else %>
-        You aren't logged in.
-        <ul>
-          <li><%= link_to "Sign in with Twitter", "/auth/twitter" %>
-        </ul>
+        Log in to save your scores.
       <% end %>
+      <ul>
+        <li
+           ><script type="text/x-handlebars">
+            {{#view App.prefsLink}}Preferences{{/view}}
+          </script>
+        <% if signed_in? %>
+          <li><%= link_to "Log out", "/logout" %>
+        <% else %>
+          <li><%= link_to "Sign in with Twitter", "/auth/twitter" %>
+        <% end %>
+      </ul>
     </div>
     <div>
       <h1><%= link_to 'typer tortoise', root_path %></h1>
@@ -74,5 +74,14 @@
 </div>
 
   <%= javascript_include_tag "application" %>
+  <script>
+    <% if signed_in? %>
+      App.user = {
+        id: '<%= current_user.id %>',
+        name: '<%= current_user.name %>'
+      };
+    <% end %>
+    App.start();
+  </script>
 </body>
 </html>

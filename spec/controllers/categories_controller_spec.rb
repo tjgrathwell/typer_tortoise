@@ -12,6 +12,23 @@ describe CategoriesController do
     test_sign_in(@user)
   end
 
+  describe 'when not signed in' do
+    before :each do
+      test_sign_in(nil)
+    end
+
+    it 'lists all categories as "enabled"' do
+      category_data = @categories.map do |c|
+        atts = c.attributes
+        atts[:enabled] = true
+        atts
+      end
+
+      get :show, :format => :json
+      response.body.should == category_data.to_json
+    end
+  end
+
   describe 'show' do
     it 'lists all categories as "enabled" for users with no category prefs' do      
       category_data = @categories.map do |c|

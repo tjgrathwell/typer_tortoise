@@ -19,6 +19,19 @@ describe SnippetsController do
       response.body.should == @snippet.to_json
     end
 
+    it "accepts a whitelist of categories" do
+      category = Factory(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = Factory(:snippet,
+        :category => category,
+        :full_text => 'cynicism-interpersonal',
+      )
+
+      10.times do
+        get :random, :format => :json, :category_ids => [category.id]
+        response.body.should == snippet_too.to_json
+      end      
+    end
+
     it "should work if you're logged in with no category preferences" do
       user = Factory(:user)
       test_sign_in(user)
