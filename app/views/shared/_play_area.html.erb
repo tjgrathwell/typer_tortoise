@@ -1,7 +1,7 @@
 <script type="text/x-handlebars">
   {{#view App.TypingArea}}
     <!-- white space becomes super-significant in this area -->
-    <div class="type-panel" tabindex="0"><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class="typeCursorClass text.hasMistakes"}}>{{text.atCursor}}</span>{{text.afterCursor}}</div>
+    <div class="type-panel" tabindex="0"><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class=":type-cursor text.hasMistakes"}}>{{text.renderedCursor}}</span>{{text.afterCursor}}</div>
 
     {{#view App.FocusNag}}Click the text to start typing!{{/view}}
   {{/view}}

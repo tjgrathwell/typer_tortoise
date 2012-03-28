@@ -173,13 +173,22 @@ App.TypingText = Em.Object.extend({
     }
 
     var this_char = this.full_string.substr(this.cursor_pos, 1);
-    if (this_char === '\n') {
-      // show the "return key" symbol instead of just the (invisible) newline char
-      return "\u21b5";
-    }
-
     return this_char;
   }.property('cursor_pos', 'mistakes.length'),
+
+  renderedCursor: function () {
+    var cursorStr = this.get('atCursor');
+    return cursorStr.split('').map(function (chr) {
+      if (chr === '\n') {
+        // show the "return key" symbol instead of just the (invisible) newline char
+        return "\u21b5";
+      }
+      if (chr === ' ') {
+        return "&nbsp;";
+      }
+      return chr;
+    }).join('');
+  }.property('atCursor'),
 
   afterCursor: function () {
     var adjustedCursor;
@@ -369,7 +378,6 @@ App.FocusNag = Em.View.extend({
 App.TypingArea = Em.View.extend({
   classNames: 'type-area-container',
   textBinding: 'App.typingAreaController.current_snippet',
-  typeCursorClass: 'type-cursor',
 
   focused: false,
 
@@ -524,7 +532,7 @@ App.prefsPopupContent = Em.View.extend({
   didInsertElement: function () {
     this._super();
     this.$().css({
-      left: $('.container').position().left + 40,
+      left: $('.container').offset().left + 40,
       top: $(window).height() / 4
     });
   },

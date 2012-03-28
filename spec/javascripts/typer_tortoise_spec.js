@@ -124,6 +124,7 @@ describe("typing on a snippet", function() {
       atCursor     : ' ',
       afterCursor  : 'has\n  more than one line'
     });
+    expect(text_model.get('renderedCursor')).toEqual("&nbsp;");
 
     type_on_snippet(text_model, 'zz');
 
@@ -159,9 +160,10 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet has',
-      atCursor     : "\u21b5",
+      atCursor     : "\n",
       afterCursor  : '\n  more than one line',
     });
+    expect(text_model.get('renderedCursor')).toEqual("\u21b5");
 
     // typo exactly on the newline character
     type_on_snippet(text_model, 'Z');
@@ -234,7 +236,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : '  first line indented\n  ',
-      atCursor     : "\u21b5",
+      atCursor     : "\n",
       afterCursor  : '\n  third line indented',
     });
 
