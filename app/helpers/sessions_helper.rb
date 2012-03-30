@@ -19,10 +19,18 @@ module SessionsHelper
     @current_user = user
   end
 
+  def admin_user?
+    current_user && current_user.is_admin?
+  end
+
+  def admin_user
+    redirect_to(root_path) unless current_user.is_admin?
+  end
+
   private
 
   def current_user=(user)
     @current_user = user
     session[:user_id] = user.nil? ? user : user.id
-  end  
+  end
 end

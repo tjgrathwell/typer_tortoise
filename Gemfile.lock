@@ -80,6 +80,10 @@ GEM
       railties (~> 3.0)
       thor (~> 0.14)
     json (1.6.5)
+    kaminari (0.13.0)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      railties (>= 3.0.0)
     libv8 (3.3.10.4)
     mail (2.3.0)
       i18n (>= 0.4.0)
@@ -200,6 +204,7 @@ DEPENDENCIES
   guard-spork
   jasmine
   jquery-rails
+  kaminari
   omniauth-twitter
   pg
   rails (= 3.1.1)

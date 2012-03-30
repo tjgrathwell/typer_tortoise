@@ -6,16 +6,24 @@
     <th>Text</th>
     <th></th>
     <th></th>
+    <% if current_user.is_admin? %>
     <th></th>
+    <th></th>
+    <% end %>
   </tr>
+
+<%= paginate @snippets %>
 
 <% @snippets.each do |snippet| %>
   <tr>
     <td><strong><%= snippet.category.name %></strong></td>
     <td><%= truncate(snippet.full_text, :length => 50) %></td>
     <td><%= link_to 'Show', snippet %></td>
+    <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
+    <% if current_user.is_admin? %>
     <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
     <td><%= link_to 'Destroy', snippet, confirm: 'Are you sure?', method: :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
