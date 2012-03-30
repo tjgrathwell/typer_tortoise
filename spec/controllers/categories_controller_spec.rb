@@ -84,6 +84,10 @@ describe CategoriesController do
       lambda do
         post :overwrite, :categories => [], :format => :json
       end.should_not change(CategoryPreference, :count)
+
+      lambda do
+        post :overwrite, :categories => ['huskily-interchanging'], :format => :json
+      end.should raise_error(ArgumentError)
     end
   end
 

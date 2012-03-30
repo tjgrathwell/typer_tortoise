@@ -8,11 +8,11 @@ class Snippet < ActiveRecord::Base
 
     [:exclude, :category_ids].each do |param|
       unless options[param].respond_to? :each
-        raise ArgumentError, "Arguments to random must be iterable, '#{options[param]}' isn't."
+        raise ArgumentError, "Arguments to #{__method__} must be iterable, '#{options[param]}' isn't."
       end
       options[param].each do |id|
         unless id.to_s.match(/^\d+$/)
-          raise ArgumentError, "Arguments to random must be numeric, '#{id.inspect}' isn't."
+          raise ArgumentError, "Arguments to #{__method__} must be numeric, '#{id.inspect}' isn't."
         end
       end
       options[param].map! { |e| e.to_i }

@@ -8,7 +8,7 @@ module SessionsHelper
   end
 
   def authenticate
-    render :text => '' unless signed_in?
+    head :forbidden unless signed_in?
   end
 
   def deny_access

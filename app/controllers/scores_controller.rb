@@ -4,7 +4,7 @@ class ScoresController < ApplicationController
   def create
     @score = current_user.scores.build(params[:score])
     if (@score.save)
-      render :text => ''
+      head :ok
     else
       render json: @score.errors, status: :unprocessable_entity
     end

@@ -46,7 +46,7 @@ describe ScoresController do
       lambda do
         post :create, :score => @score_data.merge(:wpm => -10)
 
-        response.body.should == ''
+        response.status.should == 403
       end.should_not change(Score, :count)
     end
   end

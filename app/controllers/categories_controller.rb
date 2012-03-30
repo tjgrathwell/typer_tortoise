@@ -2,19 +2,13 @@ class CategoriesController < ApplicationController
   before_filter :authenticate, only: [:overwrite]
 
   def overwrite
-    if !params[:categories] || params[:categories].length == 0
-      render :text => ''
-      return
+    if !params[:categories] || params[:categories].empty?
+      return head :bad_request
     end
 
-    current_user.category_preferences.destroy_all()
+    current_user.overwrite_category_preferences(params[:categories])
 
-    prefs = current_user.category_preferences
-    params[:categories].each do |category_id|
-      prefs.create(:user => current_user, :category_id => category_id)
-    end
-
-    render :text => ''
+    head :ok
   end
 
   def show

@@ -204,7 +204,7 @@ textarea.snippet-editor {
     position: absolute;
     z-index: 100;
 		background-color: rgba(173, 216, 230, .9);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 .prefs-popup button {
@@ -218,6 +218,10 @@ textarea.snippet-editor {
 .prefs-popup input {
     position: relative;
     display: inline;
+}
+
+.prefs-popup input:focus {
+		outline: none;
 }
 
 .prefs-popup label {

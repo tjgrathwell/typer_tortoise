@@ -602,8 +602,7 @@ App.CategoryPrefController = Em.ArrayController.extend({
   },
 
   _saveCategoriesToServer: function (finished_cb) {
-    var categories = this.enabledCategories().map(function (el) { return el.toJson(); });
-    $.post('/categories', {categories: categories}, finished_cb);
+    $.post('/categories', {categories: this.enabledCategoryIds()}, finished_cb);
   },
 
   _saveCategoriesToStorage: function (finished_cb) {
