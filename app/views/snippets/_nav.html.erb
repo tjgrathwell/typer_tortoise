@@ -7,13 +7,13 @@
     <% if !['new', 'show', 'index'].include? action_name %>
       <li><%= link_to 'View', @snippet %>
     <% end %>
-    <% if !['new', 'edit', 'index'].include?(action_name) && current_user.is_admin? %>
+    <% if !['new', 'edit', 'index'].include?(action_name) && admin_user? %>
       <li><%= link_to 'Edit', edit_snippet_path(@snippet) %>
     <% end %>
     <% if !['new', 'index'].include? action_name %>
       <li><%= link_to 'Play', play_snippet_path(@snippet) %>
     <% end %>
-    <% if !['new'].include?(action_name) && current_user.is_admin? %>
+    <% if !['new'].include?(action_name) && admin_user? %>
       <li><%= link_to 'Add a Snippet', new_snippet_path %>
     <% end %>
   </ul>

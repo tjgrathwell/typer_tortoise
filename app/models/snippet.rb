@@ -1,7 +1,8 @@
 class Snippet < ActiveRecord::Base
   belongs_to :category
   has_many :scores
-  default_scope includes(:category).order(:id)
+  default_scope includes(:category).order("#{table_name}.id")
+  scope :of_category, lambda { |category_id| {conditions: {category_id: category_id} } }
 
   def self.random(options={})
     defaults = {:category_ids => [], :exclude => []}

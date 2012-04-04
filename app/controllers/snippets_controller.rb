@@ -1,6 +1,8 @@
 class SnippetsController < ApplicationController
   before_filter :admin_user, only: [:destroy, :create, :update, :new, :edit]
 
+  # GET /random
+  # GET /random.json
   def random
     category_ids = params[:category_ids] || []
     if signed_in?
@@ -20,7 +22,11 @@ class SnippetsController < ApplicationController
   # GET /snippets
   # GET /snippets.json
   def index
+    @categories = Category.all
     @snippets = Snippet.page(params[:page])
+    if params[:category_id]
+      @snippets = @snippets.of_category(params[:category_id])
+    end
 
     respond_to do |format|
       format.html # index.html.erb

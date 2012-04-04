@@ -229,3 +229,8 @@ textarea.snippet-editor {
     display: inline;
     padding-left: .5em;
 }
+
+.filter-dropdown {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

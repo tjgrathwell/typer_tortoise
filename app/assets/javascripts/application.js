@@ -10,3 +10,4 @@
 //= require ember
 //= require bootstrap
 //= require typer_tortoise
+//= require list_filtering

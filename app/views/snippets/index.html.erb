@@ -1,18 +1,24 @@
 <%= render 'nav' %>
 
+<div class="filter-dropdown">
+  <%= select_tag "category_id",
+      "<option value=''>No Filtering</option>".html_safe + options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
+      id: 'category_filter' %>
+</div>
+
+<%= paginate @snippets %>
+
 <table class="thin-border">
   <tr>
     <th>Category</th>
     <th>Text</th>
     <th></th>
     <th></th>
-    <% if current_user.is_admin? %>
+    <% if admin_user? %>
     <th></th>
     <th></th>
     <% end %>
   </tr>
-
-<%= paginate @snippets %>
 
 <% @snippets.each do |snippet| %>
   <tr>
@@ -20,7 +26,7 @@
     <td><%= truncate(snippet.full_text, :length => 50) %></td>
     <td><%= link_to 'Show', snippet %></td>
     <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
-    <% if current_user.is_admin? %>
+    <% if admin_user? %>
     <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
     <td><%= link_to 'Destroy', snippet, confirm: 'Are you sure?', method: :delete %></td>
     <% end %>

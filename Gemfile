@@ -9,13 +9,11 @@ group :development, :test do
   gem 'jasmine'
   gem 'sqlite3'
   gem 'rspec-rails'
-  #gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'capybara'
 end
 
 group :test do
-  gem 'therubyracer'
   gem 'factory_girl_rails'
-  gem 'capybara'
   gem 'spork'
   gem 'guard-spork'
   gem 'win32-process', :platforms => :mswin
