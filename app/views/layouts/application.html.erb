@@ -43,29 +43,36 @@
   {{/view}}
 </script>
 
+<script type="text/x-handlebars" data-template-name="prefs-link">
+  Preferences
+</script>
+
 <div class="container">
   <header>
-    <div class="user-options">
+    <div>
+      <h1><%= link_to 'typer tortoise', root_path %></h1>
+      <small>are you faster than a tortoise??</small>
+    </div>
+    <nav>
+      <ul>
+        <li><%= link_to "User Index", users_path %></li>
+        <li><%= link_to "Snippet Index", snippets_path %></li>
+        <li id="prefs-link-container"><a href="#">Preferences</a></li>
+      </ul>
+    </nav>
+    <div>
       <% if signed_in? %>
         Logged in as <strong><%= link_to current_user.name, current_user %></strong>.
       <% else %>
         Log in to save your scores.
       <% end %>
       <ul>
-        <li
-           ><script type="text/x-handlebars">
-            {{#view App.prefsLink}}Preferences{{/view}}
-          </script>
         <% if signed_in? %>
           <li><%= link_to "Log out", "/logout" %>
         <% else %>
           <li><%= link_to "Sign in with Twitter", "/auth/twitter" %>
         <% end %>
       </ul>
-    </div>
-    <div>
-      <h1><%= link_to 'typer tortoise', root_path %></h1>
-      <small>are you faster than a tortoise??</small>
     </div>
   </header>
 
@@ -81,7 +88,7 @@
         name: '<%= current_user.name %>'
       };
     <% end %>
-    App.start();
+    $(document).ready(function () { App.start(); });
   </script>
 </body>
 </html>

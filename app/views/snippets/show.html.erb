@@ -2,10 +2,10 @@
 
 <p id="notice"><%= notice %></p>
 
-<p>
-  A snippet in the <strong><%= @snippet.category.name %></strong> category.
-  <pre><%= @snippet.full_text %></pre>
-</p>
+<h1>Snippet <%= @snippet.id %></h1>
+
+<h2>From the category "<strong><%= @snippet.category.name %></strong>"</h2>
+<pre><%= @snippet.full_text %></pre>
 
 <% if @snippet.scores.length > 0 %>
 <h1>User Scores:</h1>

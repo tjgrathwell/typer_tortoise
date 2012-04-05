@@ -434,7 +434,9 @@ App.typingAreaController = Em.Object.create({
     $.post('/scores', {score: this.current_snippet.getScore()});
   },
 
-  changeCurrentSnippetForPreferences: function (category_ids) {
+  changeSnippetToCategory: function (category_ids) {
+    if (!App.isPlaying()) return;
+
     if (category_ids.indexOf(this.current_snippet.category_id) >= 0) {
       // if this snippet is already in the whitelist of categories, nothing to do
       return;
@@ -491,6 +493,7 @@ App.ScoreListView = Em.View.extend({});
 //
 
 App.prefsLink = Em.View.extend({
+  templateName: 'prefs-link',
   tagName: 'span',
   classNames: ['prefs-link'],
 
@@ -504,7 +507,7 @@ App.prefsSaveButton = Em.Button.extend({
     var pref_controller = App.categoryPrefController;
     pref_controller.saveCategories(function () {
       pref_controller.hidePreferences();
-      App.typingAreaController.changeCurrentSnippetForPreferences(pref_controller.enabledCategoryIds());
+      App.typingAreaController.changeSnippetToCategory(pref_controller.enabledCategoryIds());
     });
   }
 });
@@ -703,15 +706,20 @@ App.setPreventDefaultForKey = function (e) {
 //  entry point
 //
 
+App.isPlaying = function () {
+  return (App.history.pageToken() === '/') || App.history.pageToken().match('/play');
+};
+
 App.start = function () {
   if (App.user && App.storage.supported) {
     // Kill localStorage prefs every time someone logs in properly.
     App.storage.remove('typer_tortoise.category_ids');
   }
 
-  if (App.history.pageToken() !== '/' && !App.history.pageToken().match('/play') ) {
-    return;
-  }
+  var prefs_link = App.prefsLink.create({});
+  prefs_link.replaceIn('#prefs-link-container');
+
+  if (!App.isPlaying()) return;
 
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);

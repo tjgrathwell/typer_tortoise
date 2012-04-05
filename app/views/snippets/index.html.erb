@@ -1,7 +1,9 @@
-<%= render 'nav' %>
+<% if admin_user? %><%= render 'nav' %><% end %>
+
+<h1>Snippet Index</h1>
 
 <div class="filter-dropdown">
-  <%= select_tag "category_id",
+  Filtering: <%= select_tag "category_id",
       "<option value=''>No Filtering</option>".html_safe + options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
       id: 'category_filter' %>
 </div>

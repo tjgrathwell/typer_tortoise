@@ -1,13 +1,8 @@
-<nav class="blue-round">
-  <ul class="nav-options">
-    <li><%= link_to 'Home', root_path %>
-    <% if !['index'].include? action_name %>
-      <li><%= link_to 'Index', users_path %>
-    <% end %>
-  </ul>
-</nav>
-
 <h1><%= @user.name %></h1>
+
+<% if !@scores_by_category.empty? %>
+  <h2>Snippet Scores:</h2>
+<% end %>
 
 <% @scores_by_category.keys.each do |category| %>
   <div class="blue-round user-scores">

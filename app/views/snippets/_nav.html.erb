@@ -1,6 +1,5 @@
 <nav class="blue-round">
   <ul class="nav-options">
-    <li><%= link_to 'Home', root_path %>
     <% if !['index'].include? action_name %>
       <li><%= link_to 'Index', snippets_path %>
     <% end %>
