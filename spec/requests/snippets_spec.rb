@@ -3,12 +3,12 @@ require 'spec_helper'
 describe "Snippets" do
   describe "GET '/snippets'" do
     before(:each) do
-      @cat_a = Factory(:category)
-      @cat_b = Factory(:category)
+      @cat_a = create(:category)
+      @cat_b = create(:category)
       @snippets = [
-        Factory(:snippet, full_text: 'catAsnip1', category: @cat_a),
-        Factory(:snippet, full_text: 'catAsnip2', category: @cat_a),
-        Factory(:snippet, full_text: 'catBsnip1', category: @cat_b),
+        create(:snippet, full_text: 'catAsnip1', category: @cat_a),
+        create(:snippet, full_text: 'catAsnip2', category: @cat_a),
+        create(:snippet, full_text: 'catBsnip1', category: @cat_b),
       ]
     end
 

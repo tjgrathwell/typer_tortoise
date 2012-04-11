@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SnippetsController do
 
   before(:each) do
-    @snippet = Factory(:snippet)
+    @snippet = create(:snippet)
   end
 
   describe "GET '/snippets/random'" do
@@ -20,8 +20,8 @@ describe SnippetsController do
     end
 
     it "accepts a whitelist of categories" do
-      category = Factory(:category, :name => 'Mashhad-Mithridates')
-      snippet_too = Factory(:snippet,
+      category = create(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = create(:snippet,
         :category => category,
         :full_text => 'cynicism-interpersonal',
       )
@@ -33,7 +33,7 @@ describe SnippetsController do
     end
 
     it "should work if you're logged in with no category preferences" do
-      user = Factory(:user)
+      user = create(:user)
       test_sign_in(user)
       
       get :random, :format => :json
@@ -41,11 +41,11 @@ describe SnippetsController do
     end
 
     it "should only return snippets in the user's preferences" do
-      user = Factory(:user)
+      user = create(:user)
       test_sign_in(user)
 
-      category = Factory(:category, :name => 'Mashhad-Mithridates')
-      snippet_too = Factory(:snippet,
+      category = create(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = create(:snippet,
         :category => category,
         :full_text => 'cynicism-interpersonal',
       )
@@ -59,8 +59,8 @@ describe SnippetsController do
     end
 
     it "should not return the snippet specified by the 'last_seen' parameter" do
-      category = Factory(:category, :name => 'Mashhad-Mithridates')
-      snippet_too = Factory(:snippet,
+      category = create(:category, :name => 'Mashhad-Mithridates')
+      snippet_too = create(:snippet,
         :category => category,
         :full_text => 'cynicism-interpersonal',
       )
@@ -75,7 +75,7 @@ describe SnippetsController do
 
   describe "GET '/snippets/:id.json'" do
     it "should return a particular snippet" do
-      snippet_two = Factory(:snippet)
+      snippet_two = create(:snippet)
 
       get :show, :format => :json, :id => @snippet.id
       response.body.should == @snippet.to_json

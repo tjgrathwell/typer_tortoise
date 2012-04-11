@@ -3,12 +3,12 @@ require 'spec_helper'
 describe CategoriesController do
 
   before :each do
-    @cat_a = Factory(:category, :name => 'Zedekiah-lasciviously')
-    @cat_b = Factory(:category, :name => 'stringers-goshes')
-    @cat_c = Factory(:category, :name => 'semimonthly-transcendence')
+    @cat_a = create(:category, :name => 'Zedekiah-lasciviously')
+    @cat_b = create(:category, :name => 'stringers-goshes')
+    @cat_c = create(:category, :name => 'semimonthly-transcendence')
     @categories = [@cat_a, @cat_b, @cat_c]
 
-    @user = Factory(:user)
+    @user = create(:user)
     test_sign_in(@user)
   end
 

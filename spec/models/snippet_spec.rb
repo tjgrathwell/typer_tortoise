@@ -4,9 +4,9 @@ describe Snippet do
 
   before :each do
     @snippets = [
-      Factory(:snippet, :full_text => 'editorship-contradictory', :category_id => 1),
-      Factory(:snippet, :full_text => 'scarecrow-bugbears',       :category_id => 2),
-      Factory(:snippet, :full_text => 'squelch-Alisha',           :category_id => 3),
+      create(:snippet, :full_text => 'editorship-contradictory', :category_id => 1),
+      create(:snippet, :full_text => 'scarecrow-bugbears',       :category_id => 2),
+      create(:snippet, :full_text => 'squelch-Alisha',           :category_id => 3),
     ]
   end
 

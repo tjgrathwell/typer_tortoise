@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ScoresController do
 
   before(:each) do
-    @snippet = Factory(:snippet)
+    @snippet = create(:snippet)
     @score_data = {
       'wpm' => 19,
       'accuracy' => 29,
@@ -14,7 +14,7 @@ describe ScoresController do
   describe "POST 'scores'" do
 
     before(:each) do
-      @user = test_sign_in(Factory(:user))
+      @user = test_sign_in(create(:user))
     end
 
     describe "failure" do
