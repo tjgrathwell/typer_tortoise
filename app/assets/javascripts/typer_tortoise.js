@@ -524,10 +524,6 @@ App.prefsPopup = Em.View.extend({
 App.prefsPopupContent = Em.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
-  select: function (e) {
-    App.categoryPrefController.setCategory(parseInt(e.target.value, 10), e.target.checked);
-  },
-
   click: function (e) {
     e.stopPropagation();
   },

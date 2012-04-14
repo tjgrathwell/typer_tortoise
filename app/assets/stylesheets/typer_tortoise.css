@@ -220,16 +220,11 @@ textarea.snippet-editor {
 .prefs-popup input {
     position: relative;
     display: inline;
+    margin-right: .5em;
 }
 
 .prefs-popup input:focus {
 		outline: none;
-}
-
-.prefs-popup label {
-    position: relative;
-    display: inline;
-    padding-left: .5em;
 }
 
 .filter-dropdown {
