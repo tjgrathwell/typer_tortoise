@@ -46,7 +46,15 @@ App.util.repeat = function (func, times, this_val) {
 //
 
 App.storage = {
-  supported: ("localStorage" in window && window["localStorage"] !== null),
+  supported: function () {
+    try {
+      localStorage.setItem('foo', 'bar');
+      localStorage.removeItem('foo');
+      return true;
+    } catch(e) {
+      return false;
+    }
+  }(),
 
   get: function (key) {
     return localStorage[key];
