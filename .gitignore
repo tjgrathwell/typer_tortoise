@@ -5,3 +5,4 @@ tmp/
 .sass-cache/
 config/settings.yml
 .env
+.idea

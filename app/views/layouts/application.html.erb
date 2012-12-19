@@ -32,7 +32,7 @@
     <ul>
     {{#each App.categoryPrefController}}
       <li>
-        {{view Em.Checkbox valueBinding="enabled" titleBinding="name"}}
+        <label>{{view Em.Checkbox checkedBinding="enabled"}}{{name}}</label>
       </li>
     {{/each}}
     </ul>

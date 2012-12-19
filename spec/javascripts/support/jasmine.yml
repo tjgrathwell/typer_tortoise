@@ -12,7 +12,8 @@
 #
 src_files:
 
-  - vendor/assets/javascripts/jquery.min.js
+  - vendor/assets/javascripts/jquery.js
+  - vendor/assets/javascripts/handlebars.js
   - vendor/assets/javascripts/ember.js
   - app/assets/javascripts/typer_tortoise.js
 

@@ -1,30 +1,33 @@
-<script type="text/x-handlebars">
-  {{#view App.TypingArea}}
-    <!-- white space becomes super-significant in this area -->
-    <div class="type-panel" tabindex="0"><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class=":type-cursor text.hasMistakes"}}>{{text.renderedCursor}}</span>{{text.afterCursor}}</div>
+<div id="typing-area"></div>
+<div>
+    <div id="score-display" class="full-score-display"></div>
+    <div id="user-score-display"></div>
+</div>
 
-    {{#view App.FocusNag}}Click the text to start typing!{{/view}}
-  {{/view}}
+<script type="text/x-handlebars" data-template-name="typing-area">
+  <!-- white space becomes super-significant in this area -->
+  <div class="type-panel" tabindex="0"><span class="before-cursor">{{text.beforeCursor}}</span><span {{bindAttr class=":type-cursor text.hasMistakes"}}>{{{text.renderedCursor}}}</span>{{text.afterCursor}}</div>
 
-  <div class="full-score-display">
-    {{#view App.WPMDisplay}}
-      {{text.wpm}}<small> wpm</small>
-    {{/view}}
-    {{#view App.AccuracyDisplay}}
-      {{text.accuracy}}%
-    {{/view}}
-  </div>
+  {{#view App.FocusNag}}Click the text to start typing!{{/view}}
 </script>
 
-<script type="text/x-handlebars">
+<script type="text/x-handlebars" data-template-name="wpm-display">
+  {{text.wpm}}<small> wpm</small>
+</script>
+
+<script type="text/x-handlebars" data-template-name="accuracy-display">
+  {{text.accuracy}}%
+</script>
+
+<script type="text/x-handlebars" data-template-name="player-scores">
   {{#if App.scoresController.content.length}}
   <div class="blue-round player-scores">
     <h3>Your Scores</h3>
     <ul>
     {{#each App.scoresController}}
-      {{#view App.ScoreListView contentBinding="this"}}
+      {{#view App.ScoreItemView contentBinding="this"}}
         <li>
-        {{#with content}}
+        {{#with view.content}}
           <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
         {{/with}}
       {{/view}}

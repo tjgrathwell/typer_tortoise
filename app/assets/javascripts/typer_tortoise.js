@@ -12,7 +12,7 @@ jQuery.fn.centerOnParent = function () {
     left: parent_offset.left + ((parent.width()  / 2) - (this.width()  / 2))
   });
   return this;
-}
+};
 
 //
 //  utilities
@@ -255,9 +255,10 @@ App.TypingText = Em.Object.extend({
   _startWpmTimer: function () {
     this.set('start_time', (new Date()).getTime());
 
-    var timer_id = window.setInterval((function () {
-      this.set('wpm_ticks', this.wpm_ticks + 1);
-    }).bind(this), 250);
+    var self = this;
+    var timer_id = window.setInterval(function () {
+      self.set('wpm_ticks', this.wpm_ticks + 1);
+    }, 250);
 
     this.set('wpm_timer_id', timer_id);
   },
@@ -351,18 +352,20 @@ App.TypingText = Em.Object.extend({
 //  views
 //
 
-App.WPMDisplay = Em.View.extend({
+App.WPMDisplay = Em.View.create({
   tagName: 'span',
+  templateName: 'wpm-display',
   classNames: ['stat-counter'],
 
-  textBinding: 'App.typingAreaController.current_snippet'
+  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
 });
 
-App.AccuracyDisplay = Em.View.extend({
+App.AccuracyDisplay = Em.View.create({
   tagName: 'span',
+  templateName: 'accuracy-display',
   classNames: ['stat-counter'],
 
-  textBinding: 'App.typingAreaController.current_snippet'
+  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
 });
 
 App.FocusNag = Em.View.extend({
@@ -383,7 +386,8 @@ App.FocusNag = Em.View.extend({
   }.observes('isFocused')
 });
 
-App.TypingArea = Em.View.extend({
+App.TypingArea = Em.View.create({
+  templateName: 'typing-area',
   classNames: 'type-area-container',
   textBinding: 'App.typingAreaController.current_snippet',
 
@@ -414,6 +418,7 @@ App.TypingArea = Em.View.extend({
   },
 
   snippetChanged: function () {
+    if (!this.$() || this.$().length === 0) { return; }
     this.$().fadeIn('slow');
     this.$().find('.type-panel').focus();
   }.observes('text'),
@@ -422,7 +427,7 @@ App.TypingArea = Em.View.extend({
   focusOut: function (e) { this.set('focused', false); }
 });
 
-App.typingAreaController = Em.Object.create({
+App.set('typingAreaController', Em.Object.create({
   current_snippet: null,
 
   finishedObserver: function () {
@@ -477,10 +482,10 @@ App.typingAreaController = Em.Object.create({
         category_id: snippet_json['category_id']
       }));
     }).bind(this));
-  },
-});
+  }
+}));
 
-App.scoresController = Em.ArrayController.create({
+App.set('scoresController', Em.ArrayController.create({
   content: [],
 
   loadScores: function (score) {
@@ -492,9 +497,13 @@ App.scoresController = Em.ArrayController.create({
   add: function (score) {
     this.pushObject(score);
   }
-});
+}));
 
-App.ScoreListView = Em.View.extend({});
+App.ScoreItemView = Em.View.extend({});
+
+App.ScoreListView = Em.View.create({
+  templateName: 'player-scores'
+});
 
 //
 //  category preferences stuff
@@ -510,9 +519,10 @@ App.prefsLink = Em.View.extend({
   }
 });
 
-App.prefsSaveButton = Em.Button.extend({
+App.prefsSaveButton = Em.View.extend({
+  tagName: 'button',
   click: function (e) {
-    var pref_controller = App.categoryPrefController;
+    var pref_controller = App.get('categoryPrefController');
     pref_controller.saveCategories(function () {
       pref_controller.hidePreferences();
       App.typingAreaController.changeSnippetToCategory(pref_controller.enabledCategoryIds());
@@ -542,7 +552,7 @@ App.prefsPopupContent = Em.View.extend({
       left: $('.container').offset().left + 40,
       top: $(window).height() / 4
     });
-  },
+  }
 });
 
 App.CategoryPrefController = Em.ArrayController.extend({
@@ -663,7 +673,7 @@ App.CategoryPrefController = Em.ArrayController.extend({
   }
 });
 
-App.categoryPrefController = App.CategoryPrefController.create({});
+App.set('categoryPrefController',  App.CategoryPrefController.create({}));
 
 //
 //  key handling
@@ -729,6 +739,11 @@ App.start = function () {
     App.setPreventDefaultForKey(e);
   });
 
+  App.TypingArea.appendTo('#typing-area');
+  App.WPMDisplay.appendTo('#score-display');
+  App.AccuracyDisplay.appendTo('#score-display');
+  App.ScoreListView.appendTo('#user-score-display');
+
   var path = App.history.pageToken();
   if (path.match('/play')) {
     var snippet_num = path.match('/snippets/(\\d+)/play')[1];
@@ -738,4 +753,4 @@ App.start = function () {
   }
 
   App.scoresController.loadScores();
-}
+};

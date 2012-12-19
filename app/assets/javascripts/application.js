@@ -7,6 +7,7 @@
 //= require es5-shim
 //= require jquery
 //= require jquery_ujs
+//= require handlebars
 //= require ember
 //= require bootstrap
 //= require typer_tortoise
