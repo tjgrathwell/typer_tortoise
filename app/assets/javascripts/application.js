@@ -10,5 +10,11 @@
 //= require handlebars
 //= require ember
 //= require bootstrap
-//= require typer_tortoise
 //= require list_filtering
+//= require typer_tortoise
+//= require util
+//= require storage
+//= require_tree ./models
+//= require_tree ./views
+//= require_tree ./controllers
+//= require start
