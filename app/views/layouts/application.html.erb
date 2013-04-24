@@ -27,7 +27,7 @@
 <body>
 
 <script type="text/x-handlebars" data-template-name="prefs-popup">
-  {{#view App.prefsPopupContent}}
+  {{#view App.views.PrefsPopupContent}}
     <h2><% if signed_in? %><%= current_user.name %><% else %>Guest<% end %>'s preferences:</h2>
     <ul>
     {{#each App.categoryPrefController}}
@@ -37,7 +37,7 @@
     {{/each}}
     </ul>
     <div class="center-text">
-      {{#view App.prefsSaveButton}}Save Preferences{{/view}}
+      {{#view App.views.PrefsSaveButton}}Save Preferences{{/view}}
     </div>
   {{/view}}
 </script>

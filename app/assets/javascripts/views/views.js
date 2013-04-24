@@ -1,20 +1,16 @@
-App.WPMDisplay = Em.View.create({
+App.views.WPMDisplay = Em.View.extend({
   tagName: 'span',
   templateName: 'wpm-display',
-  classNames: ['stat-counter'],
-
-  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+  classNames: ['stat-counter']
 });
 
-App.AccuracyDisplay = Em.View.create({
+App.views.AccuracyDisplay = Em.View.extend({
   tagName: 'span',
   templateName: 'accuracy-display',
-  classNames: ['stat-counter'],
-
-  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+  classNames: ['stat-counter']
 });
 
-App.FocusNag = Em.View.extend({
+App.views.FocusNag = Em.View.extend({
   classNameBindings: ['focusNagClass', 'isFocused:hidden'],
   focusNagClass: 'focus-nag',
 
@@ -32,10 +28,9 @@ App.FocusNag = Em.View.extend({
   }.observes('isFocused')
 });
 
-App.TypingArea = Em.View.create({
+App.views.TypingArea = Em.View.extend({
   templateName: 'typing-area',
   classNames: 'type-area-container',
-  textBinding: 'App.typingAreaController.current_snippet',
 
   focused: false,
 
@@ -73,81 +68,9 @@ App.TypingArea = Em.View.create({
   focusOut: function (e) { this.set('focused', false); }
 });
 
-App.set('typingAreaController', Em.Object.create({
-  current_snippet: null,
+App.views.ScoreItemView = Em.View.extend({});
 
-  finishedObserver: function () {
-    if (this.current_snippet.finished) {
-      if (App.history.pageToken().match('/play')) {
-        // reset the URL from pointing at a specific snippet (/snippets/15/play)
-        // to the root URL (/) to indicate "random play mode" has resumed
-        App.history.setPageToken('/');
-      }
-      this.saveScore();
-      this.newSnippet();
-    }
-  }.observes('current_snippet.finished'),
-
-  saveScore: function () {
-    App.scoresController.add(this.current_snippet.getScore());
-    $.post('/scores', {score: this.current_snippet.getScore()});
-  },
-
-  changeSnippetToCategory: function (category_ids) {
-    if (!App.isPlaying()) return;
-
-    if (category_ids.indexOf(this.current_snippet.category_id) >= 0) {
-      // if this snippet is already in the whitelist of categories, nothing to do
-      return;
-    }
-
-    this.newSnippet();
-  },
-
-  newSnippet: function (snippet_num) {
-    var params = {};
-
-    var url;
-    if (snippet_num) {
-      url = '/snippets/' + snippet_num + '.json';
-    } else {
-      url = '/snippets/random.json';
-      if (!App.user) {
-        params['category_ids'] = App.categoryPrefController.enabledCategoryIds();
-      }
-    }
-
-    if (this.current_snippet) {
-      params['last_seen'] = this.current_snippet.snippet_id;
-    }
-
-    $.get(url, params, (function (snippet_json) {
-      this.set('current_snippet', App.TypingText.create({
-        full_string: App.util.chomp(snippet_json['full_text']),
-        snippet_id: snippet_json['id'],
-        category_id: snippet_json['category_id']
-      }));
-    }).bind(this));
-  }
-}));
-
-App.set('scoresController', Em.ArrayController.create({
-  content: [],
-
-  loadScores: function (score) {
-    $.get('/scores/', (function (json) {
-      this.set('content', json);
-    }).bind(this));
-  },
-
-  add: function (score) {
-    this.pushObject(score);
-  }
-}));
-
-App.ScoreItemView = Em.View.extend({});
-
-App.ScoreListView = Em.View.create({
+App.views.ScoreListView = Em.View.extend({
   templateName: 'player-scores'
 });
 
@@ -155,28 +78,28 @@ App.ScoreListView = Em.View.create({
 //  category preferences stuff
 //
 
-App.prefsLink = Em.View.extend({
+App.views.PrefsLink = Em.View.extend({
   templateName: 'prefs-link',
   tagName: 'span',
   classNames: ['prefs-link'],
 
   click: function () {
-    App.categoryPrefController.showPreferences();
+    App.get('categoryPrefController').showPreferences();
   }
 });
 
-App.prefsSaveButton = Em.View.extend({
+App.views.PrefsSaveButton = Em.View.extend({
   tagName: 'button',
   click: function (e) {
     var pref_controller = App.get('categoryPrefController');
     pref_controller.saveCategories(function () {
       pref_controller.hidePreferences();
-      App.typingAreaController.changeSnippetToCategory(pref_controller.enabledCategoryIds());
+      App.get('typingAreaController').changeSnippetToCategory(pref_controller.enabledCategoryIds());
     });
   }
 });
 
-App.prefsPopup = Em.View.extend({
+App.views.PrefsPopup = Em.View.extend({
   templateName: 'prefs-popup',
   classNames: ['prefs-popup-bg'],
 
@@ -185,7 +108,7 @@ App.prefsPopup = Em.View.extend({
   }
 });
 
-App.prefsPopupContent = Em.View.extend({
+App.views.PrefsPopupContent = Em.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
   click: function (e) {

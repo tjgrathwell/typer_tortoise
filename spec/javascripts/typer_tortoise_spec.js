@@ -49,7 +49,7 @@ describe("indentation guessing", function() {
       var indent  = testitem[0];
       var snippet = testitem[1];
 
-      var model = App.TypingText.create({full_string: snippet, snippet_id: 1});
+      var model = App.models.TypingText.create({full_string: snippet, snippet_id: 1});
 
       expect(model._tabSize()).toEqual(indent);
     });
@@ -65,7 +65,7 @@ describe("snippet whitespace normalization", function () {
       '  that will have two spaces on it'
     );
 
-    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     expect(text_model.get('full_string')).toEqual(lines(
       'this snippet has',
       '  an empty line',
@@ -80,7 +80,7 @@ describe("snippet whitespace normalization", function () {
       '  whitespace in this? '
     );
 
-    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     expect(text_model.get('full_string')).toEqual(lines(
       'who put the trailing',
       '  whitespace in this?'
@@ -114,7 +114,7 @@ describe("typing on a snippet", function() {
       '  more than one line'
     );
 
-    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
 
     type_on_snippet(text_model, 'this snippet');
 
@@ -184,7 +184,7 @@ describe("typing on a snippet", function() {
       'and then another that is not'
     );
     
-    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "this snippet has\n");
 
     validate_snippet_properties(text_model, {
@@ -230,7 +230,7 @@ describe("typing on a snippet", function() {
       '  third line indented'
     );
     
-    var text_model = App.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "  first line indented\n");
 
     validate_snippet_properties(text_model, {
@@ -251,7 +251,7 @@ describe("typing on a snippet", function() {
 });
 
 describe("category preferences controller", function () {
-  var catController = App.CategoryPrefController.create();
+  var catController = App.controllers.CategoryPrefController.create();
 
   var categories_json = [
     {id: 1, name: 'melodramatically-din',   enabled: false},
@@ -260,7 +260,7 @@ describe("category preferences controller", function () {
   ];
 
   catController.set('content', $.map(categories_json, function (el) {
-    return App.Category.create(el);
+    return App.models.Category.create(el);
   }))
 
   it('allows you to ask for just the enabled categories', function () {
@@ -294,7 +294,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   });
 
   it('loads the selected categories from localstorage if available', function () {
-    var catController = App.CategoryPrefController.create();
+    var catController = App.controllers.CategoryPrefController.create();
 
     spyOn(catController, '_loadCategoriesFromServer').andCallFake(function (cb) {
       cb(categories_json);
@@ -309,10 +309,10 @@ describe("category preferences for a user that hasn't logged in", function () {
   });
 
   it('saves the selected categories into localstorage as csv', function () {
-    var catController = App.CategoryPrefController.create();
+    var catController = App.controllers.CategoryPrefController.create();
 
     catController.set('content', $.map(categories_json, function (el) {
-      return App.Category.create(el);
+      return App.models.Category.create(el);
     }))
 
     catController.saveCategories(function () {});
@@ -323,7 +323,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   it('optimistically creates category objects from localStorage on init', function () {
     App.storage.set(storage_key_name, '35,93');
 
-    var catController = App.CategoryPrefController.create();
+    var catController = App.controllers.CategoryPrefController.create();
     expect(catController.enabledCategoryIds()).toEqual([35, 93]);
   });
 });

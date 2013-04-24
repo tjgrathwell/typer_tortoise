@@ -8,29 +8,47 @@ App.start = function () {
     App.storage.remove('typer_tortoise.category_ids');
   }
 
-  var prefs_link = App.prefsLink.create({});
+  var prefs_link = App.views.PrefsLink.create({});
   prefs_link.replaceIn('#prefs-link-container');
 
   if (!App.isPlaying()) return;
 
-  App.set('categoryPrefController',  App.CategoryPrefController.create({}));
+  App.set('typingAreaController', App.controllers.TypingAreaController.create({}));
+
+  App.set('categoryPrefController',  App.controllers.CategoryPrefController.create({}));
 
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });
 
-  App.TypingArea.appendTo('#typing-area');
-  App.WPMDisplay.appendTo('#score-display');
-  App.AccuracyDisplay.appendTo('#score-display');
-  App.ScoreListView.appendTo('#user-score-display');
+  var typingArea = App.views.TypingArea.create({
+    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+  });
+  typingArea.appendTo('#typing-area');
+  App.set('typingArea', typingArea);
+
+  var wpmDisplay = App.views.WPMDisplay.create({
+    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+  });
+  wpmDisplay.appendTo('#score-display');
+
+  var accuracyDisplay = App.views.AccuracyDisplay.create({
+    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+  });
+  accuracyDisplay.appendTo('#score-display');
+
+  var scoreList = App.views.ScoreListView.create({});
+  scoreList.appendTo('#user-score-display');
 
   var path = App.history.pageToken();
   if (path.match('/play')) {
     var snippet_num = path.match('/snippets/(\\d+)/play')[1];
-    App.typingAreaController.newSnippet(snippet_num);
+    App.get('typingAreaController').newSnippet(snippet_num);
   } else {
-    App.typingAreaController.newSnippet();
+    App.get('typingAreaController').newSnippet();
   }
 
-  App.scoresController.loadScores();
+  App.set('scoresController', App.controllers.ScoresController.create({}));
+
+  App.get('scoresController').loadScores();
 };

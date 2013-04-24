@@ -1,4 +1,4 @@
-App.Category = Em.Object.extend({
+App.models.Category = Em.Object.extend({
   id: null,
   name: null,
   enabled: null,
@@ -8,13 +8,13 @@ App.Category = Em.Object.extend({
   }
 });
 
-App.Score = Em.Object.extend({
+App.models.Score = Em.Object.extend({
   wpm: null,
   accuracy: null,
   snippet_id: null
 });
 
-App.TypingText = Em.Object.extend({
+App.models.TypingText = Em.Object.extend({
   full_string: null,
   snippet_id: null,
   category_id: null,

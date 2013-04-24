@@ -1,5 +1,9 @@
 var App = Em.Application.create();
 
+App.models = {};
+App.controllers = {};
+App.views = {};
+
 //
 //  jQuery addons
 //
