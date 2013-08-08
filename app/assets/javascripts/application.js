@@ -9,7 +9,6 @@
 //= require jquery_ujs
 //= require handlebars
 //= require ember
-//= require bootstrap
 //= require list_filtering
 //= require typer_tortoise
 //= require util
