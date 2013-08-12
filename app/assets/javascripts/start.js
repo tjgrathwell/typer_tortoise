@@ -8,9 +8,6 @@ App.start = function () {
     App.storage.remove('typer_tortoise.category_ids');
   }
 
-  var prefs_link = App.views.PrefsLink.create({});
-  prefs_link.replaceIn('#prefs-link-container');
-
   if (!App.isPlaying()) return;
 
   App.set('typingAreaController', App.controllers.TypingAreaController.create({}));
@@ -20,25 +17,6 @@ App.start = function () {
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });
-
-  var typingArea = App.views.TypingArea.create({
-    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-  });
-  typingArea.appendTo('#typing-area');
-  App.set('typingArea', typingArea);
-
-  var wpmDisplay = App.views.WPMDisplay.create({
-    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-  });
-  wpmDisplay.appendTo('#score-display');
-
-  var accuracyDisplay = App.views.AccuracyDisplay.create({
-    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-  });
-  accuracyDisplay.appendTo('#score-display');
-
-  var scoreList = App.views.ScoreListView.create({});
-  scoreList.appendTo('#user-score-display');
 
   var path = App.history.pageToken();
   if (path.match('/play')) {
@@ -52,3 +30,36 @@ App.start = function () {
 
   App.get('scoresController').loadScores();
 };
+
+App.IndexRoute = Ember.Route.extend({
+  setupController: function (controller) {
+    var prefs_link = App.views.PrefsLink.create({
+      container: this.container
+    });
+    prefs_link.replaceIn('#prefs-link-container');
+
+    var wpmDisplay = App.views.WPMDisplay.create({
+      container: this.container,
+      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+    });
+    wpmDisplay.appendTo('#score-display');
+
+    var typingArea = App.views.TypingArea.create({
+      container: this.container,
+      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+    });
+    typingArea.appendTo('#typing-area');
+    App.set('typingArea', typingArea);
+
+    var accuracyDisplay = App.views.AccuracyDisplay.create({
+      container: this.container,
+      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
+    });
+    accuracyDisplay.appendTo('#score-display');
+
+    var scoreList = App.views.ScoreListView.create({
+      container: this.container
+    });
+    scoreList.appendTo('#user-score-display');
+  }
+});
