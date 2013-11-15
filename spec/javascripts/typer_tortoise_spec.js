@@ -275,7 +275,7 @@ describe("category preferences controller", function () {
   it('whines when you try to toggle a category it does not know', function () {
     expect(function () {
       catController.setCategory(4, false);
-    }).toThrow(new Error("Couldn't find an object with id 4"));
+    }).toThrow("Couldn't find an object with id 4");
   });
 });
 
@@ -296,7 +296,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   it('loads the selected categories from localstorage if available', function () {
     var catController = App.controllers.CategoryPrefController.create();
 
-    spyOn(catController, '_loadCategoriesFromServer').andCallFake(function (cb) {
+    spyOn(catController, '_loadCategoriesFromServer').and.callFake(function (cb) {
       cb(categories_json);
     });
 

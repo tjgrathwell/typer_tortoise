@@ -1,8 +1,8 @@
 TyperTortoise::Application.routes.draw do
   root :to => 'application#index'
 
-  match '/auth/:provider/callback' => 'sessions#create'
-  match '/logout'                  => 'sessions#destroy'
+  get '/auth/:provider/callback' => 'sessions#create'
+  get '/logout'                  => 'sessions#destroy'
 
   get  '/scores'                   => 'scores#show'
   post '/scores'                   => 'scores#create'

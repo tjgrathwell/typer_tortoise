@@ -18,27 +18,15 @@ describe CategoriesController do
     end
 
     it 'lists all categories as "enabled"' do
-      category_data = @categories.map do |c|
-        atts = c.attributes
-        atts[:enabled] = true
-        atts
-      end
-
       get :show, :format => :json
-      response.body.should == category_data.to_json
+      JSON.parse(response.body).map { |c| c['enabled'] }.uniq.should == [true]
     end
   end
 
   describe 'show' do
     it 'lists all categories as "enabled" for users with no category prefs' do      
-      category_data = @categories.map do |c|
-        atts = c.attributes
-        atts[:enabled] = true
-        atts
-      end
-
       get :show, :format => :json
-      response.body.should == category_data.to_json
+      JSON.parse(response.body).map { |c| c['enabled'] }.uniq.should == [true]
     end
 
     it 'lists only the preferred categories as "enabled" for users with category prefs' do
@@ -55,7 +43,12 @@ describe CategoriesController do
       category_data[2][:enabled] = false
 
       get :show, :format => :json
-      response.body.should == category_data.to_json
+      category_selections = Hash[JSON.parse(response.body).map { |c| [c['id'], c['enabled']] }]
+      category_selections.should == {
+        @cat_a.id => true,
+        @cat_b.id => true,
+        @cat_c.id => false
+      }
     end
   end
 

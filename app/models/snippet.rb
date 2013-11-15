@@ -1,8 +1,8 @@
 class Snippet < ActiveRecord::Base
   belongs_to :category
   has_many :scores
-  default_scope includes(:category).order("#{table_name}.id")
-  scope :of_category, lambda { |category_id| {conditions: {category_id: category_id} } }
+  default_scope { includes(:category).order("#{table_name}.id") }
+  scope :of_category, -> (category_id) { where(category_id: category_id) }
 
   def self.random(options={})
     defaults = {:category_ids => [], :exclude => []}
@@ -20,26 +20,13 @@ class Snippet < ActiveRecord::Base
       options[param].map! { |e| e.to_i }
     end
 
-    all_snips = Snippet.all
+    snippets_relation = Snippet
+    snippets_relation = snippets_relation.where(category_id: options[:category_ids]) if options[:category_ids].present?
+    snippets_relation = snippets_relation.where('id NOT IN (?)', options[:exclude]) if options[:exclude].present?
+    snippets = snippets_relation.respond_to?(:to_a) ? snippets_relation.to_a : snippets_relation.all.to_a
 
-    return nil if all_snips.empty?
+    return nil if snippets.empty?
 
-    unless options[:category_ids].empty?
-      all_snips.select! do |snippet|
-        options[:category_ids].include? snippet.category_id
-      end
-    end
-
-    if all_snips.length <= options[:exclude].length
-      # too few snippets selected to properly exclude, return one anyway
-      return all_snips.sample
-    end
-
-    snippet = nil
-    while true
-      snippet = all_snips.sample
-      break unless options[:exclude].include? snippet.id
-    end
-    return snippet
+    return snippets.sample
   end
 end

@@ -6,7 +6,7 @@
 # no regular words or you'll be exposed to dictionary attacks.
 if Rails.env.test?
   # A not-so-great secret token to get Rails to chill out in test
-  TyperTortoise::Application.config.secret_token = 'a' * 128
+  TyperTortoise::Application.config.secret_key_base = 'a' * 128
 else
-  TyperTortoise::Application.config.secret_token = ENV["secret_token"]
+  TyperTortoise::Application.config.secret_key_base = ENV["secret_token"]
 end

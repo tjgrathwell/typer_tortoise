@@ -11,16 +11,7 @@
 #   - dist/**/*.js
 #
 src_files:
-
-  - vendor/assets/javascripts/jquery.js
-  - vendor/assets/javascripts/handlebars.js
-  - vendor/assets/javascripts/ember.js
-  - app/assets/javascripts/typer_tortoise.js
-  - app/assets/javascripts/util.js
-  - app/assets/javascripts/storage.js
-  - app/assets/javascripts/models/*.js
-  - app/assets/javascripts/views/*.js
-  - app/assets/javascripts/controllers/*.js
+  - assets/application.js
 
 # stylesheets
 #
