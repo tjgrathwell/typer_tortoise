@@ -30,7 +30,7 @@
     <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
     <% if admin_user? %>
     <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
-    <td><%= link_to 'Destroy', snippet, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Destroy', snippet, data: { confirm: 'Are you sure?' }, method: :delete %></td>
     <% end %>
   </tr>
 <% end %>

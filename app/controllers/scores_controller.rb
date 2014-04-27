@@ -10,10 +10,10 @@ class ScoresController < ApplicationController
     end
   end
 
-  def show
+  def index
     unless signed_in?
       respond_to do |format|
-        format.json { render json: [] }
+        format.json { render json: [], root: false }
       end
       return
     end
@@ -21,7 +21,7 @@ class ScoresController < ApplicationController
     @scores = current_user.scores
 
     respond_to do |format|
-      format.json { render json: @scores }
+      format.json { render json: @scores, root: false }
     end
   end
 end

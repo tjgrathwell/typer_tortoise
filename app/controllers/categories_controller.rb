@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
     head :ok
   end
 
-  def show
+  def index
     if signed_in?
       enabled_categories = current_user.category_preferences.map { |pref| pref.category.name }.to_set
     else
@@ -28,7 +28,7 @@ class CategoriesController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: all_categories }
+      format.json { render json: all_categories, root: false }
     end
   end
 end

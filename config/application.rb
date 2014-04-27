@@ -47,5 +47,7 @@ module TyperTortoise
     config.assets.version = '1.0'
 
     config.active_record.whitelist_attributes = false
+
+    I18n.enforce_available_locales = false
   end
 end
