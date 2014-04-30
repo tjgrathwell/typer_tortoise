@@ -1,13 +1,14 @@
 TyperTortoise::Application.routes.draw do
-  root :to => 'application#index'
+  root 'application#index'
 
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout'                  => 'sessions#destroy'
 
   resources :scores, only: [:index, :create]
 
-  get  '/categories'               => 'categories#index'
-  post '/categories'               => 'categories#overwrite'
+  resources :categories, :only => [:index] do
+    post 'set_preferences', :on => :collection
+  end
 
   resources :users, :only => [:index, :show] do
     get 'scores', :on => :member

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   has_many :scores
   has_many :category_preferences
 
-  def overwrite_category_preferences(categories)
+  def set_category_preferences(categories)
     categories.each do |id|
       unless id.to_s.match(/^\d+$/)
         raise ArgumentError, "Arguments to #{__method__} must be numeric, '#{id.inspect}' isn't."

@@ -1,12 +1,12 @@
 class CategoriesController < ApplicationController
-  before_filter :authenticate, only: [:overwrite]
+  before_filter :authenticate, only: [:set_preferences]
 
-  def overwrite
+  def set_preferences
     if !params[:categories] || params[:categories].empty?
       return head :bad_request
     end
 
-    current_user.overwrite_category_preferences(params[:categories])
+    current_user.set_category_preferences(params[:categories])
 
     head :ok
   end

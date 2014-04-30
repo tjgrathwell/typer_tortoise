@@ -52,7 +52,7 @@ describe CategoriesController do
     end
   end
 
-  describe 'overwrite' do
+  describe 'set_preferences' do
 
     before :each do
       @cat_prefs = [
@@ -64,22 +64,22 @@ describe CategoriesController do
     it "completely replaces a user's existing preferences" do
       @user.category_preferences.map { |p| p.category_id }.should == [@cat_a[:id], @cat_b[:id]]
 
-      post :overwrite, :categories => [@cat_c[:id]], :format => :json
+      post :set_preferences, :categories => [@cat_c[:id]], :format => :json
 
       @user.category_preferences.map { |p| p.category_id }.should == [@cat_c[:id]]
     end
 
     it "doesn't do anything for invalid inputs" do
       lambda do
-        post :overwrite, :format => :json
+        post :set_preferences, :format => :json
       end.should_not change(CategoryPreference, :count)
 
       lambda do
-        post :overwrite, :categories => [], :format => :json
+        post :set_preferences, :categories => [], :format => :json
       end.should_not change(CategoryPreference, :count)
 
       lambda do
-        post :overwrite, :categories => ['huskily-interchanging'], :format => :json
+        post :set_preferences, :categories => ['huskily-interchanging'], :format => :json
       end.should raise_error(ArgumentError)
     end
   end
