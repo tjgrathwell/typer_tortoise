@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', '4.0.1'
+gem 'rails', '4.1.0'
 
 gem 'omniauth-twitter'
 gem 'kaminari'
@@ -16,7 +16,7 @@ gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
 
 group :development, :test do
-  gem 'jasmine', '2.0.0.rc5'
+  gem 'jasmine', '~> 2.0.0'
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'capybara'
