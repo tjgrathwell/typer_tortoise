@@ -1,15 +1,15 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.2'
 
-gem 'rails', '4.1.0'
+gem 'rails', '4.1.1'
 
 gem 'omniauth-twitter'
 gem 'kaminari'
 gem 'thin'
 gem 'jquery-rails'
 gem 'protected_attributes'
-gem 'sass-rails'
+gem 'sass-rails', '4.0.2' # https://github.com/rails/sass-rails/issues/191
 gem 'uglifier'
 gem 'bootstrap-sass-rails', '~> 2.3.0'
 gem 'ember-rails'
