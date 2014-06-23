@@ -5,20 +5,6 @@ App.controllers = {};
 App.views = {};
 
 //
-//  jQuery addons
-//
-
-jQuery.fn.centerOnParent = function () {
-  var parent = this.parent();
-  var parent_offset = parent.offset();
-  this.css({
-    top:  parent_offset.top  + ((parent.height() / 2) - (this.height() / 2)),
-    left: parent_offset.left + ((parent.width()  / 2) - (this.width()  / 2))
-  });
-  return this;
-};
-
-//
 //  currently logged in user
 //
 

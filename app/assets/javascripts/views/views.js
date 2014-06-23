@@ -14,18 +14,7 @@ App.views.FocusNag = Em.View.extend({
   classNameBindings: ['focusNagClass', 'isFocused:hidden'],
   focusNagClass: 'focus-nag',
 
-  isFocusedBinding: 'parentView.focused',
-
-  centerOnTypingArea: function () {
-    if (this.$().length === 0) { return; }
-    this.$().centerOnParent();
-  },
-
-  focusChanged: function () {
-    if (!this.get('isFocused')) {
-      this.centerOnTypingArea();
-    }
-  }.observes('isFocused')
+  isFocusedBinding: 'parentView.focused'
 });
 
 App.views.ScoreItemView = Em.View.extend({});

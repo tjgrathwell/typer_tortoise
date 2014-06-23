@@ -11,7 +11,7 @@ gem 'jquery-rails'
 gem 'protected_attributes'
 gem 'sass-rails', '4.0.2' # https://github.com/rails/sass-rails/issues/191
 gem 'uglifier'
-gem 'bootstrap-sass-rails', '~> 2.3.0'
+gem 'bootstrap-sass'
 gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
 
