@@ -1,19 +1,17 @@
 body, html {
-  background-image: url('/assets/project_papper.png');
+  background-image: asset-url('project_papper.png');
+}
+
+body {
+  padding-bottom: 20px;
 }
 
 h1 {
   font-size: 200%;
 }
 
-.center-text {
-  text-align: center;
-}
-
 .blue-round {
-  border-style: solid;
-  border-width: 2px;
-  border-color: #82B6DD;
+  border: 2px solid #82B6DD;
   border-radius: 10px;
 
   background-color: rgba(173, 216, 230, .75);
