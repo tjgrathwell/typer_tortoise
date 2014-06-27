@@ -12,7 +12,7 @@ $(document).ready(function () {
 
   var objectToQPString = function (obj) {
     var strComponents = [];
-    for (key in obj) {
+    for (var key in obj) {
       if (!key || !obj.hasOwnProperty(key)) {
         continue;
       }

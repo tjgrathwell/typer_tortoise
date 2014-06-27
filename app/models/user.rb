@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    self.category_preferences.destroy_all()
+    self.category_preferences.destroy_all
 
     prefs = self.category_preferences
     categories.each do |category_id|

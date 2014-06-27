@@ -70,8 +70,7 @@ App.models.TypingText = Em.Object.extend({
             return this.mistakes.join('');
         }
 
-        var this_char = this.full_string.substr(this.cursor_pos, 1);
-        return this_char;
+        return this.full_string.substr(this.cursor_pos, 1);
     }.property('cursor_pos', 'mistakes.length'),
 
     renderedCursor: function () {

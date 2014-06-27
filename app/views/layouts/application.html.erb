@@ -12,9 +12,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <% if Rails.env.development? %>
-    <link rel="shortcut icon" href="/assets/turtle-icon-small-inverted.ico">
+    <link rel="shortcut icon" href="<%= asset_url('turtle-icon-small-inverted.ico') %>">
   <% else %>
-    <link rel="shortcut icon" href="/assets/turtle-icon-small.ico">
+    <link rel="shortcut icon" href="<%= asset_url('turtle-icon-small.ico') %>">
   <% end %>
 
   <%= stylesheet_link_tag "application" %>

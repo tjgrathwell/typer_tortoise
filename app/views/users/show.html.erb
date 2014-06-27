@@ -1,6 +1,6 @@
 <h1><%= @user.name %></h1>
 
-<% if !@scores_by_category.empty? %>
+<% if @scores_by_category.present? %>
   <h2>Snippet Scores:</h2>
 <% end %>
 

@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
         # The identity is not associated with the current_user so lets 
         # associate the identity
         @identity.user = current_user
-        @identity.save()
+        @identity.save
         redirect_to root_url, notice: "Successfully linked that account!"
       end
     else
@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
         new_user = User.create_with_omniauth(auth)
 
         @identity.user = new_user
-        @identity.save()
+        @identity.save
 
         self.current_user = new_user
 

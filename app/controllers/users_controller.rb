@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
-    unless (@user)
+    unless @user
       deny_access
     end
 
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
   def scores
     @user = User.find(params[:id])
-    unless (@user)
+    unless @user
       deny_access
     end
 

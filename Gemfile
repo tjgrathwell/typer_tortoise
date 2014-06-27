@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 ruby '2.1.2'
 
@@ -14,6 +15,7 @@ gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
+gem 'rails-assets-es5-shim'
 
 group :development, :test do
   gem 'jasmine', '~> 2.0.0'

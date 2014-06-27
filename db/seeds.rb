@@ -23,7 +23,7 @@ snip_files.each do |filename|
 
     Snippet.find_or_create_by_full_text({
       category_id: Category.find_or_create_by_name(category).id,
-      full_text: snippet.strip()
+      full_text: snippet.strip
     })
   end
 end

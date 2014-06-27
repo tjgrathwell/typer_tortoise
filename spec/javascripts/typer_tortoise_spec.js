@@ -29,7 +29,7 @@ describe("indentation guessing", function() {
     expectations.push([2, lines(
       'this is a fake',
       '  code snippet',
-      '  with indendation',
+      '  with indentation',
       '    that should be two spaces'
     )]);
     expectations.push([3, lines(
@@ -94,19 +94,19 @@ describe("typing on a snippet", function() {
     $.each(str.split(''), function (i, chr) {
       model.typeOn(chr);
     });
-  }
+  };
   var repeat = function (func, times) {
     for (var i = 0; i < times; i++) {
       func();
     }
-  }
+  };
 
   var validate_snippet_properties = function (model, prop_hash) {
     expect(model.get('hasMistakes' )).toEqual(prop_hash.hasMistakes);
     expect(model.get('beforeCursor')).toEqual(prop_hash.beforeCursor);
     expect(model.get('atCursor')    ).toEqual(prop_hash.atCursor);
     expect(model.get('afterCursor' )).toEqual(prop_hash.afterCursor);
-  }
+  };
 
   it("splits the snippet into many parts for the view to render", function() {
     var snippet_text = lines(
@@ -261,7 +261,7 @@ describe("category preferences controller", function () {
 
   catController.set('content', $.map(categories_json, function (el) {
     return App.models.Category.create(el);
-  }))
+  }));
 
   it('allows you to ask for just the enabled categories', function () {
     expect(catController.enabledCategoryIds()).toEqual([2, 3]);
@@ -313,7 +313,7 @@ describe("category preferences for a user that hasn't logged in", function () {
 
     catController.set('content', $.map(categories_json, function (el) {
       return App.models.Category.create(el);
-    }))
+    }));
 
     catController.saveCategories(function () {});
 
