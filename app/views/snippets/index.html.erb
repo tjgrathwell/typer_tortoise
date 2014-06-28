@@ -3,35 +3,39 @@
 <h1>Snippet Index</h1>
 
 <div class="filter-dropdown">
-  Filtering: <%= select_tag "category_id",
-      "<option value=''>No Filtering</option>".html_safe + options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
-      id: 'category_filter' %>
+  <div class="row">
+    <div class="col-md-6">
+      Filtering:
+      <%= select_tag "category_id",
+          "<option value=''>No Filtering</option>".html_safe + options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
+          id: 'category_filter', class: 'form-control' %>
+    </div>
+  </div>
 </div>
 
 <%= paginate @snippets %>
 
-<table class="thin-border">
-  <tr>
-    <th>Category</th>
-    <th>Text</th>
-    <th></th>
-    <th></th>
-    <% if admin_user? %>
-    <th></th>
-    <th></th>
-    <% end %>
-  </tr>
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-bordered table-striped">
+      <tr>
+        <th>Category</th>
+        <th>Text</th>
+        <th colspan="<%= admin_user? ? 4 : 2 %>"></th>
+      </tr>
 
-<% @snippets.each do |snippet| %>
-  <tr>
-    <td><strong><%= snippet.category.name %></strong></td>
-    <td><%= truncate(snippet.full_text, :length => 50) %></td>
-    <td><%= link_to 'Show', snippet %></td>
-    <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
-    <% if admin_user? %>
-    <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
-    <td><%= link_to 'Destroy', snippet, data: { confirm: 'Are you sure?' }, method: :delete %></td>
-    <% end %>
-  </tr>
-<% end %>
-</table>
+      <% @snippets.each do |snippet| %>
+        <tr>
+          <td><strong><%= snippet.category.name %></strong></td>
+          <td><%= truncate(snippet.full_text, :length => 50) %></td>
+          <td><%= link_to 'Show', snippet %></td>
+          <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
+          <% if admin_user? %>
+            <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
+            <td><%= link_to 'Destroy', snippet, data: { confirm: 'Are you sure?' }, method: :delete %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
