@@ -30,6 +30,7 @@ App.history = Em.Object.create({
 App.KEY_BACKSPACE     = 8;
 App.KEY_TAB           = 9;
 App.KEY_RETURN        = 13;
+App.KEY_SPACE         = 32;
 App.KEY_SINGLE_QUOTE  = 39;
 App.KEY_FORWARD_SLASH = 47;
 
@@ -55,6 +56,9 @@ App.setPreventDefaultForKey = function (e) {
   // in firefox, single quote and forward slash do a "quick search"
   if (e.which == App.KEY_SINGLE_QUOTE)    { e.preventDefault();   }
   if (e.which == App.KEY_FORWARD_SLASH)   { e.preventDefault();   }
+
+  // space will page down if the page is long enough, so don't do that
+  if (e.which == App.KEY_SPACE)           { e.preventDefault();   }
 
   // tab shouldn't take us out of the typing window
   if (e.which == App.KEY_TAB)             { e.preventDefault();   }

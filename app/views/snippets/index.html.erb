@@ -21,6 +21,7 @@
       <tr>
         <th>Category</th>
         <th>Text</th>
+        <th>Characters</th>
         <th colspan="<%= admin_user? ? 4 : 2 %>"></th>
       </tr>
 
@@ -28,6 +29,7 @@
         <tr>
           <td><strong><%= snippet.category.name %></strong></td>
           <td><%= truncate(snippet.full_text, :length => 50) %></td>
+          <td><%= snippet.full_text.length %></td>
           <td><%= link_to 'Show', snippet %></td>
           <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
           <% if admin_user? %>

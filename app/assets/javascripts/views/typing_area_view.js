@@ -12,6 +12,9 @@ App.views.TypingArea = Em.View.extend({
         if (e.which == App.KEY_TAB) {
             this.text.tabPressed();
         }
+        if (e.which == App.KEY_SPACE) {
+            this.text.typeOn(' ');
+        }
     },
 
     keyPress: function (e) { // keyDown doesn't account for shift key
