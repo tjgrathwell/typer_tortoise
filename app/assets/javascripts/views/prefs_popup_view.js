@@ -30,6 +30,7 @@ App.views.PrefsPopup = Em.View.extend({
 
 App.views.PrefsPopupContent = Em.View.extend({
     classNames: ['blue-round', 'prefs-popup'],
+    userBinding: Em.Binding.oneWay('App.user'),
 
     click: function (e) {
         e.stopPropagation();

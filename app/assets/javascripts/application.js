@@ -13,6 +13,7 @@
 //= require typer_tortoise
 //= require util
 //= require storage
+//= require_tree ./templates
 //= require_tree ./models
 //= require_tree ./views
 //= require_tree ./controllers

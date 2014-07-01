@@ -1,0 +1,15 @@
+{{#if App.scoresController.content.length}}
+  <div class="blue-round player-scores">
+    <h3>Your Scores</h3>
+    <ul>
+      {{#each App.scoresController}}
+        {{#view App.views.ScoreItemView contentBinding="this"}}
+        <li>
+          {{#with view.content}}
+            <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
+          {{/with}}
+        {{/view}}
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}

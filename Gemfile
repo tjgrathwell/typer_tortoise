@@ -16,6 +16,7 @@ gem 'bootstrap-sass'
 gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
 gem 'rails-assets-es5-shim'
+gem 'handlebars_assets'
 
 group :development, :test do
   gem 'jasmine', '~> 2.0.0'

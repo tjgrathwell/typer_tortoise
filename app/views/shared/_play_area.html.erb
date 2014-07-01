@@ -3,38 +3,3 @@
     <div id="score-display" class="full-score-display"></div>
     <div id="user-score-display"></div>
 </div>
-
-<script type="text/x-handlebars" data-template-name="typing-area">
-  <!-- white space becomes super-significant in this area -->
-  <div class="type-panel" tabindex="0"><span class="before-cursor">{{view.text.beforeCursor}}</span><span {{bind-attr class=":type-cursor view.text.hasMistakes"}}>{{{view.text.renderedCursor}}}</span>{{view.text.afterCursor}}</div>
-
-  {{#view App.views.FocusNag}}
-    <div class="focus-nag-inner">Click the text to start typing!</div>
-  {{/view}}
-</script>
-
-<script type="text/x-handlebars" data-template-name="wpm-display">
-  {{view.text.wpm}}<small> wpm</small>
-</script>
-
-<script type="text/x-handlebars" data-template-name="accuracy-display">
-  {{view.text.accuracy}}%
-</script>
-
-<script type="text/x-handlebars" data-template-name="player-scores">
-  {{#if App.scoresController.content.length}}
-  <div class="blue-round player-scores">
-    <h3>Your Scores</h3>
-    <ul>
-    {{#each App.scoresController}}
-      {{#view App.views.ScoreItemView contentBinding="this"}}
-        <li>
-        {{#with view.content}}
-          <a href="/snippets/{{unbound snippet_id}}">Snippet {{snippet_id}}</a>: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
-        {{/with}}
-      {{/view}}
-    {{/each}}
-    </ul>
-  </div>
-  {{/if}}
-</script>
