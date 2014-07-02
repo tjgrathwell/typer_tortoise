@@ -14,7 +14,10 @@ App.views.PrefsSaveButton = Em.View.extend({
         var pref_controller = App.get('categoryPrefController');
         pref_controller.saveCategories(function () {
             pref_controller.hidePreferences();
-            App.get('typingAreaController').changeSnippetToCategory(pref_controller.enabledCategoryIds());
+            var typingAreaController = App.get('typingAreaController');
+            if (typingAreaController) {
+              typingAreaController.changeSnippetToCategory(pref_controller.enabledCategoryIds());
+            }
         });
     }
 });

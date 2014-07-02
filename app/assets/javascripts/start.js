@@ -8,11 +8,11 @@ App.start = function () {
     App.storage.remove('typer_tortoise.category_ids');
   }
 
+  App.set('categoryPrefController', App.controllers.CategoryPrefController.create({}));
+
   if (!App.isPlaying()) return;
 
   App.set('typingAreaController', App.controllers.TypingAreaController.create({}));
-
-  App.set('categoryPrefController',  App.controllers.CategoryPrefController.create({}));
 
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
@@ -31,12 +31,20 @@ App.start = function () {
   App.get('scoresController').loadScores();
 };
 
-App.IndexRoute = Ember.Route.extend({
+App.ApplicationRoute = Ember.Route.extend({
   setupController: function (controller) {
     var prefs_link = App.views.PrefsLink.create({
       container: this.container
     });
     prefs_link.replaceIn('#prefs-link-container');
+  }
+});
+
+App.IndexRoute = Ember.Route.extend({
+  setupController: function (controller) {
+    if ($('#score-display').length == 0) {
+      return;
+    }
 
     var wpmDisplay = App.views.WPMDisplay.create({
       container: this.container,
