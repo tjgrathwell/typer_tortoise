@@ -1,6 +1,7 @@
 App.views.TypingArea = Em.View.extend({
     templateName: 'typing-area',
     classNames: 'type-area-container',
+    textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet'),
 
     focused: false,
 

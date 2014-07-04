@@ -1,13 +1,15 @@
 App.views.WPMDisplay = Em.View.extend({
   tagName: 'span',
   templateName: 'wpm-display',
-  classNames: ['stat-counter']
+  classNames: ['stat-counter'],
+  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
 });
 
 App.views.AccuracyDisplay = Em.View.extend({
   tagName: 'span',
   templateName: 'accuracy-display',
-  classNames: ['stat-counter']
+  classNames: ['stat-counter'],
+  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
 });
 
 App.views.FocusNag = Em.View.extend({
@@ -21,4 +23,8 @@ App.views.ScoreItemView = Em.View.extend({});
 
 App.views.ScoreListView = Em.View.extend({
   templateName: 'player-scores'
+});
+
+App.views.TypingAreaContainer = Em.View.extend({
+  templateName: 'typing-area-container'
 });

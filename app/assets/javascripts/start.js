@@ -42,32 +42,13 @@ App.ApplicationRoute = Ember.Route.extend({
 
 App.IndexRoute = Ember.Route.extend({
   setupController: function (controller) {
-    if ($('#score-display').length == 0) {
+    if ($('#typing-area-container').length == 0) {
       return;
     }
 
-    var wpmDisplay = App.views.WPMDisplay.create({
-      container: this.container,
-      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-    });
-    wpmDisplay.appendTo('#score-display');
-
-    var typingArea = App.views.TypingArea.create({
-      container: this.container,
-      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-    });
-    typingArea.appendTo('#typing-area');
-    App.set('typingArea', typingArea);
-
-    var accuracyDisplay = App.views.AccuracyDisplay.create({
-      container: this.container,
-      textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet')
-    });
-    accuracyDisplay.appendTo('#score-display');
-
-    var scoreList = App.views.ScoreListView.create({
+    var typingAreaContainer = App.views.TypingAreaContainer.create({
       container: this.container
     });
-    scoreList.appendTo('#user-score-display');
+    typingAreaContainer.appendTo('#typing-area-container');
   }
 });
