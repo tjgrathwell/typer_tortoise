@@ -107,7 +107,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
     _showPopup: function () {
         var popup_view = App.views.PrefsPopup.create({});
         this.set('prefs_popup', popup_view);
-        popup_view.appendTo('.container');
+        popup_view.appendTo('.container:first');
     },
 
     hidePreferences: function () {

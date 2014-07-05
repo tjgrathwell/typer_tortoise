@@ -40,15 +40,17 @@ App.ApplicationRoute = Ember.Route.extend({
   }
 });
 
-App.IndexRoute = Ember.Route.extend({
-  setupController: function (controller) {
-    if ($('#typing-area-container').length == 0) {
-      return;
-    }
+App.Router.reopen({
+  location: 'history'
+});
 
-    var typingAreaContainer = App.views.TypingAreaContainer.create({
-      container: this.container
-    });
-    typingAreaContainer.appendTo('#typing-area-container');
+App.Router.map(function() {
+  this.route('play', { path: '/snippets/:id/play' });
+  this.route('catchAll', { path: '*:' });
+});
+
+App.IndexRoute = App.PlayRoute = Ember.Route.extend({
+  renderTemplate: function () {
+    this.render('typing-area-container');
   }
 });
