@@ -12,7 +12,7 @@ App.views.PrefsSaveButton = Em.View.extend({
     tagName: 'button',
     click: function (e) {
         var pref_controller = App.get('categoryPrefController');
-        pref_controller.saveCategories(function () {
+        pref_controller.saveCategories().then(function () {
             pref_controller.hidePreferences();
             var typingAreaController = App.get('typingAreaController');
             if (typingAreaController) {

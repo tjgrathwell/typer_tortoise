@@ -53,23 +53,33 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
         return this.enabledCategories().map(function (cat) { return cat.get('id') });
     },
 
-    saveCategories: function (finished_cb) {
+    saveCategories: function () {
+        var enabledIds = this.enabledCategoryIds();
         if (App.user) {
-            this._saveCategoriesToServer(finished_cb);
+            return this._saveCategoriesToServer(enabledIds);
         } else {
-            this._saveCategoriesToStorage(finished_cb);
+            return this._saveCategoriesToStorage(enabledIds);
         }
     },
 
-    _saveCategoriesToServer: function (finished_cb) {
-        $.post('/categories', {categories: this.enabledCategoryIds()}, finished_cb);
+    _saveCategoriesToServer: function (enabledIds) {
+        return new Promise(function(resolve, reject) {
+            $.post('/categories/set_preferences', {
+                categories: enabledIds
+            }, function () {
+                resolve();
+            });
+        });
     },
 
-    _saveCategoriesToStorage: function (finished_cb) {
-        if (!App.storage.supported) return;
+    _saveCategoriesToStorage: function (enabledIds) {
+        return new Promise(function(resolve, reject) {
+            if (App.storage.supported) {
+                App.storage.set('typer_tortoise.category_ids', enabledIds.join(','));
+            }
 
-        App.storage.set('typer_tortoise.category_ids', this.enabledCategoryIds().join(','));
-        finished_cb();
+            resolve();
+        });
     },
 
     loadCategories: function (finished_cb) {
