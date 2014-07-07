@@ -12,7 +12,7 @@ class SnippetsController < ApplicationController
     exclude = params[:last_seen] ? [params[:last_seen]] : []
 
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
-    
+
     respond_to do |format|
       format.json { render :json => selected_snip.to_json }
       format.html { render :text => selected_snip.full_text }

@@ -4,6 +4,9 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
@@ -21,6 +24,14 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  # Monkey-patch to force single DB connection even in multithreaded
+  #   tests (selenium/capybara-webkit/poltergeist)
+  ActiveRecord::ConnectionAdapters::ConnectionPool.class_eval do
+    def current_connection_id
+      Thread.main.object_id
+    end
+  end
 
   def test_sign_in(user)
     controller.sign_in user
