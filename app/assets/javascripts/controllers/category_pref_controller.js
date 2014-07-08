@@ -82,18 +82,27 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
         });
     },
 
-    loadCategories: function (finished_cb) {
-        this._loadCategoriesFromServer((function (json) {
-            this.set('content', json.map(function (el) { return App.models.Category.create(el); }));
-            if (!App.user) {
-                this._loadCategoryPreferencesFromStorage();
-            }
-            if (finished_cb) finished_cb();
-        }).bind(this));
+    loadCategories: function () {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            return self._loadCategoriesFromServer().then(function (json) {
+                self.set('content', json.map(function (el) {
+                  return App.models.Category.create(el);
+                }));
+                if (!App.user) {
+                    self._loadCategoryPreferencesFromStorage();
+                }
+                resolve();
+            });
+        });
     },
 
-    _loadCategoriesFromServer: function (success_cb) {
-        $.get('/categories', success_cb);
+    _loadCategoriesFromServer: function () {
+        return new Promise(function (resolve, reject) {
+            $.get('/categories', function (data) {
+                resolve(data);
+            });
+        });
     },
 
     _loadCategoryPreferencesFromStorage: function () {
@@ -111,7 +120,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
     },
 
     showPreferences: function () {
-        this.loadCategories(this._showPopup.bind(this));
+        this.loadCategories().then(this._showPopup.bind(this));
     },
 
     _showPopup: function () {

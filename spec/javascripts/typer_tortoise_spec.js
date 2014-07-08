@@ -293,19 +293,22 @@ describe("category preferences for a user that hasn't logged in", function () {
     App.storage.clear();
   });
 
-  it('loads the selected categories from localstorage if available', function () {
+  it('loads the selected categories from localstorage if available', function (finish) {
     var catController = App.controllers.CategoryPrefController.create();
 
-    spyOn(catController, '_loadCategoriesFromServer').and.callFake(function (cb) {
-      cb(categories_json);
+    var categoriesPromise = new Promise(function (resolve, reject) {
+      resolve(categories_json);
     });
+    spyOn(catController, '_loadCategoriesFromServer').and.returnValue(categoriesPromise);
 
     expect(catController.enabledCategoryIds()).toEqual([]);
 
     App.storage.set(storage_key_name, '1,3');
-    catController.loadCategories();
-
-    expect(catController.enabledCategoryIds()).toEqual([1,3]);
+    var requiredExpect = jasmine.createRequiredExpect();
+    catController.loadCategories().then(function () {
+      requiredExpect(catController.enabledCategoryIds()).toEqual([1,3]);
+      finish();
+    });
   });
 
   it('saves the selected categories into localstorage as csv', function () {
