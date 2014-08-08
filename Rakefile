@@ -5,3 +5,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 TyperTortoise::Application.load_tasks
+
+Rake::Task['default'].enhance do
+  Rake::Task['jasmine:ci'].invoke
+end

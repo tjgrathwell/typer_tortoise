@@ -296,7 +296,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   it('loads the selected categories from localstorage if available', function (finish) {
     var catController = App.controllers.CategoryPrefController.create();
 
-    var categoriesPromise = new Promise(function (resolve, reject) {
+    var categoriesPromise = new Ember.RSVP.Promise(function (resolve, reject) {
       resolve(categories_json);
     });
     spyOn(catController, '_loadCategoriesFromServer').and.returnValue(categoriesPromise);

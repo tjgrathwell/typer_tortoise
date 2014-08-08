@@ -63,7 +63,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
     },
 
     _saveCategoriesToServer: function (enabledIds) {
-        return new Promise(function(resolve, reject) {
+        return new Ember.RSVP.Promise(function(resolve, reject) {
             $.post('/categories/set_preferences', {
                 categories: enabledIds
             }, function () {
@@ -73,7 +73,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
     },
 
     _saveCategoriesToStorage: function (enabledIds) {
-        return new Promise(function(resolve, reject) {
+        return new Ember.RSVP.Promise(function(resolve, reject) {
             if (App.storage.supported) {
                 App.storage.set('typer_tortoise.category_ids', enabledIds.join(','));
             }
@@ -84,7 +84,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
 
     loadCategories: function () {
         var self = this;
-        return new Promise(function (resolve, reject) {
+        return new Ember.RSVP.Promise(function (resolve, reject) {
             return self._loadCategoriesFromServer().then(function (json) {
                 self.set('content', json.map(function (el) {
                   return App.models.Category.create(el);
@@ -98,7 +98,7 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
     },
 
     _loadCategoriesFromServer: function () {
-        return new Promise(function (resolve, reject) {
+        return new Ember.RSVP.Promise(function (resolve, reject) {
             $.get('/categories', function (data) {
                 resolve(data);
             });
