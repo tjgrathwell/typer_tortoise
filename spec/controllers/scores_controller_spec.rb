@@ -19,9 +19,9 @@ describe ScoresController do
 
     describe "failure" do
       it "should not create a score object for empty data" do
-        lambda do
+        expect {
           post :create, :score => { }
-        end.should_not change(Score, :count)
+        }.to raise_error
       end
 
       it "should not create a score object for data that does not validate" do

@@ -3,14 +3,13 @@ source 'https://rails-assets.org'
 
 ruby '2.1.2'
 
-gem 'rails', '4.1.1'
+gem 'rails', '4.1.4'
 
 gem 'omniauth-twitter'
 gem 'kaminari'
 gem 'thin'
 gem 'jquery-rails'
-gem 'protected_attributes'
-gem 'sass-rails', '4.0.2' # https://github.com/rails/sass-rails/issues/191
+gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'

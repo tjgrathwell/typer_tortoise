@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  attr_accessible :name
-
   has_many :identities
   has_many :scores
   has_many :category_preferences

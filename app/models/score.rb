@@ -1,4 +1,6 @@
 class Score < ActiveRecord::Base
+  PERMITTED_ATTRIBUTES = [:wpm, :accuracy, :snippet_id]
+
   belongs_to :user
   belongs_to :snippet
 
