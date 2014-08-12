@@ -210,3 +210,10 @@ textarea.snippet-editor {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.snippets-table {
+  table-layout: fixed;
+  .row-text {
+    width: 50%;
+  }
+}
