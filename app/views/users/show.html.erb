@@ -1,10 +1,11 @@
 <h1><%= @user.name %></h1>
+<hr>
 
 <% if @scores_by_category.present? %>
   <h2>Snippet Scores:</h2>
 <% end %>
 
-<% @scores_by_category.keys.each do |category| %>
+<% @scores_by_category.each do |category, scores| %>
   <div class="blue-round user-scores">
     <h2>Category: <%= category %></h2>
 
@@ -15,7 +16,7 @@
         <th>Accuracy</th>
       </tr>
 
-    <% @scores_by_category[category].each do |score| %>
+    <% scores.each do |score| %>
       <tr>
         <td><%= link_to score.snippet_id, snippet_path(score.snippet_id) %></td>
         <td><%= score.wpm %></td>

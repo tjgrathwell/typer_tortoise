@@ -135,9 +135,21 @@ nav ul.nav-options li:first-child {
   margin-left: 0px;
 }
 
-div.user-scores {
+.user-scores {
   display: inline-block;
   padding: 5px;
+  margin-right: 10px;
+
+  table {
+    width: 100%;
+  }
+  th, td {
+    padding: 0 8px;
+  }
+}
+
+table.thin-border, table.thin-border td {
+  border: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 textarea.snippet-editor {

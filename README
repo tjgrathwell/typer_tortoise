@@ -4,6 +4,8 @@ Requires foreman to start: you need at least a "secret_token" key in your .env f
 
 `foreman start` will start the server
 
-`rake` will run the ruby tests
+`rake` will run the ruby tests and javascript tests
 
-`rake jasmine:ci` will run the javascript tests
+`rake spec` will run just the ruby tests
+
+`rake jasmine:ci` will run just the javascript tests
