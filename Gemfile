@@ -3,7 +3,7 @@ source 'https://rails-assets.org'
 
 ruby '2.1.2'
 
-gem 'rails', '4.1.6'
+gem 'rails', '4.1.8'
 
 gem 'omniauth-twitter'
 gem 'kaminari'
@@ -18,7 +18,7 @@ gem 'rails-assets-es5-shim'
 gem 'handlebars_assets'
 
 group :development, :test do
-  gem 'jasmine', '~> 2.0.0'
+  gem 'jasmine'
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'capybara'
