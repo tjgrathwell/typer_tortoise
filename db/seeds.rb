@@ -21,9 +21,9 @@ snip_files.each do |filename|
       raise "No tabs allowed in the snippet seeds (#{filename}):\n#{snippet}\n"
     end
 
-    Snippet.find_or_create_by_full_text({
-      category_id: Category.find_or_create_by_name(category).id,
+    Snippet.find_or_create_by(
+      category_id: Category.find_or_create_by(name: category).id,
       full_text: snippet.strip
-    })
+    )
   end
 end
