@@ -50,7 +50,7 @@ App.controllers.TypingAreaController = Em.Object.extend({
             params['last_seen'] = this.get('current_snippet').get('snippet_id');
         }
 
-        $.get(url, params, (function (snippet_json) {
+        return $.get(url, params, (function (snippet_json) {
             this.set('current_snippet', App.models.TypingText.create({
                 full_string: App.util.chomp(snippet_json['full_text']),
                 snippet_id: snippet_json['id'],

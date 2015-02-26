@@ -24,7 +24,3 @@ App.views.ScoreItemView = Em.View.extend({});
 App.views.ScoreListView = Em.View.extend({
   templateName: 'player-scores'
 });
-
-App.views.TypingAreaContainer = Em.View.extend({
-  templateName: 'typing-area-container'
-});

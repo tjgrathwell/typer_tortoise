@@ -58,7 +58,10 @@
         name: '<%= current_user.name %>'
       };
     <% end %>
-    $(document).ready(function () { App.start(); });
+    $(document).ready(function () {
+      App.start();
+      App.advanceReadiness();
+    });
   </script>
 </body>
 </html>

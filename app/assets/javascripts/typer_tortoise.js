@@ -1,5 +1,8 @@
 var App = Em.Application.create();
 
+// TODO: Get everything all synced up so readiness needn't be deferred.
+App.deferReadiness();
+
 App.models = {};
 App.controllers = {};
 App.views = {};

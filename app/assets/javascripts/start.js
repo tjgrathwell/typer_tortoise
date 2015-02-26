@@ -18,14 +18,6 @@ App.start = function () {
     App.setPreventDefaultForKey(e);
   });
 
-  var path = App.history.pageToken();
-  if (path.match('/play')) {
-    var snippet_num = path.match('/snippets/(\\d+)/play')[1];
-    App.get('typingAreaController').newSnippet(snippet_num);
-  } else {
-    App.get('typingAreaController').newSnippet();
-  }
-
   App.set('scoresController', App.controllers.ScoresController.create({}));
 
   App.get('scoresController').loadScores();
@@ -45,12 +37,19 @@ App.Router.reopen({
 });
 
 App.Router.map(function() {
-  this.route('play', { path: '/snippets/:id/play' });
+  this.resource('snippet', { path: '/snippets/:snippet_id' }, function() {
+    this.route('play');
+  });
   this.route('catchAll', { path: '*:' });
 });
 
-App.IndexRoute = App.PlayRoute = Ember.Route.extend({
+App.IndexRoute = App.SnippetRoute = Ember.Route.extend({
+  model: function (params) {
+    // TODO: This is done more for the side-effect than to return a 'model'.
+    App.get('typingAreaController').newSnippet(params.snippet_id);
+  },
+
   renderTemplate: function () {
-    this.render('typing-area-container');
+    this.render('snippet/play');
   }
 });
