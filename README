@@ -1,9 +1,5 @@
 Typer Tortoise: A typeracer-like game built with Rails and ember.js
 
-Requires foreman to start: you need at least a "secret_token" key in your .env file.
-
-`foreman start` will start the server
-
 `rake` will run the ruby tests and javascript tests
 
 `rake spec` will run just the ruby tests

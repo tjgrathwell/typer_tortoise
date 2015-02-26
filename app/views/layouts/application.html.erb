@@ -1,28 +1,19 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]--> <!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]--> <!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]--> <!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <title>typer tortoise</title>
   <meta name="description" content="html5 typing game (like typeracer)">
   <meta name="author" content="Travis Grathwell">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <% if Rails.env.development? %>
-    <link rel="shortcut icon" href="<%= asset_url('turtle-icon-small-inverted.ico') %>">
-  <% else %>
-    <link rel="shortcut icon" href="<%= asset_url('turtle-icon-small.ico') %>">
-  <% end %>
+  <link rel="shortcut icon" href="<%= asset_url(favicon_file) %>">
 
   <%= stylesheet_link_tag "application" %>
   <%= csrf_meta_tags %>
-
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
 </head>
 <body>
 
