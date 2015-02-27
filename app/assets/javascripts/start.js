@@ -46,7 +46,11 @@ App.Router.map(function() {
 App.IndexRoute = App.SnippetRoute = Ember.Route.extend({
   model: function (params) {
     // TODO: This is done more for the side-effect than to return a 'model'.
-    App.get('typingAreaController').newSnippet(params.snippet_id);
+    return App.get('typingAreaController').newSnippet(params.snippet_id);
+  },
+
+  setupController: function (controller, model) {
+    controller.set('model', model);
   },
 
   renderTemplate: function () {

@@ -3,18 +3,6 @@ App.controllers.TypingAreaController = Em.Object.extend({
         this.set('current_snippet', null);
     },
 
-    finishedObserver: function () {
-        if (this.get('current_snippet') && this.get('current_snippet').finished) {
-            if (App.history.pageToken().match('/play')) {
-                // reset the URL from pointing at a specific snippet (/snippets/15/play)
-                // to the root URL (/) to indicate "random play mode" has resumed
-                App.history.setPageToken('/');
-            }
-            this.saveScore();
-            this.newSnippet();
-        }
-    }.observes('current_snippet.finished'),
-
     saveScore: function () {
         App.get('scoresController').add(this.get('current_snippet').getScore());
         if (App.user) {
@@ -50,12 +38,14 @@ App.controllers.TypingAreaController = Em.Object.extend({
             params['last_seen'] = this.get('current_snippet').get('snippet_id');
         }
 
-        return $.get(url, params, (function (snippet_json) {
-            this.set('current_snippet', App.models.TypingText.create({
+        return Ember.$.getJSON(url, params).then((function (snippet_json) {
+            var snippet = App.models.TypingText.create({
                 full_string: App.util.chomp(snippet_json['full_text']),
                 snippet_id: snippet_json['id'],
                 category_id: snippet_json['category_id']
-            }));
+            });
+            this.set('current_snippet', snippet);
+            return snippet;
         }).bind(this));
     }
 });
