@@ -21,3 +21,47 @@ describe "snippets index" do
     page.should_not have_content('catA')
   end
 end
+
+context 'as an admin' do
+  before do
+    admin_user = create(:user, is_admin: true)
+    Identity.create(
+      user_id: admin_user.id,
+      provider: 'twitter',
+      uid: '12345'
+    )
+
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:twitter, {uid: '12345'})
+
+    visit '/auth/twitter'
+  end
+
+  describe "creating a snippet" do
+    let!(:category) { create(:category) }
+
+    it 'adds the snippet to the database' do
+      visit new_snippet_path
+
+      fill_in 'snippet[full_text]', with: 'interesting code'
+      expect {
+        click_on 'Create Snippet'
+      }.to change(Snippet, :count).by(1)
+
+      Snippet.last.full_text.should == 'interesting code'
+    end
+  end
+
+  describe "editing a snippet" do
+    let(:snippet) { create(:snippet, full_text: 'hello world') }
+
+    it 'changes the text of the snippet' do
+      visit edit_snippet_path(snippet)
+
+      fill_in 'snippet[full_text]', with: 'interesting code'
+      click_on 'Update Snippet'
+
+      snippet.reload.full_text.should == 'interesting code'
+    end
+  end
+end

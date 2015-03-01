@@ -71,7 +71,7 @@ class SnippetsController < ApplicationController
   # POST /snippets
   # POST /snippets.json
   def create
-    @snippet = Snippet.new(params[:snippet])
+    @snippet = Snippet.new(snippet_params)
 
     respond_to do |format|
       if @snippet.save
@@ -90,7 +90,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.find(params[:id])
 
     respond_to do |format|
-      if @snippet.update_attributes(params[:snippet])
+      if @snippet.update_attributes(snippet_params)
         format.html { redirect_to @snippet, notice: 'Snippet was successfully updated.' }
         format.json { head :ok }
       else
@@ -110,5 +110,11 @@ class SnippetsController < ApplicationController
       format.html { redirect_to snippets_url }
       format.json { head :ok }
     end
+  end
+
+  private
+
+  def snippet_params
+    params.require(:snippet).permit(:full_text, :category_id)
   end
 end

@@ -1,6 +1,9 @@
 class Snippet < ActiveRecord::Base
   belongs_to :category
   has_many :scores
+
+  validates_presence_of :category
+
   default_scope { includes(:category).order("#{table_name}.id") }
   scope :of_category, -> (category_id) { where(category_id: category_id) }
 

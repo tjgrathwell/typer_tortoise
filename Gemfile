@@ -28,6 +28,10 @@ group :development, :test do
   gem 'awesome_print'
 end
 
+group :development do
+  gem 'quiet_assets'
+end
+
 group :test do
   gem 'factory_girl_rails'
 end

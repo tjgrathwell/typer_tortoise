@@ -3,16 +3,16 @@
     <% unless %w(index).include? action_name %>
       <li><%= link_to 'Index', snippets_path %>
     <% end %>
-    <% unless %w(new show index).include? action_name %>
+    <% if %w(edit).include? action_name %>
       <li><%= link_to 'View', @snippet %>
     <% end %>
-    <% unless %w(new edit index).include?(action_name) && admin_user? %>
+    <% if admin_user? && %w(show).include?(action_name) %>
       <li><%= link_to 'Edit', edit_snippet_path(@snippet) %>
     <% end %>
-    <% unless %w(new index).include? action_name %>
+    <% if %w(show edit).include? action_name %>
       <li><%= link_to 'Play', play_snippet_path(@snippet) %>
     <% end %>
-    <% unless %w(new).include?(action_name) && admin_user? %>
+    <% if admin_user? && !%w(new).include?(action_name) %>
       <li><%= link_to 'Add a Snippet', new_snippet_path %>
     <% end %>
   </ul>
