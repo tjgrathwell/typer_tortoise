@@ -4,8 +4,17 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+def choose_javascript_driver
+  if ENV['SELENIUM']
+    require 'selenium-webdriver'
+    :selenium
+  else
+    require 'capybara/poltergeist'
+    :poltergeist
+  end
+end
+
+Capybara.javascript_driver = choose_javascript_driver
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 

@@ -2,7 +2,7 @@ class Snippet < ActiveRecord::Base
   belongs_to :category
   has_many :scores, dependent: :destroy
 
-  validates_presence_of :category
+  validates_presence_of :category, :full_text
 
   default_scope { includes(:category).order("#{table_name}.id") }
   scope :of_category, -> (category_id) { where(category_id: category_id) }

@@ -1,0 +1,32 @@
+<div class="container">
+  <nav class="blue-round">
+    <ul class="nav-options">
+      <li><a href="/snippets">Index</a></li>
+      <li>{{#link-to 'snippet.index' snippet_id}}View{{/link-to}}</li>
+      <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
+      <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
+    </ul>
+  </nav>
+
+  <p>A snippet in the <strong>{{category_name}}</strong> category.</p>
+
+  <div class="edit_snippet">
+    <div class="field">
+      <label>
+        Category
+        {{view Ember.Select
+        contentBinding="App.CategoriesController.content"
+        optionValuePath="content.id"
+        optionLabelPath="content.name"
+        value=category_id}}
+      </label>
+    </div>
+
+    <div class="field">
+      {{textarea value=full_string rows=20 class='snippet-editor' name='snippet[full_text]'}}
+    </div>
+    <div class="actions">
+      <button {{action submitAction target="controller"}}>Update Snippet</button>
+    </div>
+  </div>
+</div>

@@ -30,10 +30,10 @@
           <td><strong><%= snippet.category.name %></strong></td>
           <td style="white-space: pre;"><%= snippet.full_text %></td>
           <td><%= snippet.full_text.length %></td>
-          <td><%= link_to 'Show', snippet %></td>
-          <td><%= link_to 'Play', play_snippet_path(snippet) %></td>
+          <td><%= link_to 'Show', "/snippets/#{snippet.id}" %></td>
+          <td><%= link_to 'Play', "/snippets/#{snippet.id}/play" %></td>
           <% if admin_user? %>
-            <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
+            <td><%= link_to 'Edit', "/snippets/#{snippet.id}/edit" %></td>
             <td><%= link_to 'Destroy', snippet, data: { confirm: 'Are you sure?' }, method: :delete %></td>
           <% end %>
         </tr>

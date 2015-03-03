@@ -2,9 +2,9 @@
   <nav class="blue-round">
     <ul class="nav-options">
       <li><a href="/snippets">Index</a></li>
-      <li><a {{bind-attr href=snippet_edit_link}}>Edit</a></li>
+      <li>{{#link-to 'snippet.edit' snippet_id}}Edit{{/link-to}}</li>
       <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
-      <li><a href="/snippets/new">Add a Snippet</a></li>
+      <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
     </ul>
   </nav>
 

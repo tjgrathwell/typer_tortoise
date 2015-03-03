@@ -14,11 +14,9 @@ TyperTortoise::Application.routes.draw do
     get 'scores', :on => :member
   end
 
-  resources :snippets, except: [:show] do
-    get 'play',   :on => :member
-  end
+  resources :snippets, only: [:index, :destroy]
   scope format: true, constraints: {format: 'json'} do
-    resources :snippets, only: [:show] do
+    resources :snippets, only: [:show, :update, :create] do
       get 'random', :on => :collection
     end
   end

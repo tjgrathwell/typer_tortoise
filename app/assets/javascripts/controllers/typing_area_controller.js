@@ -46,8 +46,6 @@ App.controllers.TypingAreaController = Em.Object.extend({
             var snippet = App.models.TypingText.create({
                 full_string: App.util.chomp(snippet_json['full_text']),
                 snippet_id: snippet_json['id'],
-                // TODO: remove when snippets are routeable
-                snippet_edit_link: '/snippets/' + snippet_json['id'] + '/edit',
                 category_id: snippet_json['category_id'],
                 category_name: snippet_json['category_name'],
                 scores: snippet_json['scores']

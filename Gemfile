@@ -22,8 +22,8 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'capybara'
-  gem 'poltergeist'
-  gem 'selenium-webdriver'
+  gem 'poltergeist', require: false
+  gem 'selenium-webdriver', require: false
   gem 'database_cleaner'
   gem 'awesome_print'
 end

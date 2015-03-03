@@ -7,13 +7,13 @@
       <li><%= link_to 'View', @snippet %>
     <% end %>
     <% if admin_user? && %w(show).include?(action_name) %>
-      <li><%= link_to 'Edit', edit_snippet_path(@snippet) %>
+      <li><%= link_to 'Edit', "/snippets/#{@snippet.id}/edit" %>
     <% end %>
     <% if %w(show edit).include? action_name %>
-      <li><%= link_to 'Play', play_snippet_path(@snippet) %>
+      <li><%= link_to 'Play', "/snippets/#{@snippet.id}/play" %>
     <% end %>
     <% if admin_user? && !%w(new).include?(action_name) %>
-      <li><%= link_to 'Add a Snippet', new_snippet_path %>
+      <li><%= link_to 'Add a Snippet', '/snippets/new' %>
     <% end %>
   </ul>
 </nav>

@@ -43,25 +43,6 @@ class SnippetsController < ApplicationController
     end
   end
 
-  def play
-  end
-
-  # GET /snippets/new
-  # GET /snippets/new.json
-  def new
-    @snippet = Snippet.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @snippet }
-    end
-  end
-
-  # GET /snippets/1/edit
-  def edit
-    @snippet = Snippet.find(params[:id])
-  end
-
   # POST /snippets
   # POST /snippets.json
   def create
@@ -69,10 +50,8 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.save
-        format.html { redirect_to @snippet, notice: 'Snippet was successfully created.' }
-        format.json { render json: @snippet, status: :created, location: @snippet }
+        format.json { render json: @snippet, status: :created }
       else
-        format.html { render action: "new" }
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
     end
@@ -85,10 +64,8 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.update_attributes(snippet_params)
-        format.html { redirect_to @snippet, notice: 'Snippet was successfully updated.' }
-        format.json { head :ok }
+        format.json { render json: @snippet }
       else
-        format.html { render action: "edit" }
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
     end

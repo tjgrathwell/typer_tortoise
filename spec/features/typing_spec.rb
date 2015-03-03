@@ -7,7 +7,7 @@ describe "typing a snippet", js: true do
   end
 
   it "proceeds to another random snippet" do
-    visit play_snippet_path(@snippet)
+    visit "/snippets/#{@snippet.id}/play"
 
     page.should have_content('hello world')
 
