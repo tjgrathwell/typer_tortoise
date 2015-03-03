@@ -6,13 +6,6 @@ describe SnippetsController do
     @snippet = create(:snippet)
   end
 
-  describe "GET '/snippets/random'" do
-    it "should return a random snippet as plaintext" do
-      get :random
-      response.body.should == @snippet.full_text
-    end
-  end
-
   describe "GET '/snippets/random.json'" do
     it "should return a random snippet as json" do
       get :random, :format => :json

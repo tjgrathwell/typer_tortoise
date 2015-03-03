@@ -14,9 +14,8 @@ class SnippetsController < ApplicationController
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
 
     respond_to do |format|
-      format.json { render :json => selected_snip.to_json }
-      format.html { render :text => selected_snip.full_text }
-    end    
+      format.json { render json: selected_snip.to_json }
+    end
   end
 
   # GET /snippets
@@ -37,19 +36,14 @@ class SnippetsController < ApplicationController
   # GET /snippets/1
   # GET /snippets/1.json
   def show
-    @snippet = Snippet.find(params[:id])
+    @snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
       format.json { render json: @snippet }
     end
   end
 
-  # GET /snippets/1/play
   def play
-    @snippet = Snippet.find(params[:id])
-
-    # play.html.erb
   end
 
   # GET /snippets/new

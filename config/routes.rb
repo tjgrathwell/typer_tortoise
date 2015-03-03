@@ -14,10 +14,16 @@ TyperTortoise::Application.routes.draw do
     get 'scores', :on => :member
   end
 
-  resources :snippets do
+  resources :snippets, except: [:show] do
     get 'play',   :on => :member
-    get 'random', :on => :collection
   end
+  scope format: true, constraints: {format: 'json'} do
+    resources :snippets, only: [:show] do
+      get 'random', :on => :collection
+    end
+  end
+
+  get '/snippets/*path' => 'application#only_layout'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

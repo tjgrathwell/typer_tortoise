@@ -6,4 +6,8 @@ App.SnippetRoute = Ember.Route.extend({
       return controller.newSnippet(params.snippet_id);
     }
   },
+
+  setupController: function (controller, model) {
+    controller.set('model', model);
+  }
 });

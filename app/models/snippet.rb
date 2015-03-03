@@ -1,6 +1,6 @@
 class Snippet < ActiveRecord::Base
   belongs_to :category
-  has_many :scores
+  has_many :scores, dependent: :destroy
 
   validates_presence_of :category
 
@@ -31,5 +31,12 @@ class Snippet < ActiveRecord::Base
     return nil if snippets.empty?
 
     return snippets.sample
+  end
+
+  def as_json(params = {})
+    super.merge(
+      category_name: category.name,
+      scores: scores.as_json
+    )
   end
 end

@@ -10,15 +10,17 @@ App.start = function () {
 
   App.set('categoryPrefController', App.controllers.CategoryPrefController.create({}));
 
-  if (!App.isPlaying()) return;
-
   App.set('typingAreaController', App.controllers.TypingAreaController.create({}));
+
+  App.set('scoresController', App.controllers.ScoresController.create({}));
+
+  if (App.isPlaying() || App.history.pageToken().match(/snippets\/\d+$/)) {
+    App.get('scoresController').loadScores();
+  }
+
+  if (!App.isPlaying()) return;
 
   $(document).bind('keyPress keyDown', function (e) {
     App.setPreventDefaultForKey(e);
   });
-
-  App.set('scoresController', App.controllers.ScoresController.create({}));
-
-  App.get('scoresController').loadScores();
 };

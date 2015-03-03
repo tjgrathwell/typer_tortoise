@@ -1,0 +1,36 @@
+<div class="container">
+  <nav class="blue-round">
+    <ul class="nav-options">
+      <li><a href="/snippets">Index</a></li>
+      <li><a {{bind-attr href=snippet_edit_link}}>Edit</a></li>
+      <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
+      <li><a href="/snippets/new">Add a Snippet</a></li>
+    </ul>
+  </nav>
+
+  <h1>Snippet {{snippet_id}}</h1>
+
+  <h2>From the category "<strong>{{category_name}}</strong>"</h2>
+  <pre>{{full_string}}</pre>
+
+  {{#if scores.length}}
+    <h1>User Scores:</h1>
+    <div class="blue-round user-scores">
+      <table class="thin-border">
+        <tr>
+          <th>Username</th>
+          <th>WPM</th>
+          <th>Accuracy</th>
+        </tr>
+
+        {{#each score in scores}}
+          <tr>
+            <td><a {{bind-attr href=score.user_link}}>{{score.user_name}}</a></td>
+            <td>{{score.wpm}}</td>
+            <td>{{score.accuracy}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </div>
+  {{/if}}
+</div>
