@@ -1,10 +1,14 @@
 <div class="container">
   <nav class="blue-round">
     <ul class="nav-options">
-      <li><a href="/snippets">Index</a></li>
-      <li>{{#link-to 'snippet.edit' snippet_id}}Edit{{/link-to}}</li>
+      <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
+      {{#if App.user.admin}}
+        <li>{{#link-to 'snippet.edit' snippet_id}}Edit{{/link-to}}</li>
+      {{/if}}
       <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
-      <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
+      {{#if App.user.admin}}
+        <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
+      {{/if}}
     </ul>
   </nav>
 

@@ -1,8 +1,6 @@
 class SnippetsController < ApplicationController
   before_filter :admin_user, only: [:destroy, :create, :update, :new, :edit]
 
-  # GET /random
-  # GET /random.json
   def random
     category_ids = params[:category_ids] || []
     if signed_in?
@@ -18,23 +16,17 @@ class SnippetsController < ApplicationController
     end
   end
 
-  # GET /snippets
-  # GET /snippets.json
   def index
-    @categories = Category.all
-    @snippets = Snippet.page(params[:page])
+    @snippets = Snippet.all
     if params[:category_id]
       @snippets = @snippets.of_category(params[:category_id])
     end
 
     respond_to do |format|
-      format.html # index.html.erb
       format.json { render json: @snippets }
     end
   end
 
-  # GET /snippets/1
-  # GET /snippets/1.json
   def show
     @snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
@@ -43,8 +35,6 @@ class SnippetsController < ApplicationController
     end
   end
 
-  # POST /snippets
-  # POST /snippets.json
   def create
     @snippet = Snippet.new(snippet_params)
 
@@ -57,8 +47,6 @@ class SnippetsController < ApplicationController
     end
   end
 
-  # PUT /snippets/1
-  # PUT /snippets/1.json
   def update
     @snippet = Snippet.find(params[:id])
 
@@ -71,15 +59,12 @@ class SnippetsController < ApplicationController
     end
   end
 
-  # DELETE /snippets/1
-  # DELETE /snippets/1.json
   def destroy
     @snippet = Snippet.find(params[:id])
     @snippet.destroy
 
     respond_to do |format|
-      format.html { redirect_to snippets_url }
-      format.json { head :ok }
+      format.json { render json: {} }
     end
   end
 

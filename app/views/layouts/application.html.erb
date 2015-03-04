@@ -26,7 +26,7 @@
     <nav>
       <ul>
         <li><%= link_to "User Index", users_path %></li>
-        <li><%= link_to "Snippet Index", snippets_path %></li>
+        <li><%= link_to "Snippet Index", '/snippets' %></li>
         <li id="prefs-link-container"><a href="#">Preferences</a></li>
       </ul>
     </nav>
@@ -53,9 +53,11 @@
   <%= javascript_include_tag "application" %>
   <script>
     <% if signed_in? %>
+      // TODO: move this into a controller of some kind?
       App.user = {
         id: '<%= current_user.id %>',
-        name: '<%= current_user.name %>'
+        name: '<%= current_user.name %>',
+        admin: <%= current_user.is_admin? %>
       };
     <% end %>
     $(document).ready(function () {

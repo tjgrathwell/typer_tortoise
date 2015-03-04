@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "snippets index" do
+describe "snippets index", js: true do
   before do
     @cat_a = create(:category)
     @cat_b = create(:category)
@@ -12,13 +12,8 @@ describe "snippets index" do
   end
 
   it "shows all the snippets in the database" do
-    visit snippets_path
+    visit '/snippets'
     page.should have_content(/catAsnip1.*catAsnip2.*catBsnip1/m)
-  end
-
-  it "allows category filtering via the category_id parameter" do
-    visit snippets_path(category_id: @cat_b.id)
-    page.should_not have_content('catA')
   end
 end
 
@@ -38,6 +33,19 @@ context 'as an admin', js: true do
 
     visit '/auth/twitter'
     page.should have_content(snippet.full_text)
+  end
+
+  describe "destroying a snippet" do
+    it 'removes the snippet from the database' do
+      visit "/snippets"
+
+      page.should have_content(snippet.full_text)
+
+      expect {
+        click_on "Destroy"
+        page.should_not have_content(snippet.full_text)
+      }.to change(Snippet, :count).by(-1)
+    end
   end
 
   describe "creating a snippet" do
