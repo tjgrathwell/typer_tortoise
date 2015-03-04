@@ -1,5 +1,5 @@
 App.SnippetsIndexRoute = Ember.Route.extend({
-  model: function (params) {
+  model: function () {
     return Ember.$.getJSON('/snippets.json');
   },
 

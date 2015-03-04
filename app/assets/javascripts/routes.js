@@ -3,6 +3,7 @@ App.Router.reopen({
 });
 
 App.Router.map(function() {
+  this.resource('users', function () {});
   this.resource('snippets', function() {
     this.route('new');
   });

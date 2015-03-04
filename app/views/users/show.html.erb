@@ -18,7 +18,7 @@
 
     <% scores.each do |score| %>
       <tr>
-        <td><%= link_to score.snippet_id, snippet_path(score.snippet_id) %></td>
+        <td><%= link_to score.snippet_id, "/snippets/#{score.snippet_id}" %></td>
         <td><%= score.wpm %></td>
         <td><%= score.accuracy %>%</td>
       </tr>  

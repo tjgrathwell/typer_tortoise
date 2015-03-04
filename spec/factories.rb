@@ -17,4 +17,11 @@ FactoryGirl.define do
       "lorem ipsum dolor #{n}"
     end
   end
+
+  factory :score do
+    snippet
+    user
+    wpm 88
+    accuracy 51.2
+  end
 end
