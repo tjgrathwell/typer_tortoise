@@ -32,7 +32,7 @@
     </nav>
     <div>
       <% if signed_in? %>
-        Logged in as <strong><%= link_to current_user.name, current_user %></strong>.
+        Logged in as <strong><%= link_to current_user.name, "/users/#{current_user.id}" %></strong>.
       <% else %>
         Log in to save your scores.
       <% end %>

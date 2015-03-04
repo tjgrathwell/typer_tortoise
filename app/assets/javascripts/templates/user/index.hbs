@@ -1,0 +1,30 @@
+<div class="container">
+  <h1>{{name}}</h1>
+  <hr>
+
+  {{#if score_categories}}
+    <h2>Snippet Scores:</h2>
+
+    {{#each score_category in score_categories}}
+      <div class="blue-round user-scores">
+        <h2>Category: {{score_category.name}}</h2>
+
+        <table class="thin-border scores">
+          <tr>
+            <th>Snippet ID</th>
+            <th>WPM</th>
+            <th>Accuracy</th>
+          </tr>
+
+          {{#each score in score_category.scores}}
+            <tr>
+              <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
+              <td>{{score.wpm}}</td>
+              <td>{{score.accuracy}}%</td>
+            </tr>
+          {{/each}}
+        </table>
+      </div>
+    {{/each}}
+  {{/if}}
+</div>

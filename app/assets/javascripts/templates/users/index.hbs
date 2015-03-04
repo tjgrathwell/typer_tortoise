@@ -12,7 +12,7 @@
         {{#each user in users}}
           <tr>
             <td>{{user.id}}</td>
-            <td><a {{bind-attr href=user.user_link}}>{{user.name}}</a></td>
+            <td>{{#link-to 'user.index' user.id}}{{user.name}}{{/link-to}}</td>
           </tr>
         {{/each}}
       </table>

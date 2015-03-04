@@ -39,10 +39,6 @@ App.controllers.TypingAreaController = Em.Object.extend({
         }
 
         return Ember.$.getJSON(url, params).then((function (snippet_json) {
-            // TODO: remove when users are routeable
-            snippet_json['scores'].forEach(function (score) {
-              score.user_link = "/users/" + score.user_id;
-            });
             var snippet = App.models.TypingText.create({
                 full_string: App.util.chomp(snippet_json['full_text']),
                 snippet_id: snippet_json['id'],

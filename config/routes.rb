@@ -10,10 +10,6 @@ TyperTortoise::Application.routes.draw do
     post 'set_preferences', :on => :collection
   end
 
-  resources :users, :only => [:show] do
-    get 'scores', :on => :member
-  end
-
   scope format: true, constraints: {format: 'json'} do
     resources :users, :only => [:index, :show] do
       get 'scores', :on => :member
@@ -25,6 +21,7 @@ TyperTortoise::Application.routes.draw do
   end
 
   get '/users' => 'application#only_layout'
+  get '/users/*path' => 'application#only_layout'
   get '/snippets' => 'application#only_layout'
   get '/snippets/*path' => 'application#only_layout'
 end
