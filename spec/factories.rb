@@ -24,4 +24,9 @@ FactoryGirl.define do
     wpm 88
     accuracy 51.2
   end
+
+  factory :category_preference do
+    category
+    user
+  end
 end
