@@ -1,6 +1,5 @@
 App.controllers.CategoryPrefController = Em.ArrayController.extend({
     content: [],
-    prefs_popup: null,
 
     init: function () {
         // if category ids are in local storage, optimistically
@@ -117,20 +116,5 @@ App.controllers.CategoryPrefController = Em.ArrayController.extend({
         category_ids.forEach(function (cat_id) {
             this.setCategory(cat_id, true);
         }, this);
-    },
-
-    showPreferences: function () {
-        this.loadCategories().then(this._showPopup.bind(this));
-    },
-
-    _showPopup: function () {
-        var popup_view = App.views.PrefsPopup.create({});
-        this.set('prefs_popup', popup_view);
-        popup_view.appendTo('.container:first');
-    },
-
-    hidePreferences: function () {
-        this.get('prefs_popup').destroy();
-        this.set('prefs_popup', null);
     }
 });

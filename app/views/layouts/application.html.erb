@@ -16,40 +16,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<div class="container">
-  <header>
-    <div>
-      <h1><%= link_to 'typer tortoise', root_path %></h1>
-      <small>are you faster than a tortoise??</small>
-    </div>
-    <nav>
-      <ul>
-        <li><%= link_to "User Index", '/users' %></li>
-        <li><%= link_to "Snippet Index", '/snippets' %></li>
-        <li id="prefs-link-container"><a href="#">Preferences</a></li>
-      </ul>
-    </nav>
-    <div>
-      <% if signed_in? %>
-        Logged in as <strong><%= link_to current_user.name, "/users/#{current_user.id}" %></strong>.
-      <% else %>
-        Log in to save your scores.
-      <% end %>
-      <ul>
-        <% if signed_in? %>
-          <li><%= link_to "Log out", "/logout" %>
-        <% else %>
-          <li><%= link_to "Sign in with Twitter", "/auth/twitter" %>
-        <% end %>
-      </ul>
-    </div>
-  </header>
-
-<%= yield %>
-
-</div>
-
   <%= javascript_include_tag "application" %>
   <script>
     <% if signed_in? %>

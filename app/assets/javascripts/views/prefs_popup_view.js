@@ -1,33 +1,8 @@
-App.views.PrefsLink = Em.View.extend({
-    templateName: 'prefs-link',
-    tagName: 'span',
-    classNames: ['prefs-link'],
-
-    click: function () {
-        App.get('categoryPrefController').showPreferences();
-    }
-});
-
-App.views.PrefsSaveButton = Em.View.extend({
-    tagName: 'button',
-    click: function (e) {
-        var pref_controller = App.get('categoryPrefController');
-        pref_controller.saveCategories().then(function () {
-            pref_controller.hidePreferences();
-            var typingAreaController = App.get('typingAreaController');
-            if (typingAreaController) {
-              typingAreaController.changeSnippetToCategory(pref_controller.enabledCategoryIds());
-            }
-        });
-    }
-});
-
-App.views.PrefsPopup = Em.View.extend({
-    templateName: 'prefs-popup',
+App.views.PrefsPopupBackground = Em.View.extend({
     classNames: ['prefs-popup-bg'],
 
     click: function () {
-        this.destroy();
+        this.get('controller').send('closeModal');
     }
 });
 

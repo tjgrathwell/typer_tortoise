@@ -1,0 +1,33 @@
+<div class="container">
+  <header>
+    <div>
+      <h1>{{#link-to 'index'}}typer tortoise{{/link-to}}</h1>
+      <small>are you faster than a tortoise??</small>
+    </div>
+    <nav>
+      <ul>
+        <li>{{#link-to 'users.index'}}User Index{{/link-to}}</li>
+        <li>{{#link-to 'snippets.index'}}Snippet Index{{/link-to}}</li>
+        <li><span class='prefs-link' {{action showPreferences}}>Preferences </span></li>
+      </ul>
+    </nav>
+    <div>
+      {{#if App.user}}
+        Logged in as <strong>{{#link-to 'user.index' App.user.id}}{{App.user.name}}{{/link-to}}</strong>.
+      {{else}}
+        Log in to save your scores.
+      {{/if}}
+      <ul>
+        {{#if App.user}}
+          <li><a href="/logout">Log out</a></li>
+        {{else}}
+          <li><a href="/auth/twitter">Sign in with Twitter</a></li>
+        {{/if}}
+      </ul>
+    </div>
+  </header>
+</div>
+
+{{outlet}}
+
+{{outlet 'modal'}}

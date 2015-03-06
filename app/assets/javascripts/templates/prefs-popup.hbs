@@ -1,19 +1,21 @@
-{{#view App.views.PrefsPopupContent}}
-  <h2>
-    {{#if view.user}}
-      {{view.user.name}}'s preferences
-    {{else}}
-      Guest's preferences
-    {{/if}}
-  </h2>
-  <ul>
-    {{#each App.categoryPrefController}}
-      <li>
-        <label>{{view Em.Checkbox checkedBinding="enabled"}}{{name}}</label>
-      </li>
-    {{/each}}
-  </ul>
-  <div class="text-center">
-    {{#view App.views.PrefsSaveButton}}Save Preferences{{/view}}
-  </div>
+{{#view App.views.PrefsPopupBackground}}
+  {{#view App.views.PrefsPopupContent}}
+    <h2>
+      {{#if view.user}}
+        {{view.user.name}}'s preferences
+      {{else}}
+        Guest's preferences
+      {{/if}}
+    </h2>
+    <ul>
+      {{#each App.categoryPrefController}}
+        <li>
+          <label>{{view Em.Checkbox checkedBinding="enabled"}}{{name}}</label>
+        </li>
+      {{/each}}
+    </ul>
+    <div class="text-center">
+      <button {{action 'savePreferences'}}>Save Preferences</button>
+    </div>
+  {{/view}}
 {{/view}}
