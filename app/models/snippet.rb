@@ -35,8 +35,11 @@ class Snippet < ActiveRecord::Base
 
   def as_json(params = {})
     super.merge(
-      category_name: category.name,
-      scores: scores.as_json
+      category_name: category.name
     )
+  end
+
+  def as_detailed_json
+    as_json.merge(scores: scores.as_json)
   end
 end

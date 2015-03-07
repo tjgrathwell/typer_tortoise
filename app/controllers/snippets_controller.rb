@@ -12,7 +12,7 @@ class SnippetsController < ApplicationController
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
 
     respond_to do |format|
-      format.json { render json: selected_snip.to_json }
+      format.json { render json: selected_snip }
     end
   end
 
@@ -31,7 +31,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
     respond_to do |format|
-      format.json { render json: @snippet }
+      format.json { render json: @snippet.as_detailed_json }
     end
   end
 
@@ -40,7 +40,7 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.save
-        format.json { render json: @snippet, status: :created }
+        format.json { render json: @snippet.as_detailed_json, status: :created }
       else
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
@@ -52,7 +52,7 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.update_attributes(snippet_params)
-        format.json { render json: @snippet }
+        format.json { render json: @snippet.as_detailed_json }
       else
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
