@@ -1,5 +1,5 @@
-{{#view App.views.PrefsPopupBackground}}
-  {{#view App.views.PrefsPopupContent}}
+{{#view "prefs_popup_background"}}
+  {{#view "prefs_popup_content"}}
     <h2>
       {{#if view.user}}
         {{view.user.name}}'s preferences
@@ -8,9 +8,9 @@
       {{/if}}
     </h2>
     <ul>
-      {{#each App.categoryPrefController}}
+      {{#each score in App.categoryPrefController}}
         <li>
-          <label>{{view Em.Checkbox checkedBinding="enabled"}}{{name}}</label>
+          <label>{{view Em.Checkbox checkedBinding="score.enabled"}}{{score.name}}</label>
         </li>
       {{/each}}
     </ul>

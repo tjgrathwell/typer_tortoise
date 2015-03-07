@@ -2,9 +2,9 @@
   <div class="blue-round player-scores">
     <h3>Your Scores</h3>
     <ul>
-      {{#each App.scoresController}}
+      {{#each score in App.scoresController}}
         <li>
-          {{#link-to 'snippet.index' snippet_id}}Snippet {{snippet_id}}{{/link-to}}: <strong>{{wpm}}</strong> wpm, <strong>{{accuracy}}%</strong> accurate.
+          {{#link-to 'snippet.index' snippet_id}}Snippet {{score.snippet_id}}{{/link-to}}: <strong>{{score.wpm}}</strong> wpm, <strong>{{score.accuracy}}%</strong> accurate.
         </li>
       {{/each}}
     </ul>

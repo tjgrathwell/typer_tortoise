@@ -1,4 +1,4 @@
-App.views.PrefsPopupBackground = Em.View.extend({
+App.PrefsPopupBackgroundView = Em.View.extend({
     classNames: ['prefs-popup-bg'],
 
     click: function () {
@@ -6,7 +6,7 @@ App.views.PrefsPopupBackground = Em.View.extend({
     }
 });
 
-App.views.PrefsPopupContent = Em.View.extend({
+App.PrefsPopupContentView = Em.View.extend({
     classNames: ['blue-round', 'prefs-popup'],
     userBinding: Em.Binding.oneWay('App.user'),
 

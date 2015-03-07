@@ -5,7 +5,6 @@ App.deferReadiness();
 
 App.models = {};
 App.controllers = {};
-App.views = {};
 
 //
 //  currently logged in user
