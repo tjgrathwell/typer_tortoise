@@ -13,7 +13,7 @@
         Category
         {{view Ember.Select
         prompt="Select a category..."
-        contentBinding="App.CategoriesController.content"
+        contentBinding="App.CategoriesController.model"
         optionValuePath="content.id"
         optionLabelPath="content.name"
         value=category_id}}

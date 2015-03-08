@@ -259,7 +259,7 @@ describe("category preferences controller", function () {
     {id: 3, name: 'overlaid-arachnids',     enabled: true}
   ];
 
-  catController.set('content', $.map(categories_json, function (el) {
+  catController.set('model', $.map(categories_json, function (el) {
     return App.models.Category.create(el);
   }));
 
@@ -314,7 +314,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   it('saves the selected categories into localstorage as csv', function () {
     var catController = App.controllers.CategoryPrefController.create();
 
-    catController.set('content', $.map(categories_json, function (el) {
+    catController.set('model', $.map(categories_json, function (el) {
       return App.models.Category.create(el);
     }));
 

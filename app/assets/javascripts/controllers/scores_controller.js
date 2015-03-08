@@ -1,9 +1,7 @@
 App.controllers.ScoresController = Em.ArrayController.extend({
-  content: [],
-
   loadScores: function (score) {
     $.get('/scores/', (function (json) {
-      this.set('content', json);
+      this.set('model', json);
     }).bind(this));
   },
 

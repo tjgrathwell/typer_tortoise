@@ -17,7 +17,7 @@
       <label>
         Category
         {{view Ember.Select
-        contentBinding="App.CategoriesController.content"
+        contentBinding="App.CategoriesController.model"
         optionValuePath="content.id"
         optionLabelPath="content.name"
         value=category_id}}
