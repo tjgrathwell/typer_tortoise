@@ -8,9 +8,9 @@
       {{/if}}
     </h2>
     <ul>
-      {{#each score in App.categoryPrefController}}
+      {{#each category in App.categoryPrefController}}
         <li>
-          <label>{{view Em.Checkbox checkedBinding="score.enabled"}}{{score.name}}</label>
+          <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
         </li>
       {{/each}}
     </ul>
