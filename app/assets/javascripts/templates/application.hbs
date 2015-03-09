@@ -12,13 +12,13 @@
       </ul>
     </nav>
     <div>
-      {{#if App.user}}
-        Logged in as <strong>{{#link-to 'user.index' App.user.id}}{{App.user.name}}{{/link-to}}</strong>.
+      {{#if controllers.session.user}}
+        Logged in as <strong>{{#link-to 'user.index' controllers.session.user.id}}{{controllers.session.user.name}}{{/link-to}}</strong>.
       {{else}}
         Log in to save your scores.
       {{/if}}
       <ul>
-        {{#if App.user}}
+        {{#if controllers.session.user}}
           <li><a href="/logout">Log out</a></li>
         {{else}}
           <li><a href="/auth/twitter">Sign in with Twitter</a></li>

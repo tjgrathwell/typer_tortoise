@@ -4,7 +4,7 @@
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
       <li>{{#link-to 'snippet.index' snippet_id}}View{{/link-to}}</li>
       <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
-      {{#if App.user.admin}}
+      {{#if controllers.session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
     </ul>

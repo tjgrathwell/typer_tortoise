@@ -10,6 +10,7 @@ App.controllers = {};
 //  currently logged in user
 //
 
+// TODO: replace all usage with SessionController usage instead
 App.user = null;
 
 //

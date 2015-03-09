@@ -1,5 +1,5 @@
 <div class="container">
-  {{#if App.user.admin}}
+  {{#if controllers.session.user.admin}}
     <nav class="blue-round">
       <ul class="nav-options">
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
@@ -26,7 +26,7 @@
             <td>{{snippet.full_text.length}}</td>
             <td>{{#link-to 'snippet.index' snippet.id}}Show{{/link-to}}</td>
             <td>{{#link-to 'snippet.play' snippet.id}}Play{{/link-to}}</td>
-            {{#if App.user.admin}}
+            {{#if controllers.session.user.admin}}
               <td>{{#link-to 'snippet.edit' snippet.id}}Edit{{/link-to}}</td>
               <td><button {{action 'destroy' snippet}}>Destroy</button></td>
             {{/if}}

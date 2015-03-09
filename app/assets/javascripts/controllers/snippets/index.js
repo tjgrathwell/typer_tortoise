@@ -1,7 +1,9 @@
 App.SnippetsIndexController = Ember.ObjectController.extend({
+  needs: ['session'],
+
   actionsCount: function () {
-    return (App.user && App.user.admin) ? 4 : 2;
-  }.property('App.user'),
+    return (this.get('controllers.session.user.admin')) ? 4 : 2;
+  }.property('controllers.session.user'),
 
   actions: {
     destroy: function(snippet) {

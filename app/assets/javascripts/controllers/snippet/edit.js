@@ -1,4 +1,6 @@
 App.SnippetEditController = Ember.ObjectController.extend({
+  needs: ['session'],
+
   actions: {
     submitAction : function(){
       var model = this.get("model");
