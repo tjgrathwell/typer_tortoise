@@ -1,15 +1,20 @@
 class UsersController < ApplicationController
+  respond_to :json
+
   def show
     user = User.find(params[:id])
     unless user
       deny_access
     end
 
-    scores_by_category = {}
-    user.scores.each do |score|
-      # i wonder how the performance of this is? does rails have some kind of prefetch?
-      (scores_by_category[score.snippet.category.name] ||= []).push(score)
+    scores_by_category = Hash.new { |h, k| h[k] = [] }
+    user.scores.includes(:snippet => :category).each do |score|
+      Rails.logger.error score.snippet.id
+      scores_by_category[score.snippet.category.name].push(score)
     end
+
+
+    Rails.logger.error scores_by_category.inspect
 
     score_categories = scores_by_category.map do |category, scores|
       {
@@ -18,25 +23,19 @@ class UsersController < ApplicationController
       }
     end
 
-    respond_to do |format|
-      format.json { render json: user.as_json.merge(score_categories: score_categories) }
-    end
+    render json: user.as_json.merge(score_categories: score_categories)
   end
 
   def index
-    respond_to do |format|
-      format.json { render json: User.all }
-    end
+    render json: User.all
   end
 
   def scores
-    @user = User.find(params[:id])
-    unless @user
+    user = User.find(params[:id])
+    unless user
       deny_access
     end
 
-    respond_to do |format|
-      format.json { render json: @user.scores }
-    end
+    render json: user.scores
   end
 end

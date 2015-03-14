@@ -1,8 +1,9 @@
 class CategoriesController < ApplicationController
   before_filter :authenticate, only: [:set_preferences]
+  respond_to :json
 
   def set_preferences
-    if !params[:categories] || params[:categories].empty?
+    unless params[:categories].present?
       return head :bad_request
     end
 
@@ -27,8 +28,6 @@ class CategoriesController < ApplicationController
       end
     end
 
-    respond_to do |format|
-      format.json { render json: all_categories, root: false }
-    end
+    render json: all_categories, root: false
   end
 end

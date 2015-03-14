@@ -1,5 +1,6 @@
 class SnippetsController < ApplicationController
   before_filter :admin_user, only: [:destroy, :create, :update, :new, :edit]
+  respond_to :json
 
   def random
     category_ids = params[:category_ids] || []
@@ -11,61 +12,49 @@ class SnippetsController < ApplicationController
 
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
 
-    respond_to do |format|
-      format.json { render json: selected_snip }
-    end
+    render json: selected_snip
   end
 
   def index
-    @snippets = Snippet.all
+    snippets = Snippet.all
     if params[:category_id]
-      @snippets = @snippets.of_category(params[:category_id])
+      snippets = snippets.of_category(params[:category_id])
     end
 
-    respond_to do |format|
-      format.json { render json: @snippets }
-    end
+    render json: snippets
   end
 
   def show
-    @snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
+    snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
-    respond_to do |format|
-      format.json { render json: @snippet.as_detailed_json }
-    end
+    render json: snippet.as_detailed_json
   end
 
   def create
-    @snippet = Snippet.new(snippet_params)
+    snippet = Snippet.new(snippet_params)
 
-    respond_to do |format|
-      if @snippet.save
-        format.json { render json: @snippet.as_detailed_json, status: :created }
-      else
-        format.json { render json: @snippet.errors, status: :unprocessable_entity }
-      end
+    if snippet.save
+      render json: snippet.as_detailed_json, status: :created
+    else
+      render json: snippet.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    @snippet = Snippet.find(params[:id])
+    snippet = Snippet.find(params[:id])
 
-    respond_to do |format|
-      if @snippet.update_attributes(snippet_params)
-        format.json { render json: @snippet.as_detailed_json }
-      else
-        format.json { render json: @snippet.errors, status: :unprocessable_entity }
-      end
+    if snippet.update_attributes(snippet_params)
+      render json: snippet.as_detailed_json
+    else
+      render json: snippet.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @snippet = Snippet.find(params[:id])
-    @snippet.destroy
+    snippet = Snippet.find(params[:id])
+    snippet.destroy
 
-    respond_to do |format|
-      format.json { render json: {} }
-    end
+    render json: {}
   end
 
   private

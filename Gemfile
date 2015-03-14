@@ -15,6 +15,7 @@ gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
 gem 'rails-assets-es5-shim'
 gem 'handlebars_assets'
+gem 'responders'
 
 group :development, :test do
   gem 'jasmine'

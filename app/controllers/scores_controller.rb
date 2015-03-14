@@ -1,5 +1,6 @@
 class ScoresController < ApplicationController
   before_filter :authenticate, :only => [:create]
+  respond_to :json
 
   def create
     @score = current_user.scores.build(score_params)
@@ -11,18 +12,9 @@ class ScoresController < ApplicationController
   end
 
   def index
-    unless signed_in?
-      respond_to do |format|
-        format.json { render json: [], root: false }
-      end
-      return
-    end
+    scores = current_user.try(:scores) || []
 
-    @scores = current_user.scores
-
-    respond_to do |format|
-      format.json { render json: @scores, root: false }
-    end
+    render json: scores, root: false
   end
 
   private
