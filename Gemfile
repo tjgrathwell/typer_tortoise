@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-source 'https://rails-assets.org'
 
 ruby '2.1.2'
 
@@ -13,7 +12,6 @@ gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
 gem 'ember-source', '~> 1.5.0'
-gem 'rails-assets-es5-shim'
 gem 'handlebars_assets'
 gem 'responders'
 
@@ -39,4 +37,8 @@ end
 group :production do
   gem 'pg'
   gem 'rails_12factor'
+end
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-es5-shim'
 end
