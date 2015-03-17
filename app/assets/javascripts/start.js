@@ -8,10 +8,6 @@ App.start = function () {
     App.storage.remove('typer_tortoise.category_ids');
   }
 
-  App.set('categoryPrefController', App.controllers.CategoryPrefController.create({}));
-
-  App.set('typingAreaController', App.controllers.TypingAreaController.create({}));
-
   App.set('scoresController', App.controllers.ScoresController.create({}));
 
   if (App.isPlaying() || App.history.pageToken().match(/snippets\/\d+$/)) {

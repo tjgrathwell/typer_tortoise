@@ -1,4 +1,4 @@
-App.controllers.CategoryPrefController = Em.ArrayController.extend({
+App.CategoryPreferencesController = Em.ArrayController.extend({
     init: function () {
         // if category ids are in local storage, optimistically
         //   load them into 'model' (as just ids, no 'name' attribute)

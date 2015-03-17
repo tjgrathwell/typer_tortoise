@@ -1,6 +1,10 @@
-App.controllers.TypingAreaController = Em.Object.extend({
+App.TypingAreaController = Em.ObjectController.extend({
+    needs: ['category_preferences'],
+
     init: function () {
         this.set('current_snippet', null);
+        // TODO: Stop doing this after figuring out how TypingAreaView knows where the snippet is
+        App.set('typingAreaController', this);
     },
 
     saveScore: function () {
@@ -30,7 +34,7 @@ App.controllers.TypingAreaController = Em.Object.extend({
         } else {
             url = '/snippets/random.json';
             if (!App.user) {
-                params['category_ids'] = App.get('categoryPrefController').enabledCategoryIds();
+                params['category_ids'] = this.get('controllers.category_preferences').enabledCategoryIds();
             }
         }
 

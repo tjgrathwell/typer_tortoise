@@ -40,20 +40,6 @@ App.TypingAreaView = Em.View.extend({
         this.$().find('.type-panel').focus();
     },
 
-    finishedObserver: function () {
-      if (this.get('text').finished) {
-        var typingAreaController = App.get('typingAreaController');
-        typingAreaController.saveScore();
-        // reset the URL from pointing at a specific snippet (/snippets/15/play)
-        // to the root URL (/) to indicate "random play mode" has resumed
-        // TODO: Use something like transitionTo instead
-        if (App.history.pageToken().match('/play')) {
-          App.history.setPageToken('/');
-        }
-        typingAreaController.newSnippet();
-      }
-    }.observes('text.finished'),
-
     focusIn:  function (e) { this.set('focused', true);  },
     focusOut: function (e) { this.set('focused', false); }
 });

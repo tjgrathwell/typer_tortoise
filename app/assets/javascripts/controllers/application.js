@@ -1,3 +1,3 @@
 App.ApplicationController = Ember.Controller.extend({
-  needs: ['session']
+  needs: ['session', 'category_preferences']
 });

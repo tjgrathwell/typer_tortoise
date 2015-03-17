@@ -16,6 +16,7 @@
 //= require routes
 //= require storage
 //= require routes/snippet/play
+//= require controllers/snippet/play
 //= require_tree ./routes
 //= require_tree ./templates
 //= require_tree ./models

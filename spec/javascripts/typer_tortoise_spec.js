@@ -251,7 +251,7 @@ describe("typing on a snippet", function() {
 });
 
 describe("category preferences controller", function () {
-  var catController = App.controllers.CategoryPrefController.create();
+  var catController = App.CategoryPreferencesController.create();
 
   var categories_json = [
     {id: 1, name: 'melodramatically-din',   enabled: false},
@@ -294,7 +294,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   });
 
   it('loads the selected categories from localstorage if available', function (finish) {
-    var catController = App.controllers.CategoryPrefController.create();
+    var catController = App.CategoryPreferencesController.create();
 
     var categoriesPromise = new Ember.RSVP.Promise(function (resolve, reject) {
       resolve(categories_json);
@@ -312,7 +312,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   });
 
   it('saves the selected categories into localstorage as csv', function () {
-    var catController = App.controllers.CategoryPrefController.create();
+    var catController = App.CategoryPreferencesController.create();
 
     catController.set('model', $.map(categories_json, function (el) {
       return App.models.Category.create(el);
@@ -326,7 +326,7 @@ describe("category preferences for a user that hasn't logged in", function () {
   it('optimistically creates category objects from localStorage on init', function () {
     App.storage.set(storage_key_name, '35,93');
 
-    var catController = App.controllers.CategoryPrefController.create();
+    var catController = App.CategoryPreferencesController.create();
     expect(catController.enabledCategoryIds()).toEqual([35, 93]);
   });
 });
