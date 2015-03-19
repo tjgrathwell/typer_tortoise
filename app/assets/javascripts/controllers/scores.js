@@ -1,5 +1,6 @@
 App.ScoresController = Em.ArrayController.extend({
   init: function () {
+    this._super();
     this.loadScores();
   },
 

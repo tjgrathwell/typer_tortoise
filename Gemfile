@@ -11,8 +11,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
-gem 'ember-source', '~> 1.5.0'
-gem 'handlebars_assets'
+gem 'ember-source', '~> 1.8.0'
 gem 'responders'
 
 group :development, :test do

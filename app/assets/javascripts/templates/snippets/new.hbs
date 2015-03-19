@@ -11,7 +11,7 @@
     <div class="field">
       <label>
         Category
-        {{view Ember.Select
+        {{view "select"
         prompt="Select a category..."
         contentBinding="App.CategoriesController.model"
         optionValuePath="content.id"

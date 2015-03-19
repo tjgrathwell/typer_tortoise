@@ -1,1 +1,0 @@
-HandlebarsAssets::Config.ember = true

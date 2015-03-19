@@ -1,5 +1,7 @@
 App.CategoryPreferencesController = Em.ArrayController.extend({
     init: function () {
+        this._super();
+
         // if category ids are in local storage, optimistically
         //   load them into 'model' (as just ids, no 'name' attribute)
         //   as if we know they're correct.
