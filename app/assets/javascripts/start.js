@@ -8,12 +8,6 @@ App.start = function () {
     App.storage.remove('typer_tortoise.category_ids');
   }
 
-  App.set('scoresController', App.controllers.ScoresController.create({}));
-
-  if (App.isPlaying() || App.history.pageToken().match(/snippets\/\d+$/)) {
-    App.get('scoresController').loadScores();
-  }
-
   if (!App.isPlaying()) return;
 
   $(document).bind('keyPress keyDown', function (e) {

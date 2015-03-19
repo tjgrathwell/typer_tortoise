@@ -1,5 +1,5 @@
 App.TypingAreaController = Em.ObjectController.extend({
-    needs: ['category_preferences'],
+    needs: ['category_preferences', 'scores'],
 
     init: function () {
         this.set('current_snippet', null);
@@ -8,7 +8,7 @@ App.TypingAreaController = Em.ObjectController.extend({
     },
 
     saveScore: function () {
-        App.get('scoresController').add(this.get('current_snippet').getScore());
+        this.get('controllers.scores').add(this.get('current_snippet').getScore());
         if (App.user) {
           $.post('/scores', {score: this.get('current_snippet').getScore()});
         }

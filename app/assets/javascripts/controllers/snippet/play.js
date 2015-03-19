@@ -1,5 +1,5 @@
 App.SnippetPlayController = Ember.ObjectController.extend({
-  needs: ['application', 'typing_area'],
+  needs: ['application', 'typing_area', 'scores'],
   isActive: Ember.computed.equal('controllers.application.currentRouteName', 'snippet.play'),
 
   finishedObserver: function () {
