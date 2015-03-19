@@ -1,4 +1,6 @@
 App.SnippetsNewController = Ember.ObjectController.extend({
+  needs: ['categories'],
+
   actions: {
     submitAction : function(){
       var model = this.get("model");

@@ -1,5 +1,5 @@
 App.SnippetEditController = Ember.ObjectController.extend({
-  needs: ['session'],
+  needs: ['session', 'categories'],
 
   actions: {
     submitAction : function(){

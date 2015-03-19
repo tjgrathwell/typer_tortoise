@@ -1,5 +1,8 @@
-App.CategoriesController = Ember.ArrayController.create({});
-
-Ember.$.get('/categories.json', function(data) {
-  App.CategoriesController.set('model', data);
+App.CategoriesController = Ember.ArrayController.extend({
+  init: function () {
+    this._super();
+    Ember.$.get('/categories.json', (function(data) {
+      this.set('model', data);
+    }).bind(this));
+  }
 });

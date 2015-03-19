@@ -8,7 +8,7 @@
       {{/if}}
     </h2>
     <ul>
-      {{#each category in 'controllers.category_preferences'}}
+      {{#each category in controllers.category_preferences}}
         <li>
           <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
         </li>

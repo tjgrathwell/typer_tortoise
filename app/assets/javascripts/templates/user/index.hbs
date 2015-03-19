@@ -10,19 +10,23 @@
         <h2>Category: {{score_category.name}}</h2>
 
         <table class="thin-border scores">
-          <tr>
-            <th>Snippet ID</th>
-            <th>WPM</th>
-            <th>Accuracy</th>
-          </tr>
-
-          {{#each score in score_category.scores}}
+          <thead>
             <tr>
-              <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
-              <td>{{score.wpm}}</td>
-              <td>{{score.accuracy}}%</td>
+              <th>Snippet ID</th>
+              <th>WPM</th>
+              <th>Accuracy</th>
             </tr>
-          {{/each}}
+          </thead>
+
+          <tbody>
+            {{#each score in score_category.scores}}
+              <tr>
+                <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
+                <td>{{score.wpm}}</td>
+                <td>{{score.accuracy}}%</td>
+              </tr>
+            {{/each}}
+          </tbody>
         </table>
       </div>
     {{/each}}

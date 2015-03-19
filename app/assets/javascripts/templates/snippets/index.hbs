@@ -12,26 +12,30 @@
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered table-striped snippets-table">
-        <tr>
-          <th class="row-category">Category</th>
-          <th class="row-text">Text</th>
-          <th class="row-characters">Characters</th>
-          <th class="row-actions" {{bind-attr colspan=actionsCount}}></th>
-        </tr>
-
-        {{#each snippet in snippets}}
+        <thead>
           <tr>
-            <td><strong>{{snippet.category_name}}</strong></td>
-            <td style="white-space: pre;">{{snippet.full_text}}</td>
-            <td>{{snippet.full_text.length}}</td>
-            <td>{{#link-to 'snippet.index' snippet.id}}Show{{/link-to}}</td>
-            <td>{{#link-to 'snippet.play' snippet.id}}Play{{/link-to}}</td>
-            {{#if controllers.session.user.admin}}
-              <td>{{#link-to 'snippet.edit' snippet.id}}Edit{{/link-to}}</td>
-              <td><button {{action 'destroy' snippet}}>Destroy</button></td>
-            {{/if}}
+            <th class="row-category">Category</th>
+            <th class="row-text">Text</th>
+            <th class="row-characters">Characters</th>
+            <th class="row-actions" {{bind-attr colspan=actionsCount}}></th>
           </tr>
-        {{/each}}
+        </thead>
+
+        <tbody>
+          {{#each snippet in snippets}}
+            <tr>
+              <td><strong>{{snippet.category_name}}</strong></td>
+              <td style="white-space: pre;">{{snippet.full_text}}</td>
+              <td>{{snippet.full_text.length}}</td>
+              <td>{{#link-to 'snippet.index' snippet.id}}Show{{/link-to}}</td>
+              <td>{{#link-to 'snippet.play' snippet.id}}Play{{/link-to}}</td>
+              {{#if controllers.session.user.admin}}
+                <td>{{#link-to 'snippet.edit' snippet.id}}Edit{{/link-to}}</td>
+                <td><button {{action 'destroy' snippet}}>Destroy</button></td>
+              {{/if}}
+            </tr>
+          {{/each}}
+        </tbody>
       </table>
     </div>
   </div>
