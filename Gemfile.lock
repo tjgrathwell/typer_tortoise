@@ -85,7 +85,6 @@ GEM
     ffi (1.9.8)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
-    handlebars-source (3.0.0)
     hashie (3.4.0)
     hike (1.2.3)
     i18n (0.7.0)
@@ -235,7 +234,6 @@ DEPENDENCIES
   ember-rails
   ember-source
   factory_girl_rails
-  handlebars-source
   jasmine
   jquery-rails
   omniauth-twitter

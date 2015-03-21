@@ -12,7 +12,6 @@ gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
 gem 'ember-source'
-gem 'handlebars-source'
 gem 'responders'
 
 group :development, :test do

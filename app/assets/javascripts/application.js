@@ -7,7 +7,6 @@
 //= require es5-shim
 //= require jquery
 //= require jquery_ujs
-//= require handlebars
 //= require ember
 //= require test_config
 //= require list_filtering
