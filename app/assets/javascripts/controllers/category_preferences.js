@@ -2,6 +2,11 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
     init: function () {
         this._super();
 
+        if (App.user && App.storage.supported) {
+            // Kill localStorage prefs every time someone logs in properly.
+            App.storage.remove('typer_tortoise.category_ids');
+        }
+
         // if category ids are in local storage, optimistically
         //   load them into 'model' (as just ids, no 'name' attribute)
         //   as if we know they're correct.

@@ -22,6 +22,10 @@ App.history = Em.Object.create({
   setPageToken: function (token) { return history.pushState({}, '', token); }
 });
 
+App.isPlaying = function () {
+  return (App.history.pageToken() === '/') || App.history.pageToken().match('/play');
+};
+
 //
 //  key handling
 //
