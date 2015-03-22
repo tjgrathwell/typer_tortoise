@@ -38,6 +38,13 @@ App.TypingAreaView = Em.View.extend({
         this._super();
         this.$().fadeIn();
         this.$().find('.type-panel').focus();
+        $(document).on('keypress.typingArea keydown.typingArea', function (e) {
+            App.setPreventDefaultForKey(e);
+        });
+    },
+
+    willDestroyElement: function () {
+        $(document).off('.typingArea');
     },
 
     focusIn:  function (e) { this.set('focused', true);  },

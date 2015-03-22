@@ -4,10 +4,6 @@ App.TypingAreaController = Em.ObjectController.extend({
     init: function () {
         this._super();
 
-        $(document).bind('keypress keydown', function (e) {
-            App.setPreventDefaultForKey(e);
-        });
-
         this.set('current_snippet', null);
         // TODO: Stop doing this after figuring out how TypingAreaView knows where the snippet is
         App.set('typingAreaController', this);
