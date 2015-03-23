@@ -13,7 +13,11 @@ describe "snippets index", js: true do
 
   it "shows all the snippets in the database" do
     visit '/snippets'
-    page.should have_content(/catAsnip1.*catAsnip2.*catBsnip1/m)
+    select @cat_a.name
+    page.should have_content(/catAsnip1.*catAsnip2/m)
+
+    select @cat_b.name
+    page.should have_content(/catBsnip/m)
   end
 end
 
@@ -39,6 +43,7 @@ context 'as an admin', js: true do
     it 'removes the snippet from the database' do
       visit "/snippets"
 
+      select snippet.category.name
       page.should have_content(snippet.full_text)
 
       expect {
