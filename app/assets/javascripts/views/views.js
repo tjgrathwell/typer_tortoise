@@ -19,6 +19,6 @@ App.FocusNagView = Em.View.extend({
   isFocusedBinding: 'parentView.focused'
 });
 
-App.ScoreListView = Em.View.extend({
+App.PlayerScoresView = Em.View.extend({
   templateName: 'player-scores'
 });

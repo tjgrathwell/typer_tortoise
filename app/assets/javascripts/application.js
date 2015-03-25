@@ -9,7 +9,6 @@
 //= require jquery_ujs
 //= require ember
 //= require test_config
-//= require list_filtering
 //= require typer_tortoise
 //= require util
 //= require routes

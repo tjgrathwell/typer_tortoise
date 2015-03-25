@@ -4,7 +4,6 @@ var App = Em.Application.create();
 App.deferReadiness();
 
 App.models = {};
-App.controllers = {};
 
 //
 //  currently logged in user
