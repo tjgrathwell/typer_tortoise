@@ -227,12 +227,10 @@ App.models.TypingText = Em.Object.extend({
     // output
     //
     getScore: function () {
-        // TODO returning an actual Score model here causes infinite recursion.
-        // Bit of a bummer.
-        return {
+        return App.models.Score.create({
             snippet_id: this.snippet_id,
             wpm: this.get('wpm'),
             accuracy: this.get('accuracy')
-        };
+        });
     }
 });

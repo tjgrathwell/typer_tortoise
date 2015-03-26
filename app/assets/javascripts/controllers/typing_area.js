@@ -10,9 +10,10 @@ App.TypingAreaController = Em.ObjectController.extend({
     },
 
     saveScore: function () {
-        this.get('controllers.scores').add(this.get('current_snippet').getScore());
+        var score = this.get('current_snippet').getScore();
+        this.get('controllers.scores').add(score);
         if (App.user) {
-          $.post('/scores', {score: this.get('current_snippet').getScore()});
+          $.post('/scores', {score: score.toJson()});
         }
     },
 
