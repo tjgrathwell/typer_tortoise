@@ -18,7 +18,7 @@ App.TypingAreaController = Em.ObjectController.extend({
     },
 
     changeSnippetToCategory: function (category_ids) {
-        if (!App.isPlaying()) return;
+        if (!this.get('current_snippet')) return;
 
         if (category_ids.indexOf(this.get('current_snippet').get('category_id')) >= 0) {
             // if this snippet is already in the whitelist of categories, nothing to do
@@ -26,6 +26,11 @@ App.TypingAreaController = Em.ObjectController.extend({
         }
 
         this.newSnippet();
+    },
+
+    clearSnippet: function () {
+        this.set('previous_snippet', this.get('current_snippet'));
+        this.set('current_snippet', null);
     },
 
     newSnippet: function (snippet_num) {
@@ -41,8 +46,9 @@ App.TypingAreaController = Em.ObjectController.extend({
             }
         }
 
-        if (this.get('current_snippet')) {
-            params['last_seen'] = this.get('current_snippet').get('snippet_id');
+        var lastSnippet = this.get('current_snippet') || this.get('previous_snippet');
+        if (lastSnippet) {
+            params['last_seen'] = lastSnippet.get('snippet_id');
         }
 
         return Ember.$.getJSON(url, params).then((function (snippet_json) {

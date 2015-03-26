@@ -10,13 +10,13 @@ App.SnippetPlayController = Ember.ObjectController.extend({
     var typingAreaController = this.get('controllers.typing_area');
     if (typingAreaController.get('current_snippet').finished) {
       typingAreaController.saveScore();
-      // reset the URL from pointing at a specific snippet (/snippets/15/play)
-      // to the root URL (/) to indicate "random play mode" has resumed
-      // TODO: Use something like transitionTo instead
-      if (App.history.pageToken().match('/play')) {
-        App.history.setPageToken('/');
+      var routeName = this.get('controllers.application.currentRouteName');
+      if (routeName == 'snippet.play') {
+        // Go to the root route to indicate "random play mode" has resumed
+        this.transitionToRoute('index');
+      } else {
+        typingAreaController.newSnippet();
       }
-      typingAreaController.newSnippet();
     }
   }.observes('controllers.typing_area.current_snippet.finished'),
 });

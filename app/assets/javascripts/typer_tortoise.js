@@ -13,19 +13,6 @@ App.models = {};
 App.user = null;
 
 //
-//  history handling
-//
-
-App.history = Em.Object.create({
-  pageToken:    function ()      { return window.location.pathname; },
-  setPageToken: function (token) { return history.pushState({}, '', token); }
-});
-
-App.isPlaying = function () {
-  return (App.history.pageToken() === '/') || App.history.pageToken().match('/play');
-};
-
-//
 //  key handling
 //
 
