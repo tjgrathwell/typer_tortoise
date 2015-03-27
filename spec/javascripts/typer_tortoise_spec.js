@@ -289,7 +289,6 @@ describe("category preferences for a user that hasn't logged in", function () {
   ];
 
   beforeEach(function () {
-    App.user = null;
     App.storage.clear();
   });
 

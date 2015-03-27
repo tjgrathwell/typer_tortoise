@@ -1,5 +1,5 @@
 App.TypingAreaController = Em.ObjectController.extend({
-    needs: ['category_preferences', 'scores'],
+    needs: ['category_preferences', 'scores', 'session'],
 
     init: function () {
         this._super();
@@ -12,7 +12,7 @@ App.TypingAreaController = Em.ObjectController.extend({
     saveScore: function () {
         var score = this.get('current_snippet').getScore();
         this.get('controllers.scores').add(score);
-        if (App.user) {
+        if (this.get('controllers.session.user')) {
           $.post('/scores', {score: score.toJson()});
         }
     },
@@ -41,7 +41,7 @@ App.TypingAreaController = Em.ObjectController.extend({
             url = '/snippets/' + snippet_num + '.json';
         } else {
             url = '/snippets/random.json';
-            if (!App.user) {
+            if (!this.get('controllers.session.user')) {
                 params['category_ids'] = this.get('controllers.category_preferences').enabledCategoryIds();
             }
         }

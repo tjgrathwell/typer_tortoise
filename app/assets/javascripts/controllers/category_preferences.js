@@ -2,7 +2,9 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
     init: function () {
         this._super();
 
-        if (App.user && App.storage.supported) {
+        // TODO: Use controllers.session.user after figuring out how
+        // to instantiate a CategoryPreferencesController in test
+        if (window.currentUser && App.storage.supported) {
             // Kill localStorage prefs every time someone logs in properly.
             App.storage.remove('typer_tortoise.category_ids');
         }
@@ -17,7 +19,7 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
         // hopefully any discontinuities (a user with discontinued
         //   categories in their localStorage prefs) will be cleared
         //   up when that user next saves their prefs.
-        if (!App.user && App.storage.supported) {
+        if (!window.currentUser && App.storage.supported) {
             var category_ids = App.storage.get('typer_tortoise.category_ids');
             if (category_ids) {
                 var categories = category_ids.split(',').map(function (cat_id) {
@@ -59,7 +61,7 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
 
     saveCategories: function () {
         var enabledIds = this.enabledCategoryIds();
-        if (App.user) {
+        if (window.currentUser) {
             return this._saveCategoriesToServer(enabledIds);
         } else {
             return this._saveCategoriesToStorage(enabledIds);
@@ -93,7 +95,7 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
                 self.set('model', json.map(function (el) {
                   return App.models.Category.create(el);
                 }));
-                if (!App.user) {
+                if (!window.currentUser) {
                     self._loadCategoryPreferencesFromStorage();
                 }
                 resolve();

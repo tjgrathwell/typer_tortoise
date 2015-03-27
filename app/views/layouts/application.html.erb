@@ -19,16 +19,12 @@
   <%= javascript_include_tag "application" %>
   <script>
     <% if signed_in? %>
-      // TODO: move this into a controller of some kind?
-      App.user = {
+      window.currentUser = {
         id: '<%= current_user.id %>',
         name: '<%= current_user.name %>',
         admin: <%= current_user.is_admin? %>
       };
     <% end %>
-    $(document).ready(function () {
-      App.advanceReadiness();
-    });
   </script>
 </body>
 </html>

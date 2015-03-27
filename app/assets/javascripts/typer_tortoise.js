@@ -1,16 +1,6 @@
 var App = Em.Application.create();
 
-// TODO: Get everything all synced up so readiness needn't be deferred.
-App.deferReadiness();
-
 App.models = {};
-
-//
-//  currently logged in user
-//
-
-// TODO: replace all usage with SessionController usage instead
-App.user = null;
 
 //
 //  key handling
