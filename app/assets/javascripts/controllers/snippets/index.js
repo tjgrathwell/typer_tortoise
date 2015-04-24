@@ -13,13 +13,13 @@ App.SnippetsIndexController = Ember.ObjectController.extend({
     return Object.keys(categories).map(function (id) {
       return {name: categories[id], id: id};
     });
-  }.property('model'),
+  }.property('snippets'),
 
   filteredSnippets: function () {
     return this.get('model').snippets.filter((function (snippet) {
       return snippet.category_id == this.get('category_id');
     }).bind(this));
-  }.property('model', 'category_id'),
+  }.property('snippets', 'category_id'),
 
   actions: {
     destroy: function(snippet) {
@@ -29,15 +29,14 @@ App.SnippetsIndexController = Ember.ObjectController.extend({
           url: '/snippets/' + snippet.id + '.json',
           method: 'DELETE'
         }).then((function () {
-          // TODO: improve this, by doing basically anything else
-          var snippets = this.get('model').snippets;
+          var snippets = this.get('snippets');
           var newSnippets = [];
           snippets.forEach(function (s) {
             if (s.id != snippet.id) {
               newSnippets.push(s);
             }
           });
-          this.set('model', {snippets: newSnippets});
+          this.set('snippets', newSnippets);
         }).bind(this));
       }
     }
