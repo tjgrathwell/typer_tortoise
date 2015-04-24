@@ -8,20 +8,10 @@ class Snippet < ActiveRecord::Base
   scope :of_category, -> (category_id) { where(category_id: category_id) }
 
   def self.random(options={})
-    defaults = {:category_ids => [], :exclude => []}
+    defaults = {category_ids: [], exclude: []}
     options = defaults.merge(options)
 
-    [:exclude, :category_ids].each do |param|
-      unless options[param].respond_to? :each
-        raise ArgumentError, "Arguments to #{__method__} must be iterable, '#{options[param]}' isn't."
-      end
-      options[param].each do |id|
-        unless id.to_s.match(/^\d+$/)
-          raise ArgumentError, "Arguments to #{__method__} must be numeric, '#{id.inspect}' isn't."
-        end
-      end
-      options[param].map! { |e| e.to_i }
-    end
+    ParamChecker.new(__method__).force_integers!(options[:exclude], options[:category_ids])
 
     snippets_relation = Snippet
     snippets_relation = snippets_relation.where(category_id: options[:category_ids]) if options[:category_ids].present?

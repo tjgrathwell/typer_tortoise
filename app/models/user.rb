@@ -4,11 +4,7 @@ class User < ActiveRecord::Base
   has_many :category_preferences
 
   def set_category_preferences(categories)
-    categories.each do |id|
-      unless id.to_s.match(/^\d+$/)
-        raise ArgumentError, "Arguments to #{__method__} must be numeric, '#{id.inspect}' isn't."
-      end
-    end
+    ParamChecker.new(__method__).force_integers!(categories)
 
     self.category_preferences.destroy_all
 
