@@ -28,7 +28,9 @@
       {{textarea value=full_string rows=20 class='snippet-editor' name='snippet[full_text]'}}
     </div>
     <div class="actions">
-      <button {{action 'submitAction' target="controller"}}>Update Snippet</button>
+      <button class="btn btn-primary"
+        {{action 'submitAction' target="controller"}}
+        {{bind-attr disabled="snippetInvalid"}}>Update Snippet</button>
     </div>
   </div>
 </div>

@@ -1,8 +1,6 @@
 App.CategoriesController = Ember.ArrayController.extend({
   init: function () {
+    this.set('model', window.snippetCategories);
     this._super();
-    Ember.$.get('/categories.json', (function(data) {
-      this.set('model', data);
-    }).bind(this));
   }
 });

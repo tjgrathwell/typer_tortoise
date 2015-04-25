@@ -25,6 +25,7 @@
         admin: <%= current_user.is_admin? %>
       };
     <% end %>
+    window.snippetCategories = <%= Category.all.to_json.html_safe %>;
   </script>
 </body>
 </html>
