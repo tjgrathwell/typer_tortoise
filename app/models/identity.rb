@@ -2,7 +2,7 @@ class Identity < ActiveRecord::Base
   belongs_to :user
 
   def self.find_with_omniauth(auth)
-    find_by_provider_and_uid(auth['provider'], auth['uid'])
+    find_by(provider: auth['provider'], uid: auth['uid'])
   end
 
   def self.create_with_omniauth(auth)

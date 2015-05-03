@@ -11,8 +11,9 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
-gem 'ember-source'
+gem 'ember-source', '1.10.0'
 gem 'responders'
+gem 'sprockets', '2.12.3'
 
 group :development, :test do
   gem 'jasmine'
