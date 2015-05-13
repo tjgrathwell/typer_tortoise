@@ -1,3 +1,5 @@
+$monospace-font-families: Consolas, Menlo, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+
 body, html {
   background-image: asset-url('project_papper.png');
 }
@@ -26,7 +28,7 @@ h1 {
   margin-bottom: 20px;
 
   font-size: 12pt;
-  font-family: Consolas, Menlo, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-family: $monospace-font-families;
 
   background-color: rgba(0, 0, 0, .75);
   color: #F8F8F8;
@@ -154,6 +156,7 @@ table.thin-border, table.thin-border td {
 
 textarea.snippet-editor {
   width: 50%;
+  font-family: $monospace-font-families;
 }
 
 .focus-nag {
