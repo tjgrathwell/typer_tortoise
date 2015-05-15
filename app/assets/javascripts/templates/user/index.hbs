@@ -1,11 +1,11 @@
 <div class="container">
-  <h1>{{name}}</h1>
+  <h1>{{model.name}}</h1>
   <hr>
 
-  {{#if score_categories}}
+  {{#if model.score_categories}}
     <h2>Snippet Scores:</h2>
 
-    {{#each score_category in score_categories}}
+    {{#each score_category in model.score_categories}}
       <div class="blue-round user-scores">
         <h2>Category: {{score_category.name}}</h2>
 

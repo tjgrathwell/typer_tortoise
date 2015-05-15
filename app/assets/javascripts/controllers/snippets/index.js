@@ -1,4 +1,4 @@
-App.SnippetsIndexController = Ember.ObjectController.extend({
+App.SnippetsIndexController = Ember.Controller.extend({
   needs: ['session'],
 
   actionsCount: function () {
@@ -7,19 +7,19 @@ App.SnippetsIndexController = Ember.ObjectController.extend({
 
   snippetCategories: function () {
     var categories = {};
-    this.get('model').snippets.forEach(function (snippet) {
+    this.get('model.snippets').forEach(function (snippet) {
       categories[snippet.category_id] = snippet.category_name;
     });
     return Object.keys(categories).map(function (id) {
       return {name: categories[id], id: id};
     });
-  }.property('snippets'),
+  }.property('model.snippets'),
 
   filteredSnippets: function () {
-    return this.get('model').snippets.filter((function (snippet) {
+    return this.get('model.snippets').filter((function (snippet) {
       return snippet.category_id == this.get('category_id');
     }).bind(this));
-  }.property('snippets', 'category_id'),
+  }.property('model.snippets', 'category_id'),
 
   actions: {
     destroy: function(snippet) {
@@ -29,14 +29,14 @@ App.SnippetsIndexController = Ember.ObjectController.extend({
           url: '/snippets/' + snippet.id + '.json',
           method: 'DELETE'
         }).then((function () {
-          var snippets = this.get('snippets');
+          var snippets = this.get('model.snippets');
           var newSnippets = [];
           snippets.forEach(function (s) {
             if (s.id != snippet.id) {
               newSnippets.push(s);
             }
           });
-          this.set('snippets', newSnippets);
+          this.set('model.snippets', newSnippets);
         }).bind(this));
       }
     }

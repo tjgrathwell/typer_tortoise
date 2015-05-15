@@ -1,3 +1,3 @@
-App.SnippetIndexController = Ember.ObjectController.extend({
+App.SnippetIndexController = Ember.Controller.extend({
   needs: ['session']
 });

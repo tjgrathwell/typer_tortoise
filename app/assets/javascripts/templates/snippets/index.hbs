@@ -14,7 +14,7 @@
       {{view "select"
       prompt="Select a category..."
       class="form-control"
-      contentBinding="snippetCategories"
+      content=snippetCategories
       optionValuePath="content.id"
       optionLabelPath="content.name"
       value=category_id}}
@@ -26,7 +26,7 @@
               <th class="row-category">Category</th>
               <th class="row-text">Text</th>
               <th class="row-characters">Characters</th>
-              <th class="row-actions" {{bind-attr colspan=actionsCount}}></th>
+              <th class="row-actions" colspan="{{actionsCount}}"></th>
             </tr>
           </thead>
 

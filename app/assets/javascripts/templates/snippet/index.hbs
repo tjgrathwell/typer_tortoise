@@ -3,21 +3,21 @@
     <ul class="nav-options">
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
       {{#if controllers.session.user.admin}}
-        <li>{{#link-to 'snippet.edit' snippet_id}}Edit{{/link-to}}</li>
+        <li>{{#link-to 'snippet.edit' model.snippet_id}}Edit{{/link-to}}</li>
       {{/if}}
-      <li>{{#link-to 'snippet.play' snippet_id}}Play{{/link-to}}</li>
+      <li>{{#link-to 'snippet.play' model.snippet_id}}Play{{/link-to}}</li>
       {{#if controllers.session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
     </ul>
   </nav>
 
-  <h1>Snippet {{snippet_id}}</h1>
+  <h1>Snippet {{model.snippet_id}}</h1>
 
-  <h2>From the category "<strong>{{category_name}}</strong>"</h2>
-  <pre>{{full_string}}</pre>
+  <h2>From the category "<strong>{{model.category_name}}</strong>"</h2>
+  <pre>{{model.full_string}}</pre>
 
-  {{#if scores.length}}
+  {{#if model.scores.length}}
     <h1>User Scores:</h1>
     <div class="blue-round user-scores">
       <table class="thin-border">
@@ -30,7 +30,7 @@
         </thead>
 
         <tbody>
-          {{#each score in scores}}
+          {{#each score in model.scores}}
             <tr>
               <td>{{#link-to 'user.index' score.user_id}}{{score.user_name}}{{/link-to}}</td>
               <td>{{score.wpm}}</td>

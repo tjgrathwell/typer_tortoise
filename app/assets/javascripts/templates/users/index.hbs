@@ -12,7 +12,7 @@
         </thead>
 
         <tbody>
-          {{#each user in users}}
+          {{#each user in model.users}}
             <tr>
               <td>{{user.id}}</td>
               <td>{{#link-to 'user.index' user.id}}{{user.name}}{{/link-to}}</td>

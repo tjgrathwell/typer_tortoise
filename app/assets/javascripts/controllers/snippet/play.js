@@ -1,4 +1,4 @@
-App.SnippetPlayController = Ember.ObjectController.extend({
+App.SnippetPlayController = Ember.Controller.extend({
   needs: ['application', 'typing_area', 'scores'],
   isActive: Ember.computed.equal('controllers.application.currentRouteName', 'snippet.play'),
 

@@ -1,4 +1,4 @@
-App.TypingAreaController = Em.ObjectController.extend({
+App.TypingAreaController = Em.Controller.extend({
     needs: ['category_preferences', 'scores', 'session'],
 
     init: function () {

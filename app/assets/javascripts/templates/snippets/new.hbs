@@ -13,20 +13,20 @@
         Category
         {{view "select"
         prompt="Select a category..."
-        contentBinding="controllers.categories"
+        content=controllers.categories
         optionValuePath="content.id"
         optionLabelPath="content.name"
-        value=category_id}}
+        value=model.category_id}}
       </label>
     </div>
 
     <div class="field">
-      {{textarea value=full_text rows=20 class='snippet-editor' name='snippet[full_text]'}}
+      {{textarea value=model.full_text rows=20 class='snippet-editor' name='snippet[full_text]'}}
     </div>
     <div class="actions">
-      <button class="btn btn-primary"
-        {{action 'submitAction' target="controller"}}
-        {{bind-attr disabled="snippetInvalid"}}>Create Snippet</button>
+      <button class="btn btn-primary" disabled={{snippetInvalid}}
+        {{action 'submitAction' target="controller"}}>Create Snippet
+      </button>
     </div>
   </div>
 </div>

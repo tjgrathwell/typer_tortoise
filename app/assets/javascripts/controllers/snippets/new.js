@@ -1,9 +1,9 @@
-App.SnippetsNewController = Ember.ObjectController.extend({
+App.SnippetsNewController = Ember.Controller.extend({
   needs: ['categories'],
 
   snippetInvalid: function() {
-    return !this.get('full_text') || !this.get('category_id');
-  }.property('full_text', 'category_id'),
+    return !this.get('model.full_text') || !this.get('model.category_id');
+  }.property('model.full_text', 'model.category_id'),
 
   actions: {
     submitAction : function(){
@@ -12,8 +12,8 @@ App.SnippetsNewController = Ember.ObjectController.extend({
         url: '/snippets.json',
         data: {
           snippet: {
-            full_text: this.get('full_text'),
-            category_id: this.get('category_id')
+            full_text: this.get('model.full_text'),
+            category_id: this.get('model.category_id')
           }
         }
       }).then((function (response) {
