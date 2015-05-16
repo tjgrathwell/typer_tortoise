@@ -12,10 +12,14 @@
     </ul>
   </nav>
 
-  <h1>Snippet {{model.snippet_id}}</h1>
-
-  <h2>From the category "<strong>{{model.category_name}}</strong>"</h2>
-  <pre>{{model.full_string}}</pre>
+  <div class="snippet-view">
+    <div class="snippet-view-header">
+      <span class="snippet-number">#{{model.snippet_id}}</span>
+      -
+      <span class="snippet-category">{{model.category_name}}</span>
+    </div>
+    <pre>{{model.full_string}}</pre>
+  </div>
 
   {{#if model.scores.length}}
     <h1>User Scores:</h1>
