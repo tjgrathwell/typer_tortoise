@@ -1,7 +1,7 @@
 {{#view "prefs_popup_background"}}
   {{#view "prefs_popup_content"}}
     <h2>
-      {{if view.user view.user.name 'Guest'}}'s preferences
+      {{if controllers.session.user controllers.session.user.name 'Guest'}}'s preferences
     </h2>
     <ul>
       {{#each category in controllers.category_preferences}}

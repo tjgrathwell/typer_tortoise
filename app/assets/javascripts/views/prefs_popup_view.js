@@ -8,8 +8,6 @@ App.PrefsPopupBackgroundView = Em.View.extend({
 
 App.PrefsPopupContentView = Em.View.extend({
     classNames: ['blue-round', 'prefs-popup'],
-    // TODO: this doesn't work, make it work!
-    userBinding: Em.Binding.oneWay('controllers.session.user'),
 
     click: function (e) {
         e.stopPropagation();
