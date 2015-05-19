@@ -1,6 +1,10 @@
 App.SnippetsIndexController = Ember.Controller.extend({
   needs: ['session'],
 
+  init: function () {
+    this.set('category_id', App.storage.get('typer_tortoise.filtered_category_id'));
+  },
+
   actionsCount: function () {
     return (this.get('controllers.session.user.admin')) ? 4 : 2;
   }.property('controllers.session.user'),
@@ -20,6 +24,10 @@ App.SnippetsIndexController = Ember.Controller.extend({
       return snippet.category_id == this.get('category_id');
     }).bind(this));
   }.property('model.snippets', 'category_id'),
+
+  saveCategoryId: function () {
+    App.storage.set('typer_tortoise.filtered_category_id', this.get('category_id'));
+  }.observes('category_id'),
 
   actions: {
     destroy: function(snippet) {
