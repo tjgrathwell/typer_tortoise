@@ -9,7 +9,13 @@ body {
 }
 
 h1 {
-  font-size: 200%;
+  font-size: 4rem;
+  text-decoration: underline;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 3rem;
 }
 
 .blue-round {
@@ -81,10 +87,10 @@ h1 {
   display: inline-block;
 
   background-color: rgba(173, 216, 230, .75);
-}
 
-.stat-counter small {
-  font-size: 25%;
+  small {
+    font-size: 25%;
+  }
 }
 
 header {
@@ -94,7 +100,7 @@ header {
 header > div,
 header > nav {
   display: inline-block;
-  margin: 0px;
+  margin: 0;
   margin-right: 10px;
 
   vertical-align: top;
@@ -111,14 +117,13 @@ header > nav {
 header h1 {
   font-size: 300%;
   font-weight: bold;
-}
-
-header h1 a:link,
-header h1 a:visited,
-header h1 a:hover,
-header h1 a:active {
-  color: #333;
+  margin-bottom: 0;
   text-decoration: none;
+
+  a:link, a:visited, a:hover, a:active {
+    color: #333;
+    text-decoration: none;
+  }
 }
 
 nav {
@@ -126,15 +131,16 @@ nav {
   padding: 5px;
 
   margin-bottom: 20px;
-}
 
-nav ul.nav-options li {
-  display: inline;
-  margin-left: 10px;
-}
-
-nav ul.nav-options li:first-child {
-  margin-left: 0px;
+  ul.nav-options {
+    li {
+      display: inline;
+      margin-left: 10px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
 }
 
 .user-scores {
@@ -183,10 +189,10 @@ textarea.snippet-editor {
   position: fixed;
   z-index: 50;
   background-color: rgba(100, 100, 100, .8);
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .prefs-link {
@@ -238,6 +244,10 @@ select.form-control {
 }
 
 .snippet-view {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
   .snippet-view-header {
     border-bottom: 1px solid #ccc;
   }
@@ -246,10 +256,6 @@ select.form-control {
     font-size: 24px;
     padding: 0 10px;
   }
-
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 
   pre {
     background-color: transparent;
