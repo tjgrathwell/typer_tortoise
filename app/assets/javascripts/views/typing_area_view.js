@@ -9,13 +9,13 @@ App.TypingAreaView = Em.View.extend({
 
     keyDown: function (e) {
         App.setPreventDefaultForKey(e);
-        if (e.which == App.KEY_BACKSPACE) {
+        if (e.which == App.keyCodes.BACKSPACE) {
             this.text.backUp();
         }
-        if (e.which == App.KEY_TAB) {
+        if (e.which == App.keyCodes.TAB) {
             this.text.tabPressed();
         }
-        if (e.which == App.KEY_SPACE) {
+        if (e.which == App.keyCodes.SPACE) {
             this.text.typeOn(' ');
         }
     },
