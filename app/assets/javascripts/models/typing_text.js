@@ -57,9 +57,26 @@ App.models.TypingText = Em.Object.extend({
     //
     // rendering bookkeeping
     //
-    hasMistakes: function () {
-        return (this.mistakes.length > 0);
-    }.property('mistakes.length'),
+    renderedText: function () {
+      function annotateText(text, klass) {
+        return "<span class='" + klass + "'>" + text + "</span>";
+      }
+
+      function escape (text) {
+        return Ember.Handlebars.Utils.escapeExpression(text);
+      }
+
+      var cursorClasses = ['type-cursor'];
+      if (this.mistakes.length > 0) {
+        cursorClasses.push('has-mistakes');
+      }
+      var parts = [
+        annotateText(escape(this.get('beforeCursor')), 'before-cursor'),
+        annotateText(this.get('renderedCursor'), cursorClasses.join(' ')),
+        annotateText(escape(this.get('afterCursor')), 'after-cursor')
+      ];
+      return parts.join('');
+    }.property('cursor_pos', 'mistakes.length'),
 
     beforeCursor: function () {
         return this.full_string.substr(0, this.cursor_pos);

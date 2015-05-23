@@ -86,10 +86,11 @@ describe("typing on a snippet", function() {
   };
 
   var validate_snippet_properties = function (model, prop_hash) {
-    expect(model.get('hasMistakes' )).toEqual(prop_hash.hasMistakes);
-    expect(model.get('beforeCursor')).toEqual(prop_hash.beforeCursor);
-    expect(model.get('atCursor')    ).toEqual(prop_hash.atCursor);
-    expect(model.get('afterCursor' )).toEqual(prop_hash.afterCursor);
+    var $renderedText = $('<div>' + model.get('renderedText') + '</div>');
+    expect($renderedText.find('.has-mistakes').length > 0).toEqual(prop_hash.hasMistakes);
+    expect($renderedText.find('.before-cursor').html()).toEqual(prop_hash.beforeCursor);
+    expect($renderedText.find('.type-cursor').html()).toEqual(prop_hash.atCursor);
+    expect($renderedText.find('.after-cursor').html()).toEqual(prop_hash.afterCursor);
   };
 
   it("splits the snippet into many parts for the view to render", function() {
@@ -105,10 +106,10 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet',
-      atCursor     : ' ',
+      atCursor     : '&nbsp;',
       afterCursor  : 'has\n  more than one line'
     });
-    expect(text_model.get('renderedCursor')).toEqual("&nbsp;");
+    //expect(text_model.get('renderedCursor')).toEqual("&nbsp;");
 
     type_on_snippet(text_model, 'zz');
 
@@ -124,7 +125,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet',
-      atCursor     : ' ',
+      atCursor     : '&nbsp;',
       afterCursor  : 'has\n  more than one line',
     });
 
@@ -144,10 +145,10 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet has',
-      atCursor     : "\n",
+      atCursor     : "\u21b5",
       afterCursor  : '\n  more than one line',
     });
-    expect(text_model.get('renderedCursor')).toEqual("\u21b5");
+    //expect(text_model.get('renderedCursor')).toEqual("\u21b5");
 
     // typo exactly on the newline character
     type_on_snippet(text_model, 'Z');
@@ -174,7 +175,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet has\n',
-      atCursor     : ' ',
+      atCursor     : '&nbsp;',
       afterCursor  : ' two lines\n  that are indented\nand then another that is not',
     });
 
@@ -192,7 +193,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : true,
       beforeCursor : 'this snippet has\n  two lines\n  that are indented\n',
-      atCursor     : '  ',
+      atCursor     : '&nbsp;&nbsp;',
       afterCursor  : 'd then another that is not',
     });
 
@@ -220,7 +221,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : '  first line indented\n  ',
-      atCursor     : "\n",
+      atCursor     : "↵",
       afterCursor  : '\n  third line indented',
     });
 
@@ -230,6 +231,24 @@ describe("typing on a snippet", function() {
       beforeCursor : '  first line indented\n  \n  ',
       atCursor     : "t",
       afterCursor  : 'hird line indented',
+    });
+  });
+
+  it("escapes snippet text", function () {
+    var snippet_text = lines(
+      '<div>first</div>',
+      '<p>second</p>',
+      '<span>third</span>'
+    );
+
+    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
+    type_on_snippet(text_model, "<div>first</div>\n");
+
+    validate_snippet_properties(text_model, {
+      hasMistakes  : false,
+      beforeCursor : '&lt;div&gt;first&lt;/div&gt;\n',
+      atCursor     : '&lt;',
+      afterCursor  : 'p&gt;second&lt;/p&gt;\n&lt;span&gt;third&lt;/span&gt;',
     });
   });
 });

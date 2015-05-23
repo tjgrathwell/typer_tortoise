@@ -1,5 +1,4 @@
-<!-- white space becomes super-significant in this area -->
-<div class="type-panel" tabindex="0"><span class="before-cursor">{{view.text.beforeCursor}}</span><span class="type-cursor {{if view.text.hasMistakes 'has-mistakes'}}">{{{view.text.renderedCursor}}}</span>{{view.text.afterCursor}}</div>
+<div class="type-panel" tabindex="0">{{{view.text.renderedText}}}</div>
 
 {{#view "focus_nag"}}
   <div class="focus-nag-inner">Click the text to start typing!</div>
