@@ -35,7 +35,7 @@ describe("indentation guessing", function() {
 
       var model = App.models.TypingText.create({full_string: snippet, snippet_id: 1});
 
-      expect(model._tabSize()).toEqual(indent);
+      expect(model.tabSize()).toEqual(indent);
     });
   });
 });
@@ -109,7 +109,6 @@ describe("typing on a snippet", function() {
       atCursor     : '&nbsp;',
       afterCursor  : 'has\n  more than one line'
     });
-    //expect(text_model.get('renderedCursor')).toEqual("&nbsp;");
 
     type_on_snippet(text_model, 'zz');
 
@@ -148,7 +147,6 @@ describe("typing on a snippet", function() {
       atCursor     : "\u21b5",
       afterCursor  : '\n  more than one line',
     });
-    //expect(text_model.get('renderedCursor')).toEqual("\u21b5");
 
     // typo exactly on the newline character
     type_on_snippet(text_model, 'Z');
@@ -249,6 +247,81 @@ describe("typing on a snippet", function() {
       beforeCursor : '&lt;div&gt;first&lt;/div&gt;\n',
       atCursor     : '&lt;',
       afterCursor  : 'p&gt;second&lt;/p&gt;\n&lt;span&gt;third&lt;/span&gt;',
+    });
+  });
+
+  describe("skipping comments", function () {
+    it("skips leading comments on snippet initialize", function () {
+      var snippet_text = lines(
+      '# hello',
+      '# this is some stuff',
+      'a = b + 1'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+
+      validate_snippet_properties(text_model, {
+        hasMistakes  : false,
+        beforeCursor : '# hello\n# this is some stuff\n',
+        atCursor     : 'a',
+        afterCursor  : ' = b + 1',
+      });
+    });
+
+    it("skips inline comments while typing", function () {
+      var snippet_text = lines(
+      'a = b + 1 # math',
+      'puts a'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+
+      // TODO: probably the trailing space should not be required
+      type_on_snippet(text_model, "a = b + 1 ");
+
+      validate_snippet_properties(text_model, {
+        hasMistakes  : false,
+        beforeCursor : 'a = b + 1 # math\n',
+        atCursor     : 'p',
+        afterCursor  : 'uts a',
+      });
+    });
+
+    it("preserves indent after skipping comments", function () {
+      var snippet_text = lines(
+      'def foo',
+      '  a = 1',
+      '  # this adds more',
+      '  a += 1',
+      'end'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+      type_on_snippet(text_model, "def foo\n  a = 1\n");
+
+      validate_snippet_properties(text_model, {
+        hasMistakes  : false,
+        beforeCursor : 'def foo\n  a = 1\n  # this adds more\n  ',
+        atCursor     : 'a',
+        afterCursor  : ' += 1\nend',
+      });
+    });
+
+    it("does not auto-indent when the comment character is in a string", function () {
+      var snippet_text = lines(
+      '"round #{n}"',
+      'puts x'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+      type_on_snippet(text_model, '"round ');
+
+      validate_snippet_properties(text_model, {
+        hasMistakes  : false,
+        beforeCursor : '"round ',
+        atCursor     : '#',
+        afterCursor  : '{n}"\nputs x',
+      });
     });
   });
 });

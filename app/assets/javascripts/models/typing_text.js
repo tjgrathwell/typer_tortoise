@@ -17,7 +17,8 @@ App.models.TypingText = Em.Object.extend({
         this.set('finished', false);
 
         this._normalizeSnippet();
-        this.set('_tab_size', this._tabSize());
+        this._computeCommentRanges();
+        this._skipComments();
     },
 
     _normalizeSnippet: function () {
@@ -39,7 +40,33 @@ App.models.TypingText = Em.Object.extend({
         this.set('full_string', normalized.join('\n'));
     },
 
-    _tabSize: function () {
+    _computeCommentRanges: function () {
+        if (this.category_name == 'ruby') {
+            var highlighted = hljs.highlight(this.category_name, this.full_string).value;
+            var $highlighted = $('<div>' + highlighted + '</div>');
+            var TEXT_NODE = 3;
+            var index = 0;
+            var commentRanges = [];
+            $highlighted.contents().each(function (ix, node) {
+                if (node.nodeType == TEXT_NODE) {
+                    index += node.length;
+                    return;
+                }
+                var innerTextLength = node.innerText.length;
+                if (node.classList == 'hljs-comment') {
+                    commentRanges.push([index, index + innerTextLength]);
+                }
+                index += innerTextLength;
+            });
+            this.set('comment_ranges', commentRanges);
+        }
+    },
+
+    tabSize: function () {
+        if (this.get('_tab_size')) {
+            return this.get('_tab_size');
+        }
+
         var indents = [];
 
         // guess the indent size to be however deeply indented the first indented line is
@@ -51,6 +78,7 @@ App.models.TypingText = Em.Object.extend({
             }
         });
 
+        this.set('_tab_size', indents[0]);
         return indents[0];
     },
 
@@ -187,6 +215,25 @@ App.models.TypingText = Em.Object.extend({
         App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
     },
 
+    _skipComments: function () {
+        // TODO: backspacing over comments
+        // TODO: mistakes on comments
+        // TODO: WPM compensating for comments
+
+        var skipped = false;
+
+        if (this.comment_ranges) {
+            for (var i = 0; i < this.comment_ranges.length; i++) {
+                var commentRange = this.comment_ranges[i];
+                if (this.cursor_pos == commentRange[0]) {
+                    this.set('cursor_pos', commentRange[1] + 1);
+                    skipped = true;
+                }
+            }
+        }
+        return skipped;
+    },
+
     //
     // user actions
     //
@@ -200,7 +247,8 @@ App.models.TypingText = Em.Object.extend({
         var no_mistakes = this.mistakes.length == 0;
         if (no_mistakes && cursor_matches) {
             this.set('cursor_pos', this.cursor_pos + 1);
-            if (chr === '\n') {
+            var skipped = this._skipComments();
+            if (skipped || (chr === '\n')) {
                 this._autoIndent();
             }
         } else {
@@ -213,7 +261,7 @@ App.models.TypingText = Em.Object.extend({
     },
 
     tabPressed: function () {
-        App.util.repeat(function () { this.typeOn(' ') }, this.get('_tab_size'), this);
+        App.util.repeat(function () { this.typeOn(' ') }, this.tabSize(), this);
     },
 
     backUp: function () {
@@ -225,8 +273,8 @@ App.models.TypingText = Em.Object.extend({
         var current_line = lines[lines.length-1];
         // if there's at least one tab worth of trailing whitespace on this line,
         //   'tab' backwards
-        if (App.util.trailingWhitespaceCount(current_line) >= this.get('_tab_size')) {
-            App.util.repeat(function () { this._backUp() }, this.get('_tab_size'), this);
+        if (App.util.trailingWhitespaceCount(current_line) >= this.tabSize()) {
+            App.util.repeat(function () { this._backUp() }, this.tabSize(), this);
         } else {
             this._backUp();
         }

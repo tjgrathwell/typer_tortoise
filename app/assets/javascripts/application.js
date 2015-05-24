@@ -8,6 +8,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require ember
+//= require highlightjs
 //= require test_config
 //= require typer_tortoise
 //= require util

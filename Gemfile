@@ -41,4 +41,5 @@ end
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-es5-shim'
+  gem 'rails-assets-highlightjs'
 end
