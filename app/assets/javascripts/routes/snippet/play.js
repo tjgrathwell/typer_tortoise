@@ -4,7 +4,7 @@ App.SnippetPlayRoute = Ember.Route.extend({
   },
 
   actions: {
-    willTransition: function() {
+    willTransition: function () {
       return this.controllerFor('typing_area').clearSnippet();
     }
   }

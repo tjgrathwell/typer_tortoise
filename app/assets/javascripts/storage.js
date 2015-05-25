@@ -4,7 +4,7 @@ App.storage = {
       localStorage.setItem('foo', 'bar');
       localStorage.removeItem('foo');
       return true;
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }(),

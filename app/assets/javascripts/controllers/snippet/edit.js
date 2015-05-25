@@ -1,12 +1,12 @@
 App.SnippetEditController = Ember.Controller.extend({
   needs: ['session', 'categories'],
 
-  snippetInvalid: function() {
+  snippetInvalid: function () {
     return !this.get('model.full_string') || !this.get('model.category_id');
   }.property('model.full_string', 'model.category_id'),
 
   actions: {
-    submitAction : function(){
+    submitAction: function () {
       Ember.$.ajax({
         type: 'PUT',
         url: '/snippets/' + this.get('model.snippet_id') + '.json',

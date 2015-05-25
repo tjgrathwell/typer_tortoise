@@ -30,7 +30,7 @@ App.SnippetsIndexController = Ember.Controller.extend({
   }.observes('category_id'),
 
   actions: {
-    destroy: function(snippet) {
+    destroy: function (snippet) {
       var answer = confirm('Are you sure?');
       if (answer) {
         Ember.$.ajax({

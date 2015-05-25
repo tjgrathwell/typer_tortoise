@@ -1,12 +1,12 @@
 App.SnippetsNewController = Ember.Controller.extend({
   needs: ['categories'],
 
-  snippetInvalid: function() {
+  snippetInvalid: function () {
     return !this.get('model.full_text') || !this.get('model.category_id');
   }.property('model.full_text', 'model.category_id'),
 
   actions: {
-    submitAction : function(){
+    submitAction: function () {
       Ember.$.ajax({
         type: 'POST',
         url: '/snippets.json',

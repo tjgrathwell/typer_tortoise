@@ -17,7 +17,7 @@ App.ApplicationRoute = Ember.Route.extend({
       }).bind(this));
     },
 
-    closeModal: function() {
+    closeModal: function () {
       return this.disconnectOutlet({
         outlet: 'modal',
         parentView: 'application'
