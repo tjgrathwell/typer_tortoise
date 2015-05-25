@@ -276,8 +276,7 @@ describe("typing on a snippet", function() {
 
       var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
 
-      // TODO: probably the trailing space should not be required
-      type_on_snippet(text_model, "a = b + 1 ");
+      type_on_snippet(text_model, "a = b + 1");
 
       validate_snippet_properties(text_model, {
         hasMistakes  : false,

@@ -47,17 +47,21 @@ App.models.TypingText = Em.Object.extend({
             var TEXT_NODE = 3;
             var index = 0;
             var commentRanges = [];
-            $highlighted.contents().each(function (ix, node) {
+            $highlighted.contents().each((function (ix, node) {
                 if (node.nodeType == TEXT_NODE) {
                     index += node.length;
                     return;
                 }
                 var innerTextLength = node.innerText.length;
                 if (node.classList == 'hljs-comment') {
-                    commentRanges.push([index, index + innerTextLength]);
+                    var indexIncludingWhitespace = index;
+                    while (this.full_string[indexIncludingWhitespace - 1] == ' ') {
+                        indexIncludingWhitespace = indexIncludingWhitespace - 1;
+                    }
+                    commentRanges.push([indexIncludingWhitespace, index + innerTextLength]);
                 }
                 index += innerTextLength;
-            });
+            }).bind(this));
             this.set('comment_ranges', commentRanges);
         }
     },
