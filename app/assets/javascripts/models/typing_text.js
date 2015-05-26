@@ -220,8 +220,6 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _skipComments: function () {
-    // TODO: backspacing over comments
-    // TODO: mistakes on comments
     // TODO: WPM compensating for comments
 
     var skipped = false;
@@ -236,6 +234,18 @@ App.models.TypingText = Em.Object.extend({
       }
     }
     return skipped;
+  },
+
+  _cursorInComment: function (cursorPos) {
+    if (!this.comment_ranges) return;
+
+    for (var i = 0; i < this.comment_ranges.length; i++) {
+      var commentRange = this.comment_ranges[i];
+      if (commentRange[0] <= cursorPos && commentRange[1] >= cursorPos) {
+        return true;
+      }
+    }
+    return false;
   },
 
   //
@@ -273,11 +283,14 @@ App.models.TypingText = Em.Object.extend({
 
     if (this.cursor_pos === 0 && this.mistakes.length === 0) return;
 
+    if (this._cursorInComment(this.cursor_pos - 1)) return;
+
     var lines = (this.get('beforeCursor') + this.get('atCursor')).split('\n');
     var current_line = lines[lines.length - 1];
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
     if (App.util.trailingWhitespaceCount(current_line) >= this.tabSize()) {
+      // TODO: only do the fast backspacing if the space is a multiple of the tab size
       App.util.repeat(function () { this._backUp() }, this.tabSize(), this);
     } else {
       this._backUp();

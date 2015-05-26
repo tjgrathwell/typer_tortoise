@@ -87,10 +87,18 @@ describe("typing on a snippet", function() {
 
   var validate_snippet_properties = function (model, prop_hash) {
     var $renderedText = $('<div>' + model.get('renderedText') + '</div>');
-    expect($renderedText.find('.has-mistakes').length > 0).toEqual(prop_hash.hasMistakes);
-    expect($renderedText.find('.before-cursor').html()).toEqual(prop_hash.beforeCursor);
-    expect($renderedText.find('.type-cursor').html()).toEqual(prop_hash.atCursor);
-    expect($renderedText.find('.after-cursor').html()).toEqual(prop_hash.afterCursor);
+    if (prop_hash.hasMistakes) {
+      expect($renderedText.find('.has-mistakes').length > 0).toEqual(prop_hash.hasMistakes);
+    }
+    if (prop_hash.beforeCursor) {
+      expect($renderedText.find('.before-cursor').html()).toEqual(prop_hash.beforeCursor);
+    }
+    if (prop_hash.atCursor) {
+      expect($renderedText.find('.type-cursor').html()).toEqual(prop_hash.atCursor);
+    }
+    if (prop_hash.afterCursor) {
+      expect($renderedText.find('.after-cursor').html()).toEqual(prop_hash.afterCursor);
+    }
   };
 
   it("splits the snippet into many parts for the view to render", function() {
@@ -140,7 +148,7 @@ describe("typing on a snippet", function() {
 
     repeat(function () { text_model.backUp() }, 9);
     type_on_snippet(text_model, ' has');
-    
+
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
       beforeCursor : 'this snippet has',
@@ -166,7 +174,7 @@ describe("typing on a snippet", function() {
       '  that are indented',
       'and then another that is not'
     );
-    
+
     var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "this snippet has\n");
 
@@ -212,7 +220,7 @@ describe("typing on a snippet", function() {
       '', // second line empty
       '  third line indented'
     );
-    
+
     var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
     type_on_snippet(text_model, "  first line indented\n");
 
@@ -306,7 +314,7 @@ describe("typing on a snippet", function() {
       });
     });
 
-    it("does not auto-indent when the comment character is in a string", function () {
+    it("does not skip comments when the comment character is in a string", function () {
       var snippet_text = lines(
       '"round #{n}"',
       'puts x'
@@ -321,6 +329,26 @@ describe("typing on a snippet", function() {
         atCursor     : '#',
         afterCursor  : '{n}"\nputs x',
       });
+    });
+
+    it("does not allow backspacing over skipped comments", function () {
+      var snippet_text = lines(
+      '# cool code here',
+      'a = 2 + 2'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+      type_on_snippet(text_model, 'a');
+
+      validate_snippet_properties(text_model, {beforeCursor : '# cool code here\na'});
+
+      text_model.backUp();
+
+      validate_snippet_properties(text_model, {beforeCursor : '# cool code here\n'});
+
+      text_model.backUp();
+
+      validate_snippet_properties(text_model, {beforeCursor: '# cool code here\n'});
     });
   });
 });
