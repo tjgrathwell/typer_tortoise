@@ -17,8 +17,10 @@ App.models.TypingText = Em.Object.extend({
     this.set('finished', false);
 
     this._normalizeSnippet();
-    this._computeCommentRanges();
-    this._skipComments();
+    if (this._canParseComments()) {
+      this._computeCommentRanges();
+      this._skipComments();
+    }
   },
 
   _normalizeSnippet: function () {
@@ -40,30 +42,33 @@ App.models.TypingText = Em.Object.extend({
     this.set('full_string', normalized.join('\n'));
   },
 
+  _canParseComments: function () {
+    var commentableCategories = ['ruby', 'javascript', 'python', 'c', 'perl', 'php'];
+    return commentableCategories.indexOf(this.category_name) != -1;
+  },
+
   _computeCommentRanges: function () {
-    if (this.category_name == 'ruby') {
-      var highlighted = hljs.highlight(this.category_name, this.full_string).value;
-      var $highlighted = $('<div>' + highlighted + '</div>');
-      var TEXT_NODE = 3;
-      var index = 0;
-      var commentRanges = [];
-      $highlighted.contents().each((function (ix, node) {
-        if (node.nodeType == TEXT_NODE) {
-          index += node.length;
-          return;
+    var highlighted = hljs.highlight(this.category_name, this.full_string).value;
+    var $highlighted = $('<div>' + highlighted + '</div>');
+    var TEXT_NODE = 3;
+    var index = 0;
+    var commentRanges = [];
+    $highlighted.contents().each((function (ix, node) {
+      if (node.nodeType == TEXT_NODE) {
+        index += node.length;
+        return;
+      }
+      var innerTextLength = node.innerText.length;
+      if (node.classList == 'hljs-comment') {
+        var indexIncludingWhitespace = index;
+        while (this.full_string[indexIncludingWhitespace - 1] == ' ') {
+          indexIncludingWhitespace = indexIncludingWhitespace - 1;
         }
-        var innerTextLength = node.innerText.length;
-        if (node.classList == 'hljs-comment') {
-          var indexIncludingWhitespace = index;
-          while (this.full_string[indexIncludingWhitespace - 1] == ' ') {
-            indexIncludingWhitespace = indexIncludingWhitespace - 1;
-          }
-          commentRanges.push([indexIncludingWhitespace, index + innerTextLength]);
-        }
-        index += innerTextLength;
-      }).bind(this));
-      this.set('comment_ranges', commentRanges);
-    }
+        commentRanges.push([indexIncludingWhitespace, index + innerTextLength]);
+      }
+      index += innerTextLength;
+    }).bind(this));
+    this.set('comment_ranges', commentRanges);
   },
 
   tabSize: function () {
@@ -162,6 +167,20 @@ App.models.TypingText = Em.Object.extend({
   //
   // synthesized typing quality data
   //
+  realTypedCharacters: function () {
+    var characters = this.cursor_pos;
+    var commentRanges = this.get('comment_ranges') || [];
+    for (var i = 0; i < commentRanges.length; i++) {
+      var commentRange = commentRanges[i];
+      if (this.cursor_pos < commentRange[0]) {
+        break;
+      }
+
+      characters -= (commentRange[1] - commentRange[0]);
+    }
+    return characters;
+  },
+
   wpm: function () {
     if (this.start_time === null) { return 0; }
 
@@ -172,21 +191,22 @@ App.models.TypingText = Em.Object.extend({
       return 0;
     }
 
-    var wpm_raw = (this.cursor_pos / 5.0) / minutes;
+    var wpm_raw = (this.realTypedCharacters() / 5.0) / minutes;
 
     return wpm_raw.toFixed();
   }.property('wpm_ticks'),
 
   accuracy: function () {
-    if (this.cursor_pos === 0) {
+    var realTypedCharacters = this.realTypedCharacters();
+    if (realTypedCharacters === 0) {
       return 100;
     }
 
-    if (this.cursor_pos < this.total_mistakes) {
+    if (realTypedCharacters < this.total_mistakes) {
       return 0;
     }
 
-    var raw_acc = (this.cursor_pos - this.total_mistakes) / this.cursor_pos;
+    var raw_acc = (realTypedCharacters - this.total_mistakes) / realTypedCharacters;
     return (raw_acc * 100).toFixed(0);
   }.property('cursor_pos', 'total_mistakes'),
 
@@ -215,13 +235,12 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _autoIndent: function () {
+    // TODO: Don't consider unhelpful autoindenting as a 'mistake'
     var spaces = this._previousLineIndent();
     App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
   },
 
   _skipComments: function () {
-    // TODO: WPM compensating for comments
-
     var skipped = false;
 
     if (this.comment_ranges) {
