@@ -270,7 +270,7 @@ describe("typing on a snippet", function() {
 
       validate_snippet_properties(text_model, {
         hasMistakes  : false,
-        beforeCursor : '# hello\n# this is some stuff\n',
+        beforeCursor : '<span class="comment"># hello</span>\n<span class="comment"># this is some stuff</span>\n',
         atCursor     : 'a',
         afterCursor  : ' = b + 1',
       });
@@ -288,7 +288,7 @@ describe("typing on a snippet", function() {
 
       validate_snippet_properties(text_model, {
         hasMistakes  : false,
-        beforeCursor : 'a = b + 1 # math\n',
+        beforeCursor : 'a = b + 1<span class="comment"> # math</span>\n',
         atCursor     : 'p',
         afterCursor  : 'uts a',
       });
@@ -308,7 +308,7 @@ describe("typing on a snippet", function() {
 
       validate_snippet_properties(text_model, {
         hasMistakes  : false,
-        beforeCursor : 'def foo\n  a = 1\n  # this adds more\n  ',
+        beforeCursor : 'def foo\n  a = 1\n<span class="comment">  # this adds more</span>\n  ',
         atCursor     : 'a',
         afterCursor  : ' += 1\nend',
       });
@@ -340,15 +340,15 @@ describe("typing on a snippet", function() {
       var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
       type_on_snippet(text_model, 'a');
 
-      validate_snippet_properties(text_model, {beforeCursor : '# cool code here\na'});
+      validate_snippet_properties(text_model, {beforeCursor : '<span class="comment"># cool code here</span>\na'});
 
       text_model.backUp();
 
-      validate_snippet_properties(text_model, {beforeCursor : '# cool code here\n'});
+      validate_snippet_properties(text_model, {beforeCursor : '<span class="comment"># cool code here</span>\n'});
 
       text_model.backUp();
 
-      validate_snippet_properties(text_model, {beforeCursor: '# cool code here\n'});
+      validate_snippet_properties(text_model, {beforeCursor: '<span class="comment"># cool code here</span>\n'});
     });
   });
 });

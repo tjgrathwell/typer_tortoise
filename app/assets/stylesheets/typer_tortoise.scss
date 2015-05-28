@@ -66,6 +66,12 @@ h2 {
       text-decoration: underline;
     }
   }
+
+  .before-cursor, .after-cursor, .type-cursor {
+    .comment {
+      color: #BC9458;
+    }
+  }
 }
 
 .full-score-display {

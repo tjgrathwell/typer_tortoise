@@ -99,24 +99,47 @@ App.models.TypingText = Em.Object.extend({
       return "<span class='" + klass + "'>" + text + "</span>";
     }
 
-    function escape(text) {
-      return Ember.Handlebars.Utils.escapeExpression(text);
-    }
-
     var cursorClasses = ['type-cursor'];
     if (this.mistakes.length > 0) {
       cursorClasses.push('has-mistakes');
     }
     var parts = [
-      annotateText(escape(this.get('beforeCursor')), 'before-cursor'),
+      annotateText(this.get('beforeCursor'), 'before-cursor'),
       annotateText(this.get('renderedCursor'), cursorClasses.join(' ')),
-      annotateText(escape(this.get('afterCursor')), 'after-cursor')
+      annotateText(this.get('afterCursor'), 'after-cursor')
     ];
     return parts.join('');
   }.property('cursor_pos', 'mistakes.length'),
 
+  _decoratedSubstring: function (cursorStart, cursorEnd) {
+    function escape(text) {
+      return Ember.Handlebars.Utils.escapeExpression(text)
+    }
+
+    var result = [];
+    var index = cursorStart;
+    var commentRanges = (this.comment_ranges || []);
+    for (var i = 0; i < commentRanges.length; i++) {
+      var commentRange = commentRanges[i];
+      if (commentRange[0] > cursorEnd) {
+        break;
+      }
+      if (commentRange[1] < cursorStart) {
+        continue;
+      }
+
+      result.push(escape(this.full_string.substr(index, commentRange[0] - index)));
+      result.push('<span class="comment">');
+      result.push(escape(this.full_string.substr(commentRange[0], commentRange[1] - commentRange[0])));
+      result.push('</span>');
+      index = commentRange[1];
+    }
+    result.push(escape(this.full_string.substr(index, cursorEnd - index)));
+    return result.join('');
+  },
+
   beforeCursor: function () {
-    return this.full_string.substr(0, this.cursor_pos);
+    return this._decoratedSubstring(0, this.cursor_pos);
   }.property('cursor_pos'),
 
   atCursor: function () {
@@ -161,7 +184,7 @@ App.models.TypingText = Em.Object.extend({
       //   afterCursor section, so we leave the cursor alone.
       adjustedCursor += 1;
     }
-    return this.full_string.substr(adjustedCursor);
+    return this._decoratedSubstring(adjustedCursor, this.full_string.length);
   }.property('cursor_pos', 'mistakes.length'),
 
   //
@@ -227,7 +250,7 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _previousLineIndent: function () {
-    var lines = this.get('beforeCursor').split('\n');
+    var lines = this.full_string.substr(0, this.cursor_pos).split('\n');
     if (lines.length < 2) return;
 
     var prev_line = lines[lines.length - 2];
