@@ -58,15 +58,15 @@ App.models.TypingText = Em.Object.extend({
         index += node.length;
         return;
       }
-      var innerTextLength = node.innerText.length;
+      var textLength = node.textContent.length;
       if (node.classList == 'hljs-comment') {
         var indexIncludingWhitespace = index;
         while (this.full_string[indexIncludingWhitespace - 1] == ' ') {
           indexIncludingWhitespace = indexIncludingWhitespace - 1;
         }
-        commentRanges.push([indexIncludingWhitespace, index + innerTextLength]);
+        commentRanges.push([indexIncludingWhitespace, index + textLength]);
       }
-      index += innerTextLength;
+      index += textLength;
     }).bind(this));
     this.set('comment_ranges', commentRanges);
   },
