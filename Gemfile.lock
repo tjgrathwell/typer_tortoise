@@ -40,7 +40,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
-    autoprefixer-rails (5.1.11)
+    autoprefixer-rails (5.2.0)
       execjs
       json
     awesome_print (1.6.1)
@@ -63,11 +63,12 @@ GEM
     daemons (1.2.2)
     database_cleaner (1.4.1)
     diff-lcs (1.2.5)
-    ember-data-source (1.0.0.beta.17)
+    ember-data-source (1.0.0.beta.18)
       ember-source (~> 1.8)
-    ember-handlebars-template (0.1.5)
+    ember-handlebars-template (0.2.1)
       barber (>= 0.9.0)
-      sprockets (>= 2.1, < 3.1)
+      sprockets (>= 2.1, < 3.2)
+      tilt
     ember-rails (0.18.2)
       active_model_serializers
       ember-data-source (>= 1.0.0.beta.5)
@@ -105,9 +106,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mime-types (2.5)
+    mime-types (2.6.1)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     multi_json (1.11.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -121,7 +122,7 @@ GEM
     omniauth-twitter (1.2.0)
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
-    pg (0.18.1)
+    pg (0.18.2)
     phantomjs (1.9.8.0)
     poltergeist (1.6.0)
       capybara (~> 2.1)
@@ -185,7 +186,7 @@ GEM
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
     rubyzip (1.1.7)
-    sass (3.4.13)
+    sass (3.4.14)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -255,3 +256,6 @@ DEPENDENCIES
   sqlite3
   thin
   uglifier
+
+BUNDLED WITH
+   1.10.1
