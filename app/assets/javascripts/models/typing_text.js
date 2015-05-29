@@ -308,7 +308,9 @@ App.models.TypingText = Em.Object.extend({
         this._autoIndent();
       }
     } else {
-      this.set('total_mistakes', this.total_mistakes + 1);
+      if (chr != ' ') {
+        this.set('total_mistakes', this.total_mistakes + 1);
+      }
       this.mistakes.pushObject(chr);
     }
 
