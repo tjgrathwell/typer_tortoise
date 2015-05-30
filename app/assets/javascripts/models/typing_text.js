@@ -104,9 +104,9 @@ App.models.TypingText = Em.Object.extend({
       cursorClasses.push('has-mistakes');
     }
     var parts = [
-      annotateText(this.get('beforeCursor'), 'before-cursor'),
-      annotateText(this.get('renderedCursor'), cursorClasses.join(' ')),
-      annotateText(this.get('afterCursor'), 'after-cursor')
+      annotateText(this._beforeCursor(), 'before-cursor'),
+      annotateText(this._renderedCursor(), cursorClasses.join(' ')),
+      annotateText(this._afterCursor(), 'after-cursor')
     ];
     return parts.join('');
   }.property('cursor_pos', 'mistakes.length'),
@@ -138,20 +138,20 @@ App.models.TypingText = Em.Object.extend({
     return result.join('');
   },
 
-  beforeCursor: function () {
+  _beforeCursor: function () {
     return this._decoratedSubstring(0, this.cursor_pos);
-  }.property('cursor_pos'),
+  },
 
-  atCursor: function () {
+  _atCursor: function () {
     if (this.mistakes.length > 0) {
       return this.mistakes.join('');
     }
 
     return this.full_string.substr(this.cursor_pos, 1);
-  }.property('cursor_pos', 'mistakes.length'),
+  },
 
-  renderedCursor: function () {
-    var cursorStr = this.get('atCursor');
+  _renderedCursor: function () {
+    var cursorStr = this._atCursor();
     return cursorStr.split('').map(function (chr) {
       if (chr === '\n') {
         // show the "return key" symbol instead of just the (invisible) newline char
@@ -162,9 +162,9 @@ App.models.TypingText = Em.Object.extend({
       }
       return chr;
     }).join('');
-  }.property('atCursor'),
+  },
 
-  afterCursor: function () {
+  _afterCursor: function () {
     var adjustedCursor;
 
     // For mistakes to not clobber the newline character (which causes
@@ -185,7 +185,7 @@ App.models.TypingText = Em.Object.extend({
       adjustedCursor += 1;
     }
     return this._decoratedSubstring(adjustedCursor, this.full_string.length);
-  }.property('cursor_pos', 'mistakes.length'),
+  },
 
   //
   // synthesized typing quality data
@@ -258,7 +258,6 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _autoIndent: function () {
-    // TODO: Don't consider unhelpful autoindenting as a 'mistake'
     var spaces = this._previousLineIndent();
     App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
   },
@@ -329,7 +328,7 @@ App.models.TypingText = Em.Object.extend({
 
     if (this._cursorInComment(this.cursor_pos - 1)) return;
 
-    var lines = (this.get('beforeCursor') + this.get('atCursor')).split('\n');
+    var lines = (this._beforeCursor() + this._atCursor()).split('\n');
     var current_line = lines[lines.length - 1];
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
