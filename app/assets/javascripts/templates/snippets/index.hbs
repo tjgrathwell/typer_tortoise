@@ -34,7 +34,7 @@
             {{#each snippet in filteredSnippets}}
               <tr>
                 <td><strong>{{snippet.category_name}}</strong></td>
-                <td style="white-space: pre;">{{snippet.full_text}}</td>
+                <td class="snippet-preview">{{snippet.full_text}}</td>
                 <td>{{snippet.full_text.length}}</td>
                 <td>{{#link-to 'snippet.index' snippet.id}}Show{{/link-to}}</td>
                 <td>{{#link-to 'snippet.play' snippet.id}}Play{{/link-to}}</td>

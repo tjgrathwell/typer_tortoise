@@ -243,6 +243,11 @@ textarea.snippet-editor {
   .row-text {
     width: 50%;
   }
+  .snippet-preview {
+    white-space: pre;
+    font-family: $monospace-font-families;
+    overflow: hidden;
+  }
 }
 
 select.form-control {
