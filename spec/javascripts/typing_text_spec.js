@@ -258,6 +258,49 @@ describe("typing on a snippet", function() {
     });
   });
 
+  describe("backspacing", function () {
+    var text_model;
+    beforeEach(function () {
+      var snippet_text = lines(
+      'def foo',
+      '  def bar',
+      '    a = b + 1',
+      '  end',
+      'end'
+      );
+
+      text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+    });
+
+    describe("when the typed whitespace does not match indent level", function () {
+      beforeEach(function () {
+        type_on_snippet(text_model, "def foo\n  def bar\n "); // note 1 space
+      });
+
+      it("removes one space", function () {
+        text_model.backUp();
+
+        validate_snippet_properties(text_model, {
+          beforeCursor : 'def foo\n  def bar\n  '
+        });
+      });
+    });
+
+    describe("when the typed whitespace is a multiple of the indent level", function () {
+      beforeEach(function () {
+        type_on_snippet(text_model, "def foo\n  def bar\n  "); // note 2 spaces
+      });
+
+      it("removes one indent level worth of spaces", function () {
+        text_model.backUp();
+
+        validate_snippet_properties(text_model, {
+          beforeCursor : 'def foo\n  def bar\n  '
+        });
+      });
+    });
+  });
+
   describe("skipping comments", function () {
     it("skips leading comments on snippet initialize", function () {
       var snippet_text = lines(

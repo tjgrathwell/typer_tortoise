@@ -258,6 +258,8 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _autoIndent: function () {
+    // TODO: Show autoindents in a different symbol when they register as mistakes
+    // (like a '<-' or something)
     var spaces = this._previousLineIndent();
     App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
   },
@@ -328,12 +330,12 @@ App.models.TypingText = Em.Object.extend({
 
     if (this._cursorInComment(this.cursor_pos - 1)) return;
 
-    var lines = (this._beforeCursor() + this._atCursor()).split('\n');
+    var lines = (this._beforeCursor() + this.mistakes.join('')).split('\n');
     var current_line = lines[lines.length - 1];
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
-    if (App.util.trailingWhitespaceCount(current_line) >= this.tabSize()) {
-      // TODO: only do the fast backspacing if the space is a multiple of the tab size
+    var spaces = App.util.trailingWhitespaceCount(current_line);
+    if (spaces >= this.tabSize() && (spaces % this.tabSize()) == 0) {
       App.util.repeat(function () { this._backUp() }, this.tabSize(), this);
     } else {
       this._backUp();
