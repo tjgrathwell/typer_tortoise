@@ -199,7 +199,7 @@ describe("typing on a snippet", function() {
     validate_snippet_properties(text_model, {
       hasMistakes  : true,
       beforeCursor : 'this snippet has\n  two lines\n  that are indented\n',
-      atCursor     : '&nbsp;&nbsp;',
+      atCursor     : '←←',
       afterCursor  : 'd then another that is not',
     });
 

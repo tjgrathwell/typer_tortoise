@@ -144,7 +144,12 @@ App.models.TypingText = Em.Object.extend({
 
   _atCursor: function () {
     if (this.mistakes.length > 0) {
-      return this.mistakes.join('');
+      var mistakesString = this.mistakes.join('');
+      if (this._onlySpacesOnCurrentLine() && (mistakesString.length % this.tabSize()) == 0) {
+        return mistakesString.replace(/ /g, '&larr;');
+      } else {
+        return mistakesString;
+      }
     }
 
     return this.full_string.substr(this.cursor_pos, 1);
@@ -330,24 +335,31 @@ App.models.TypingText = Em.Object.extend({
 
     if (this._cursorInComment(this.cursor_pos - 1)) return;
 
-    var lines = (this._beforeCursor() + this.mistakes.join('')).split('\n');
-    var current_line = lines[lines.length - 1];
+    var repeatCount = 1;
+
+    var spaces = App.util.trailingWhitespaceCount(this._currentLine());
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
-    var spaces = App.util.trailingWhitespaceCount(current_line);
-    if (spaces >= this.tabSize() && (spaces % this.tabSize()) == 0) {
-      App.util.repeat(function () { this._backUp() }, this.tabSize(), this);
-    } else {
-      this._backUp();
+    if (this._onlySpacesOnCurrentLine() && (spaces % this.tabSize()) == 0) {
+      repeatCount = this.tabSize();
     }
+
+    App.util.repeat(function () {
+      if (this.mistakes.length > 0) {
+        this.mistakes.popObject();
+      } else {
+        this.set('cursor_pos', this.cursor_pos - 1);
+      }
+    }, repeatCount, this);
   },
 
-  _backUp: function () {
-    if (this.mistakes.length > 0) {
-      this.mistakes.popObject();
-    } else {
-      this.set('cursor_pos', this.cursor_pos - 1);
-    }
+  _currentLine: function () {
+    var lines = (this._beforeCursor() + this.mistakes.join('')).split('\n');
+    return lines[lines.length - 1];
+  },
+
+  _onlySpacesOnCurrentLine: function () {
+    return !!this._currentLine().match(/^ +$/);
   },
 
   //
