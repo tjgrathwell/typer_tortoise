@@ -17,8 +17,10 @@ App.models.TypingText = Em.Object.extend({
     this.set('finished', false);
 
     this._normalizeSnippet();
-    if (this._canParseComments()) {
-      this._computeCommentRanges();
+    var commentParser = App.services.CommentParser;
+    debugger;
+    if (commentParser.canParseComments(this.category_name)) {
+      this.set('comment_ranges', commentParser.computeCommentRanges(this.category_name, this.full_string));
       this._skipComments();
     }
   },
@@ -40,35 +42,6 @@ App.models.TypingText = Em.Object.extend({
     });
 
     this.set('full_string', normalized.join('\n'));
-  },
-
-  _canParseComments: function () {
-    var commentableCategories = ['ruby', 'javascript', 'python', 'c', 'perl', 'php'];
-    return commentableCategories.indexOf(this.category_name) != -1;
-  },
-
-  _computeCommentRanges: function () {
-    var highlighted = hljs.highlight(this.category_name, this.full_string).value;
-    var $highlighted = $('<div>' + highlighted + '</div>');
-    var TEXT_NODE = 3;
-    var index = 0;
-    var commentRanges = [];
-    $highlighted.contents().each((function (ix, node) {
-      if (node.nodeType == TEXT_NODE) {
-        index += node.length;
-        return;
-      }
-      var textLength = node.textContent.length;
-      if (node.classList == 'hljs-comment') {
-        var indexIncludingWhitespace = index;
-        while (this.full_string[indexIncludingWhitespace - 1] == ' ') {
-          indexIncludingWhitespace = indexIncludingWhitespace - 1;
-        }
-        commentRanges.push([indexIncludingWhitespace, index + textLength]);
-      }
-      index += textLength;
-    }).bind(this));
-    this.set('comment_ranges', commentRanges);
   },
 
   tabSize: function () {
@@ -263,8 +236,6 @@ App.models.TypingText = Em.Object.extend({
   },
 
   _autoIndent: function () {
-    // TODO: Show autoindents in a different symbol when they register as mistakes
-    // (like a '<-' or something)
     var spaces = this._previousLineIndent();
     App.util.repeat(function () { this.typeOn(' ') }, spaces, this);
   },
