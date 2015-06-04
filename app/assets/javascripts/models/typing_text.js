@@ -16,32 +16,13 @@ App.models.TypingText = Em.Object.extend({
 
     this.set('finished', false);
 
-    this._normalizeSnippet();
+    this.set('full_string', App.services.SnippetNormalizer.normalizeSnippet(this.full_string));
+
     var commentParser = App.services.CommentParser;
-    debugger;
     if (commentParser.canParseComments(this.category_name)) {
       this.set('comment_ranges', commentParser.computeCommentRanges(this.category_name, this.full_string));
       this._skipComments();
     }
-  },
-
-  _normalizeSnippet: function () {
-    var raw_lines = this.get('full_string').split('\n');
-
-    var prev_line_indent = 0;
-    var normalized = [];
-    raw_lines.forEach(function (line) {
-      if (line.match(/^\s*$/)) {
-        // force empty normalized to have as much whitespace as the previous line is indented
-        normalized.push(new Array(prev_line_indent + 1).join(' '));
-      } else {
-        // delete trailing whitespace on non-empty lines
-        normalized.push(line.replace(/\s+$/, ''));
-      }
-      prev_line_indent = App.util.leadingWhitespaceCount(line);
-    });
-
-    this.set('full_string', normalized.join('\n'));
   },
 
   tabSize: function () {

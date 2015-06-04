@@ -8,81 +8,38 @@ function lines () {
 
 describe("indentation guessing", function() {
   it("should be able to guess the level of indentation", function() {
-    var expectations = [];
+    function assertIndentationLevel (snippetText, level) {
+      var model = App.models.TypingText.create({full_string: snippetText, snippet_id: 1});
 
-    expectations.push([2, lines(
+      expect(model.tabSize()).toEqual(level);
+    }
+
+    assertIndentationLevel(lines(
       'this is a fake',
       '  code snippet',
       '  with indentation',
       '    that should be two spaces'
-    )]);
-    expectations.push([3, lines(
+    ), 2);
+    assertIndentationLevel(lines(
       'this is a crazy',
       '   code snippet',
       '      with three',
       '   line indentation'
-    )]);
-    expectations.push([4, lines(
+    ), 3);
+    assertIndentationLevel(lines(
       'four spaces',
       '    is an okay number',
       '    for a program',
       '        to have'
-    )]);
-
-    expectations.forEach(function (testitem) {
-      var indent  = testitem[0];
-      var snippet = testitem[1];
-
-      var model = App.models.TypingText.create({full_string: snippet, snippet_id: 1});
-
-      expect(model.tabSize()).toEqual(indent);
-    });
-  });
-});
-
-describe("snippet whitespace normalization", function () {
-  it("adds whitespace to empty lines to meet the expected indentation threshold", function () {
-    var snippet_text = lines(
-      'this snippet has',
-      '  an empty line',
-      '', // <= this one!
-      '  that will have two spaces on it'
-    );
-
-    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
-    expect(text_model.get('full_string')).toEqual(lines(
-      'this snippet has',
-      '  an empty line',
-      '  ',
-      '  that will have two spaces on it'
-    ));
-  });
-
-  it("removes trailing whitespace", function () {
-    var snippet_text = lines(
-      'who put the trailing   ',
-      '  whitespace in this? '
-    );
-
-    var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1});
-    expect(text_model.get('full_string')).toEqual(lines(
-      'who put the trailing',
-      '  whitespace in this?'
-    ));
+    ), 4);
   });
 });
 
 describe("typing on a snippet", function() {
-
   var type_on_snippet = function (model, str) {
     $.each(str.split(''), function (i, chr) {
       model.typeOn(chr);
     });
-  };
-  var repeat = function (func, times) {
-    for (var i = 0; i < times; i++) {
-      func();
-    }
   };
 
   var validate_snippet_properties = function (model, prop_hash) {
@@ -101,7 +58,7 @@ describe("typing on a snippet", function() {
     }
   };
 
-  it("splits the snippet into many parts for the view to render", function() {
+  it("wraps the areas before, in, and after the cursor in special tags", function() {
     var snippet_text = lines(
       'this snippet has',
       '  more than one line'
@@ -127,7 +84,7 @@ describe("typing on a snippet", function() {
       afterCursor  : 'as\n  more than one line',
     });
 
-    repeat(function () { text_model.backUp() }, 2);
+    App.util.repeat(function () { text_model.backUp() }, 2);
 
     validate_snippet_properties(text_model, {
       hasMistakes  : false,
@@ -146,7 +103,7 @@ describe("typing on a snippet", function() {
       afterCursor  : '\n  more than one line',
     });
 
-    repeat(function () { text_model.backUp() }, 9);
+    App.util.repeat(function () { text_model.backUp() }, 9);
     type_on_snippet(text_model, ' has');
 
     validate_snippet_properties(text_model, {
