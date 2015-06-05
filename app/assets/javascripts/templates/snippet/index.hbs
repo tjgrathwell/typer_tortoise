@@ -21,19 +21,20 @@
     <pre>{{model.full_string}}</pre>
   </div>
 
-  {{#if model.scores.length}}
-    <h1>User Scores:</h1>
-    <div class="blue-round user-scores">
-      <table class="thin-border">
-        <thead>
+  {{#if controllers.session.user}}
+    {{#if model.scores.length}}
+      <h1>User Scores:</h1>
+      <div class="blue-round user-scores">
+        <table class="thin-border">
+          <thead>
           <tr>
             <th>Username</th>
             <th>WPM</th>
             <th>Accuracy</th>
           </tr>
-        </thead>
+          </thead>
 
-        <tbody>
+          <tbody>
           {{#each score in model.scores}}
             <tr>
               <td>{{#link-to 'user.index' score.user_id}}{{score.user_name}}{{/link-to}}</td>
@@ -41,8 +42,9 @@
               <td>{{score.accuracy}}</td>
             </tr>
           {{/each}}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
+    {{/if}}
   {{/if}}
 </div>

@@ -3,24 +3,16 @@ require 'rails_helper'
 describe "changing preferences", js: true do
   let(:user) { create(:user) }
   before do
-    Identity.create(
-      user_id: user.id,
-      provider: 'twitter',
-      uid: '12345'
-    )
-
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock(:twitter, {uid: '12345'})
-
     @cat_a = create(:category, name: 'Category A')
     @cat_b = create(:category, name: 'Category B')
     @snippet_a = create(:snippet, full_text: 'catAsnip', category: @cat_a),
     @snippet_b = create(:snippet, full_text: 'catBsnip', category: @cat_b),
     create(:category_preference, user: user, category: @cat_a)
+
+    sign_in_with_twitter_as(user)
   end
 
   it "updates the database and shows a new snippet when appropriate" do
-    visit '/auth/twitter'
     page.should have_content(/catAsnip/m)
 
     page.find('.prefs-link').click

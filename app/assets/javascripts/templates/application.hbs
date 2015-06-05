@@ -6,7 +6,9 @@
     </div>
     <nav>
       <ul>
-        <li>{{#link-to 'users.index'}}Users{{/link-to}}</li>
+        {{#if controllers.session.user}}
+          <li>{{#link-to 'users.index'}}Users{{/link-to}}</li>
+        {{/if}}
         <li>{{#link-to 'snippets.index'}}Snippets{{/link-to}}</li>
         <li><span class='prefs-link' {{action 'showPreferences'}}>Preferences </span></li>
       </ul>

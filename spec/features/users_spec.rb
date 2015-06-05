@@ -4,26 +4,45 @@ describe "users", js: true do
   before do
     @user1 = create(:user)
     @user2 = create(:user)
+    create(:snippet, full_text: 'HelloWorld')
   end
 
-  describe "index" do
-    it "shows a list of users" do
+  describe "as an unauthenticated user" do
+    it "redirects the user list to the home page" do
       visit '/users'
-      page.should have_content(@user1.name)
-      page.should have_content(@user2.name)
+      page.should have_content('HelloWorld')
+    end
+
+    it "redirects individual user pages to the home page" do
+      visit "/users/#{@user1.id}"
+      page.should have_content('HelloWorld')
     end
   end
 
-  describe "profile" do
-    let!(:category) { create(:category, name: 'long obnoxious name') }
-    let!(:snippet) { create(:snippet, category: category) }
-    let!(:score) { create(:score, snippet: snippet, wpm: 71, user: @user1) }
-    it "shows user info and previous scores" do
-      visit "/users/#{@user1.id}"
+  describe "as an authenticated user" do
+    before do
+      sign_in_with_twitter_as(@user1)
+    end
 
-      page.should have_content(@user1.name)
-      page.should have_content(snippet.category.name)
-      page.should have_content(71)
+    describe "index" do
+      it "shows a list of users" do
+        visit '/users'
+        page.should have_content(@user1.name)
+        page.should have_content(@user2.name)
+      end
+    end
+
+    describe "profile" do
+      let!(:category) { create(:category, name: 'long obnoxious name') }
+      let!(:snippet) { create(:snippet, category: category) }
+      let!(:score) { create(:score, snippet: snippet, wpm: 71, user: @user1) }
+      it "shows user info and previous scores" do
+        visit "/users/#{@user1.id}"
+
+        page.should have_content(@user1.name)
+        page.should have_content(snippet.category.name)
+        page.should have_content(71)
+      end
     end
   end
 end

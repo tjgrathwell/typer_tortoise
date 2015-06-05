@@ -26,16 +26,7 @@ context 'as an admin', js: true do
 
   before do
     admin_user = create(:user, is_admin: true)
-    Identity.create(
-      user_id: admin_user.id,
-      provider: 'twitter',
-      uid: '12345'
-    )
-
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock(:twitter, {uid: '12345'})
-
-    visit '/auth/twitter'
+    sign_in_with_twitter_as(admin_user)
     page.should have_content(snippet.full_text)
   end
 
