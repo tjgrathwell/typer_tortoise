@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   respond_to :json
+  before_filter :authenticate
 
   def show
     user = User.find(params[:id])
