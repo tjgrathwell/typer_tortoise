@@ -13,7 +13,7 @@ App.TypingAreaController = Em.Controller.extend({
     var score = this.get('current_snippet').getScore();
     this.get('controllers.scores').add(score);
     if (this.get('controllers.session.user')) {
-      $.post('/scores', {score: score.toJson()});
+      Ember.$.post('/scores.json', {score: score.toJson()});
     }
   },
 

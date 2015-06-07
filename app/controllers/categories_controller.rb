@@ -9,7 +9,7 @@ class CategoriesController < ApplicationController
 
     current_user.set_category_preferences(params[:categories])
 
-    head :ok
+    render json: {}, status: :ok
   end
 
   def index

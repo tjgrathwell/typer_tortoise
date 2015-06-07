@@ -4,13 +4,13 @@ TyperTortoise::Application.routes.draw do
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout'                  => 'sessions#destroy'
 
-  resources :scores, only: [:index, :create]
-
-  resources :categories, :only => [:index] do
-    post 'set_preferences', :on => :collection
-  end
-
   scope format: true, constraints: {format: 'json'} do
+    resources :scores, only: [:index, :create]
+
+    resources :categories, :only => [:index] do
+      post 'set_preferences', :on => :collection
+    end
+
     resources :users, :only => [:index, :show] do
       get 'scores', :on => :member
     end
@@ -20,8 +20,6 @@ TyperTortoise::Application.routes.draw do
     end
   end
 
-  get '/users' => 'application#only_layout'
-  get '/users/*path' => 'application#only_layout'
-  get '/snippets' => 'application#only_layout'
-  get '/snippets/*path' => 'application#only_layout'
+  # Serve up the ember app for any other page and allow it to handle errors
+  get '*path' => 'application#index'
 end

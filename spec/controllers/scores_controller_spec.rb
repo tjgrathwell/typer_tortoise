@@ -20,13 +20,13 @@ describe ScoresController do
     describe "failure" do
       it "should not create a score object for empty data" do
         expect {
-          post :create, :score => { }
+          post :create, score: { }, format: :json
         }.to raise_error
       end
 
       it "should not create a score object for data that does not validate" do
         lambda do
-          post :create, :score => @score_data.merge(:wpm => -10)
+          post :create, :score => @score_data.merge(:wpm => -10), format: :json
         end.should_not change(Score, :count)
       end
     end
@@ -34,7 +34,7 @@ describe ScoresController do
     describe "success" do
       it "should create a score object" do
         lambda do
-          post :create, :score => @score_data
+          post :create, score: @score_data, format: :json
         end.should change(Score, :count).by(1)
       end
     end
@@ -44,7 +44,7 @@ describe ScoresController do
 
     it "should return an empty response" do
       lambda do
-        post :create, :score => @score_data.merge(:wpm => -10)
+        post :create, score: @score_data.merge(:wpm => -10), format: :json
 
         response.status.should == 403
       end.should_not change(Score, :count)
