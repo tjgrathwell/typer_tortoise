@@ -351,6 +351,36 @@ describe("typing on a snippet", function() {
       validate_snippet_properties(text_model, {beforeCursor: '<span class="comment"># cool code here</span>\n'});
     });
 
+    it("allows backspacing over the first mistake before a comment", function () {
+      var snippet_text = lines(
+      'b = 1',
+      '# cool code here',
+      'a = 2 + 2'
+      );
+
+      var text_model = App.models.TypingText.create({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+      type_on_snippet(text_model, 'b = 1zz');
+
+      validate_snippet_properties(text_model, {
+        beforeCursor : 'b = 1',
+        atCursor: 'zz'
+      });
+
+      text_model.backUp();
+
+      validate_snippet_properties(text_model, {
+        beforeCursor : 'b = 1',
+        atCursor: 'z'
+      });
+
+      text_model.backUp();
+
+      validate_snippet_properties(text_model, {
+        beforeCursor : 'b = 1',
+        atCursor: '↵'
+      });
+    });
+
     it("allows backspacing over the first mistake after a skipped comment", function () {
       var snippet_text = lines(
       '# cool code here',

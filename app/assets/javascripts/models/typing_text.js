@@ -285,8 +285,7 @@ App.models.TypingText = Em.Object.extend({
 
     if (this.cursor_pos === 0 && this.mistakes.length === 0) return;
 
-    var positionWithMistakes = this.cursor_pos + this.mistakes.length;
-    if (this._cursorInComment(positionWithMistakes - 1)) return;
+    if (!this.mistakes.length && this._cursorInComment(this.cursor_pos - 1)) return;
 
     var repeatCount = 1;
 
