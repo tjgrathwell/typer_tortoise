@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.2'
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.2'
 
 gem 'omniauth-twitter'
 gem 'thin'
@@ -11,7 +11,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-rails'
-gem 'ember-source'
+gem 'ember-source', '1.12.1'
 gem 'responders'
 gem 'sprockets', '2.12.3'
 

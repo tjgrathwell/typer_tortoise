@@ -21,7 +21,7 @@ describe ScoresController do
       it "should not create a score object for empty data" do
         expect {
           post :create, score: { }, format: :json
-        }.to raise_error
+        }.to raise_error(ActionController::ParameterMissing)
       end
 
       it "should not create a score object for data that does not validate" do
