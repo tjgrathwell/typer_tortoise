@@ -100,7 +100,15 @@ App.models.TypingText = Em.Object.extend({
     if (this.mistakes.length > 0) {
       var mistakesString = this.mistakes.join('');
       if (this._onlySpacesOnCurrentLine() && (mistakesString.length % this.tabSize()) == 0) {
-        return mistakesString.replace(/ /g, '&larr;');
+        function arrayOfCharacter(chr, count) {
+          return Array.apply(null, Array(count)).map(function() { return chr; });
+        }
+
+        var spaces = arrayOfCharacter(' ', this.tabSize());
+        var arrow = arrayOfCharacter('&#9135;', this.tabSize());
+        arrow[0] = '&larr;';
+
+        return mistakesString.replace(new RegExp(spaces.join(''), 'g'), arrow.join(''));
       } else {
         return mistakesString;
       }
