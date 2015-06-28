@@ -30,6 +30,16 @@ h2 {
   position: relative;
 }
 
+.type-area-category {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 12pt;
+  font-family: $monospace-font-families;
+  color: #838383;
+  padding: 5px 10px;
+}
+
 .type-panel {
   margin-bottom: 20px;
 
