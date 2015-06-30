@@ -6,7 +6,7 @@ App.UsersIndexRoute = Ember.Route.extend({
   },
 
   model: function () {
-    return Ember.$.getJSON('/users.json');
+    return Ember.$.getJSON('/users');
   },
 
   setupController: function (controller, model) {

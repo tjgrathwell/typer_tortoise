@@ -6,7 +6,7 @@ App.UserRoute = Ember.Route.extend({
   },
 
   model: function (params) {
-    return Ember.$.getJSON('/users/' + params.user_id + '.json');
+    return Ember.$.getJSON('/users/' + params.user_id);
   },
 
   setupController: function (controller, model) {

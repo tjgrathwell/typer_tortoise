@@ -34,8 +34,9 @@ App.SnippetsIndexController = Ember.Controller.extend({
       var answer = confirm('Are you sure?');
       if (answer) {
         Ember.$.ajax({
-          url: '/snippets/' + snippet.id + '.json',
-          method: 'DELETE'
+          url: '/snippets/' + snippet.id,
+          method: 'DELETE',
+          dataType: 'json'
         }).then((function () {
           var snippets = this.get('model.snippets');
           var newSnippets = [];

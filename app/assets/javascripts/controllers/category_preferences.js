@@ -70,11 +70,14 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
 
   _saveCategoriesToServer: function (enabledIds) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      Ember.$.post('/categories/set_preferences.json', {
-        categories: enabledIds
-      }, function () {
-        resolve();
-      });
+      Ember.$.ajax({
+        type: 'POST',
+        url: '/categories/set_preferences',
+        data: {
+          categories: enabledIds
+        },
+        dataType: 'json'
+      }).then(resolve);
     });
   },
 
@@ -105,8 +108,7 @@ App.CategoryPreferencesController = Em.ArrayController.extend({
 
   _loadCategoriesFromServer: function () {
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      // TODO: '.json' shouldn't be required
-      Ember.$.getJSON('/categories.json', function (data) {
+      Ember.$.getJSON('/categories', function (data) {
         resolve(data);
       });
     });

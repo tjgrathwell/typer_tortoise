@@ -5,7 +5,7 @@ App.ScoresController = Em.ArrayController.extend({
   },
 
   loadScores: function (score) {
-    Ember.$.getJSON('/scores.json', (function (json) {
+    Ember.$.getJSON('/scores', (function (json) {
       this.set('model', json);
     }).bind(this));
   },

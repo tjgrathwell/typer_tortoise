@@ -1,6 +1,6 @@
 App.SnippetsIndexRoute = Ember.Route.extend({
   model: function () {
-    return Ember.$.getJSON('/snippets.json');
+    return Ember.$.getJSON('/snippets');
   },
 
   setupController: function (controller, model) {

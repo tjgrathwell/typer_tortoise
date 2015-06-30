@@ -9,13 +9,14 @@ App.SnippetEditController = Ember.Controller.extend({
     submitAction: function () {
       Ember.$.ajax({
         type: 'PUT',
-        url: '/snippets/' + this.get('model.snippet_id') + '.json',
+        url: '/snippets/' + this.get('model.snippet_id'),
         data: {
           snippet: {
             full_text: this.get('model.full_string'),
             category_id: this.get('model.category_id')
           }
-        }
+        },
+        dataType: 'json'
       }).then((function (response) {
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));

@@ -13,7 +13,7 @@ App.TypingAreaController = Em.Controller.extend({
     var score = this.get('current_snippet').getScore();
     this.get('controllers.scores').add(score);
     if (this.get('controllers.session.user')) {
-      Ember.$.post('/scores.json', {score: score.toJson()});
+      Ember.$.post('/scores', {score: score.toJson()});
     }
   },
 
@@ -38,9 +38,9 @@ App.TypingAreaController = Em.Controller.extend({
 
     var url;
     if (snippet_num) {
-      url = '/snippets/' + snippet_num + '.json';
+      url = '/snippets/' + snippet_num;
     } else {
-      url = '/snippets/random.json';
+      url = '/snippets/random';
       if (!this.get('controllers.session.user')) {
         params['category_ids'] = this.get('controllers.category_preferences').enabledCategoryIds();
       }
