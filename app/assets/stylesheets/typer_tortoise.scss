@@ -290,3 +290,47 @@ select.form-control {
     border: none;
   }
 }
+
+.loading-spinner {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name: showLater;
+  animation-duration: 2s;
+}
+
+.loading-spinner-inner {
+  display: inline-block;
+  opacity: 0.4;
+  font-size: 180px;
+  height: 180px;
+  animation-iteration-count: infinite;
+  animation-name: rotateForever;
+  animation-timing-function: linear;
+  animation-duration: 3s;
+}
+
+@keyframes showLater {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes rotateForever {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
