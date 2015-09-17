@@ -11,6 +11,7 @@
 //= require highlightjs
 //= require test_config
 //= require typer_tortoise
+//= require keys
 //= require util
 //= require routes
 //= require storage

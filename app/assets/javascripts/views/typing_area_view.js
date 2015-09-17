@@ -8,21 +8,21 @@ App.TypingAreaView = Em.View.extend({
   focused: false,
 
   keyDown: function (e) {
-    App.setPreventDefaultForKey(e);
-    if (e.which == App.keyCodes.BACKSPACE) {
+    App.KeyHandling.setPreventDefaultForKey(e);
+    if (e.which == App.KeyHandling.CODES.BACKSPACE) {
       this.text.backUp();
     }
-    if (e.which == App.keyCodes.TAB) {
+    if (e.which == App.KeyHandling.CODES.TAB) {
       this.text.tabPressed();
     }
-    if (e.which == App.keyCodes.SPACE) {
+    if (e.which == App.KeyHandling.CODES.SPACE) {
       this.text.typeOn(' ');
     }
   },
 
   keyPress: function (e) { // keyDown doesn't account for shift key
-    App.setPreventDefaultForKey(e);
-    if (App.notAKeypress(e)) {
+    App.KeyHandling.setPreventDefaultForKey(e);
+    if (App.KeyHandling.notAKeypress(e)) {
       return;
     }
 
@@ -39,7 +39,7 @@ App.TypingAreaView = Em.View.extend({
     this.$().fadeIn();
     this.$().find('.type-panel').focus();
     $(document).on('keypress.typingArea keydown.typingArea', function (e) {
-      App.setPreventDefaultForKey(e);
+      App.KeyHandling.setPreventDefaultForKey(e);
     });
   },
 
