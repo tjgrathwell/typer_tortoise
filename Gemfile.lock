@@ -21,8 +21,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active-model-adapter-source (2.1.1)
-      ember-data-source (>= 1.13, < 3.0)
     active_model_serializers (0.9.4)
       activemodel (>= 3.2)
     activejob (4.2.5.2)
@@ -46,9 +44,6 @@ GEM
     autoprefixer-rails (6.3.3.1)
       execjs
     awesome_print (1.6.1)
-    barber (0.11.1)
-      ember-source (>= 1.0, < 3)
-      execjs (>= 1.2, < 3)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -73,20 +68,9 @@ GEM
     dotenv-rails (2.1.0)
       dotenv (= 2.1.0)
       railties (>= 4.0, < 5.1)
-    ember-data-source (2.2.1)
-      ember-source (>= 1.8, < 3.0)
-    ember-handlebars-template (0.3.6)
-      barber (>= 0.10.0)
-      sprockets (>= 2.1, < 3.5)
-      tilt
-    ember-rails (0.19.3)
-      active-model-adapter-source (>= 1.13.0)
-      active_model_serializers
-      ember-data-source (>= 1.13.0)
-      ember-handlebars-template (>= 0.1.1, < 1.0)
-      ember-source (>= 1.8.0)
-      jquery-rails (>= 1.0.17)
-      railties (>= 3.1)
+    ember-cli-rails (0.3.5)
+      railties (>= 3.1, < 5)
+      sprockets (>= 2.0)
     ember-source (1.12.1)
     erubis (2.7.0)
     eventmachine (1.0.9.1)
@@ -102,12 +86,6 @@ GEM
     hashie (3.4.3)
     hike (1.2.3)
     i18n (0.7.0)
-    jasmine (2.4.0)
-      jasmine-core (~> 2.4)
-      phantomjs
-      rack (>= 1.2.1)
-      rake
-    jasmine-core (2.4.1)
     jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -136,7 +114,6 @@ GEM
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
     pg (0.18.4)
-    phantomjs (2.1.1.0)
     poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -244,16 +221,16 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers
   awesome_print
   bootstrap-sass
   capybara
   capybara-screenshot
   database_cleaner
   dotenv-rails
-  ember-rails (= 0.19.3)
+  ember-cli-rails
   ember-source (= 1.12.1)
   factory_girl_rails
-  jasmine
   jquery-rails (= 4.0.5)
   omniauth-twitter
   pg

@@ -1,1 +1,0 @@
-App.SnippetPlayRoute = Ember.Route.extend(App.SnippetPlayingRoute);

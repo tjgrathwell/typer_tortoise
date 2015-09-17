@@ -4,4 +4,4 @@ Typer Tortoise: A typeracer-like game built with Rails and ember.js
 
 `rake spec` will run just the ruby tests
 
-`rake jasmine:ci` will run just the javascript tests
+`(cd frontend; ember test)` will run just the javascript tests

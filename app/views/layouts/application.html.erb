@@ -14,6 +14,8 @@
 
   <%= stylesheet_link_tag "application" %>
   <%= csrf_meta_tags %>
+  <%= include_ember_script_tags :frontend %>
+  <%= include_ember_stylesheet_tags :frontend %>
 </head>
 <body>
   <%= javascript_include_tag "application" %>

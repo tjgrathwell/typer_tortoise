@@ -8,6 +8,8 @@ TyperTortoise::Application.load_tasks
 
 if Rake::Task.task_defined?(:default)
   Rake::Task['default'].enhance do
-    Rake::Task['jasmine:ci'].invoke
+    Dir.chdir Rails.root.join('frontend') do
+      system('ember test')
+    end
   end
 end
