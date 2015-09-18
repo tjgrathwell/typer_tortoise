@@ -1,4 +1,4 @@
-App.TypingAreaController = Em.Controller.extend({
+App.TypingAreaController = Ember.Controller.extend({
   needs: ['category_preferences', 'scores', 'session'],
 
   init: function () {

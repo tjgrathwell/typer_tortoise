@@ -1,4 +1,4 @@
-App.PrefsPopupContentView = Em.View.extend({
+App.PrefsPopupContentView = Ember.View.extend({
   classNames: ['blue-round', 'prefs-popup'],
 
   click: function (e) {

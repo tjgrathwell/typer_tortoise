@@ -1,6 +1,6 @@
-App.WpmDisplayView = Em.View.extend({
+App.WpmDisplayView = Ember.View.extend({
   tagName: 'span',
   templateName: 'wpm-display',
   classNames: ['stat-counter'],
-  textBinding: Em.Binding.oneWay('controller.controllers.typing_area.current_snippet')
+  textBinding: Ember.Binding.oneWay('controller.controllers.typing_area.current_snippet')
 });

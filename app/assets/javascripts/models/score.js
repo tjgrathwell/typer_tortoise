@@ -1,4 +1,4 @@
-App.models.Score = Em.Object.extend({
+App.models.Score = Ember.Object.extend({
   wpm: null,
   accuracy: null,
   snippet_id: null,

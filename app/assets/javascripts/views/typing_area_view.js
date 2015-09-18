@@ -1,7 +1,7 @@
-App.TypingAreaView = Em.View.extend({
+App.TypingAreaView = Ember.View.extend({
   templateName: 'typing-area',
   classNames: 'type-area-container',
-  textBinding: Em.Binding.oneWay('controller.controllers.typing_area.current_snippet'),
+  textBinding: Ember.Binding.oneWay('controller.controllers.typing_area.current_snippet'),
 
   focused: false,
 

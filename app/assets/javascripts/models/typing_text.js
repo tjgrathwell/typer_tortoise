@@ -1,4 +1,4 @@
-App.models.TypingText = Em.Object.extend({
+App.models.TypingText = Ember.Object.extend({
   full_string: null,
   snippet_id: null,
   category_id: null,

@@ -1,4 +1,4 @@
-App.CategoryPreferencesController = Em.ArrayController.extend({
+App.CategoryPreferencesController = Ember.ArrayController.extend({
   init: function () {
     this._super();
 

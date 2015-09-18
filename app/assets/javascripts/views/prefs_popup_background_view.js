@@ -1,4 +1,4 @@
-App.PrefsPopupBackgroundView = Em.View.extend({
+App.PrefsPopupBackgroundView = Ember.View.extend({
   classNames: ['prefs-popup-bg'],
 
   click: function () {

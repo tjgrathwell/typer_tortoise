@@ -1,4 +1,4 @@
-App.FocusNagView = Em.View.extend({
+App.FocusNagView = Ember.View.extend({
   classNameBindings: ['focusNagClass', 'isFocused:hidden'],
   focusNagClass: 'focus-nag',
 

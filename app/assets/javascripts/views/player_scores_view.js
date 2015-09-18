@@ -1,3 +1,3 @@
-App.PlayerScoresView = Em.View.extend({
+App.PlayerScoresView = Ember.View.extend({
   templateName: 'player-scores'
 });

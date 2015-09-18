@@ -1,4 +1,4 @@
-App.ScoresController = Em.ArrayController.extend({
+App.ScoresController = Ember.ArrayController.extend({
   init: function () {
     this._super();
     this.loadScores();

@@ -1,4 +1,4 @@
-var App = Em.Application.create();
+var App = Ember.Application.create();
 
 App.models = {};
 App.services = {};

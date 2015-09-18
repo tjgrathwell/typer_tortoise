@@ -1,4 +1,4 @@
-App.models.Category = Em.Object.extend({
+App.models.Category = Ember.Object.extend({
   id: null,
   name: null,
   enabled: null,
