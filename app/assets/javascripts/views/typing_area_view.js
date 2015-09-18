@@ -1,9 +1,7 @@
 App.TypingAreaView = Em.View.extend({
   templateName: 'typing-area',
   classNames: 'type-area-container',
-  // TODO: bind to something like controller.model. Doesn't work now because
-  // prefs category change must be able to change the snippet.
-  textBinding: Em.Binding.oneWay('App.typingAreaController.current_snippet'),
+  textBinding: Em.Binding.oneWay('controller.controllers.typing_area.current_snippet'),
 
   focused: false,
 

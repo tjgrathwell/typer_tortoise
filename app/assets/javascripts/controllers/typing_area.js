@@ -5,8 +5,6 @@ App.TypingAreaController = Em.Controller.extend({
     this._super();
 
     this.set('current_snippet', null);
-    // TODO: Stop doing this after figuring out how TypingAreaView knows where the snippet is
-    App.set('typingAreaController', this);
   },
 
   saveScore: function () {
