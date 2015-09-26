@@ -21,7 +21,7 @@ App.SnippetsIndexController = Ember.Controller.extend({
 
   filteredSnippets: function () {
     return this.get('model.snippets').filter((function (snippet) {
-      return snippet.category_id == this.get('category_id');
+      return snippet.category_id === parseInt(this.get('category_id'), 10);
     }).bind(this));
   }.property('model.snippets', 'category_id'),
 
@@ -41,7 +41,7 @@ App.SnippetsIndexController = Ember.Controller.extend({
           var snippets = this.get('model.snippets');
           var newSnippets = [];
           snippets.forEach(function (s) {
-            if (s.id != snippet.id) {
+            if (s.id !== snippet.id) {
               newSnippets.push(s);
             }
           });

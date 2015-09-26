@@ -99,7 +99,7 @@ App.models.TypingText = Ember.Object.extend({
   _atCursor: function () {
     if (this.mistakes.length > 0) {
       var mistakesString = this.mistakes.join('');
-      if (this._onlySpacesOnCurrentLine() && (mistakesString.length % this.tabSize()) == 0) {
+      if (this._onlySpacesOnCurrentLine() && (mistakesString.length % this.tabSize()) === 0) {
         function arrayOfCharacter(chr, count) {
           return Array.apply(null, Array(count)).map(function() { return chr; });
         }
@@ -235,7 +235,7 @@ App.models.TypingText = Ember.Object.extend({
     if (this.comment_ranges) {
       for (var i = 0; i < this.comment_ranges.length; i++) {
         var commentRange = this.comment_ranges[i];
-        if (this.cursor_pos == commentRange[0]) {
+        if (this.cursor_pos === commentRange[0]) {
           this.set('cursor_pos', commentRange[1] + 1);
           skipped = true;
         }
@@ -300,7 +300,7 @@ App.models.TypingText = Ember.Object.extend({
     var spaces = App.util.trailingWhitespaceCount(this._currentLine());
     // if there's at least one tab worth of trailing whitespace on this line,
     //   'tab' backwards
-    if (this._onlySpacesOnCurrentLine() && (spaces % this.tabSize()) == 0) {
+    if (this._onlySpacesOnCurrentLine() && (spaces % this.tabSize()) === 0) {
       repeatCount = this.tabSize();
     }
 

@@ -10,7 +10,7 @@ App.SnippetPlayingController = Ember.Mixin.create({
     if (typingAreaController.get('current_snippet').finished) {
       typingAreaController.saveScore();
       var routeName = this.get('controllers.application.currentRouteName');
-      if (routeName == 'snippet.play') {
+      if (routeName === 'snippet.play') {
         // Go to the root route to indicate "random play mode" has resumed
         this.transitionToRoute('index');
       } else {

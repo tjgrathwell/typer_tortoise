@@ -7,13 +7,13 @@ App.TypingAreaView = Ember.View.extend({
 
   keyDown: function (e) {
     App.KeyHandling.setPreventDefaultForKey(e);
-    if (e.which == App.KeyHandling.CODES.BACKSPACE) {
+    if (e.which === App.KeyHandling.CODES.BACKSPACE) {
       this.text.backUp();
     }
-    if (e.which == App.KeyHandling.CODES.TAB) {
+    if (e.which === App.KeyHandling.CODES.TAB) {
       this.text.tabPressed();
     }
-    if (e.which == App.KeyHandling.CODES.SPACE) {
+    if (e.which === App.KeyHandling.CODES.SPACE) {
       this.text.typeOn(' ');
     }
   },

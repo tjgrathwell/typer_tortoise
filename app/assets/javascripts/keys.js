@@ -21,24 +21,24 @@ App.KeyHandling = {
     //   all these sort of problems.
     if (e.ctrlKey || e.altKey || e.metaKey) { return true; }
 
-    if (e.which == App.KeyHandling.CODES.BACKSPACE) { return true; }
+    if (e.which === App.KeyHandling.CODES.BACKSPACE) { return true; }
     // tab in keypress shows as 0
-    if (e.which == 0)                 { return true; }
+    if (e.which === 0)                 { return true; }
     return false;
   },
 
   setPreventDefaultForKey: function (e) {
     // in firefox delete/backspace goes back a page. undesirable!
-    if (e.which == App.KeyHandling.CODES.BACKSPACE)       { e.preventDefault();   }
+    if (e.which === App.KeyHandling.CODES.BACKSPACE)       { e.preventDefault();   }
 
     // in firefox, single quote and forward slash do a "quick search"
-    if (e.which == App.KeyHandling.CODES.SINGLE_QUOTE)    { e.preventDefault();   }
-    if (e.which == App.KeyHandling.CODES.FORWARD_SLASH)   { e.preventDefault();   }
+    if (e.which === App.KeyHandling.CODES.SINGLE_QUOTE)    { e.preventDefault();   }
+    if (e.which === App.KeyHandling.CODES.FORWARD_SLASH)   { e.preventDefault();   }
 
     // space will page down if the page is long enough, so don't do that
-    if (e.which == App.KeyHandling.CODES.SPACE)           { e.preventDefault();   }
+    if (e.which === App.KeyHandling.CODES.SPACE)           { e.preventDefault();   }
 
     // tab shouldn't take us out of the typing window
-    if (e.which == App.KeyHandling.CODES.TAB)             { e.preventDefault();   }
+    if (e.which === App.KeyHandling.CODES.TAB)             { e.preventDefault();   }
   }
 };

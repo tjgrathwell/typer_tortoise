@@ -20,6 +20,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'capybara-screenshot'
   gem 'poltergeist', require: false
   gem 'selenium-webdriver', require: false
   gem 'database_cleaner'
