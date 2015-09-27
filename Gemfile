@@ -4,6 +4,8 @@ ruby '2.2.2'
 
 gem 'rails', '4.2.4'
 
+gem 'dotenv-rails', groups: [:development, :test]
+
 gem 'omniauth-twitter'
 gem 'thin'
 gem 'jquery-rails'
