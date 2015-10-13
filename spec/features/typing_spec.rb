@@ -1,18 +1,38 @@
 require 'rails_helper'
 
 describe "typing a snippet", js: true do
+  def type_on_snippet(snippet)
+    visit "/snippets/#{snippet.id}/play"
+
+    page.should have_content(snippet.full_text)
+
+    page.find('.type-panel').native.send_key(snippet.full_text)
+  end
+
   before do
     @snippet = create(:snippet, full_text: 'hello world')
     create(:snippet, full_text: 'another snippet')
   end
 
   it "proceeds to another random snippet" do
-    visit "/snippets/#{@snippet.id}/play"
-
-    page.should have_content('hello world')
-
-    page.find('.type-panel').native.send_key('hello world')
+    type_on_snippet(@snippet)
 
     page.should have_content('another snippet')
+  end
+
+  context 'when signed in' do
+    before do
+      sign_in_with_twitter_as create(:user)
+    end
+
+    it "saves the user's WPM and error rate" do
+      type_on_snippet(@snippet)
+
+      within '.player-scores' do
+        page.should have_content("Snippet #{@snippet.id}")
+      end
+
+      expect(User.last.scores.length).to eq(1)
+    end
   end
 end
