@@ -21,7 +21,12 @@ TyperTortoise::Application.routes.draw do
   end
 
   # Serve up the ember app for any other page and allow it to handle errors
-  get '*path' => 'application#index'
-
-  # TODO: try to ensure /rails/info still works even while this catchall is installed
+  get '*path' => 'application#index', constraints: (lambda do |request|
+    if Rails.env.development?
+      # Allow helper paths like /rails/info to skip the catchall in development
+      !request.path.start_with?('/rails/')
+    else
+      true
+    end
+  end)
 end
