@@ -17,6 +17,11 @@ App.ApplicationRoute = Ember.Route.extend({
       }).bind(this));
     },
 
+    showCategory: function (categoryId) {
+      App.storage.set('typer_tortoise.filtered_category_id', categoryId);
+      this.transitionTo('snippets.index');
+    },
+
     closeModal: function () {
       return this.disconnectOutlet({
         outlet: 'modal',

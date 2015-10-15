@@ -5,5 +5,6 @@ App.SnippetsIndexRoute = Ember.Route.extend({
 
   setupController: function (controller, model) {
     controller.set('model', model);
+    controller.set('category_id', App.storage.get('typer_tortoise.filtered_category_id'));
   }
 });
