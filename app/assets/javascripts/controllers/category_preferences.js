@@ -30,6 +30,10 @@ App.CategoryPreferencesController = Ember.ArrayController.extend({
     }
   },
 
+  noCategoriesSelected: function () {
+    return this.enabledCategories().length === 0;
+  }.property('model.@each.enabled'),
+
   findCategoryById: function (category_id) {
     var model = this.get('model');
     var length = model.length;
