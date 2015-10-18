@@ -99,11 +99,13 @@ App.models.TypingText = Ember.Object.extend({
   _atCursor: function () {
     if (this.mistakes.length > 0) {
       var mistakesString = this.mistakes.join('');
-      if (this._onlySpacesOnCurrentLine() && (mistakesString.length % this.tabSize()) === 0) {
+      if (this._onlySpacesOnCurrentLine() && (mistakesString.length >= this.tabSize())) {
         function arrayOfCharacter(chr, count) {
           return Array.apply(null, Array(count)).map(function() { return chr; });
         }
 
+        // TODO: find a way to draw long arrows that works in firefox
+        // (currently the arrow body doesn't match up to the arrow head very well)
         var spaces = arrayOfCharacter(' ', this.tabSize());
         var arrow = arrayOfCharacter('&#9135;', this.tabSize());
         arrow[0] = '&larr;';

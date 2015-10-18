@@ -28,8 +28,8 @@ describe "typing a snippet", js: true do
     it "saves the user's WPM and error rate" do
       type_on_snippet(@snippet)
 
-      within '.player-scores' do
-        page.should have_content("Snippet #{@snippet.id}")
+      within('.player-scores tbody td', match: :first) do
+        page.should have_content(@snippet.id)
       end
 
       expect(User.last.scores.length).to eq(1)

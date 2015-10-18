@@ -175,6 +175,15 @@ nav {
   }
 }
 
+.player-scores table {
+  margin-top: 10px;
+  background-color: transparent;
+
+  th {
+    padding-right: 10px;
+  }
+}
+
 table.thin-border, table.thin-border td {
   border: 1px dashed rgba(0, 0, 0, 0.1);
 }

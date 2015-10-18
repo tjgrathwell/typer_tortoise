@@ -1,12 +1,21 @@
 {{#if controllers.scores.length}}
   <div class="blue-round player-scores">
     <h3>Your Scores</h3>
-    <ul>
-      {{#each score in controllers.scores}}
-        <li>
-          {{#link-to 'snippet.index' score.snippet_id}}Snippet {{score.snippet_id}}{{/link-to}}: <strong>{{score.wpm}}</strong> wpm, <strong>{{score.accuracy}}%</strong> accurate.
-        </li>
-      {{/each}}
-    </ul>
+    <table>
+      <thead>
+        <th>Snippet</th>
+        <th>WPM</th>
+        <th>Accuracy</th>
+      </thead>
+      <tbody>
+        {{#each score in controllers.scores}}
+          <tr>
+            <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
+            <td>{{score.wpm}}</td>
+            <td>{{score.accuracy}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 {{/if}}
