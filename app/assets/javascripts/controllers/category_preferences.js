@@ -119,10 +119,14 @@ App.CategoryPreferencesController = Ember.ArrayController.extend({
   },
 
   _loadCategoryPreferencesFromStorage: function () {
-    if (!App.storage.supported) return;
+    if (!App.storage.supported) {
+      return;
+    }
 
     var category_id_csv = App.storage.get('typer_tortoise.category_ids');
-    if (!category_id_csv) return;
+    if (!category_id_csv) {
+      return;
+    }
 
     this.disableAll();
 

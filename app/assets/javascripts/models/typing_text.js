@@ -100,9 +100,9 @@ App.models.TypingText = Ember.Object.extend({
     if (this.mistakes.length > 0) {
       var mistakesString = this.mistakes.join('');
       if (this._onlySpacesOnCurrentLine() && (mistakesString.length >= this.tabSize())) {
-        function arrayOfCharacter(chr, count) {
-          return Array.apply(null, Array(count)).map(function() { return chr; });
-        }
+        var arrayOfCharacter = function (chr, count) {
+          return Array.apply(null, new Array(count)).map(function() { return chr; });
+        };
 
         // TODO: find a way to draw long arrows that works in firefox
         // (currently the arrow body doesn't match up to the arrow head very well)
@@ -220,7 +220,9 @@ App.models.TypingText = Ember.Object.extend({
 
   _previousLineIndent: function () {
     var lines = this.full_string.substr(0, this.cursor_pos).split('\n');
-    if (lines.length < 2) return;
+    if (lines.length < 2) {
+      return;
+    }
 
     var prev_line = lines[lines.length - 2];
     return App.util.leadingWhitespaceCount(prev_line);
@@ -247,7 +249,9 @@ App.models.TypingText = Ember.Object.extend({
   },
 
   _cursorInComment: function (cursorPos) {
-    if (!this.comment_ranges) return;
+    if (!this.comment_ranges) {
+      return;
+    }
 
     for (var i = 0; i < this.comment_ranges.length; i++) {
       var commentRange = this.comment_ranges[i];
@@ -262,13 +266,17 @@ App.models.TypingText = Ember.Object.extend({
   // user actions
   //
   typeOn: function (chr) {
-    if (this.finished) return;
+    if (this.finished) {
+      return;
+    }
 
     // start the wpm timer if this is the first character typed
-    if (this.start_time === null) this._startWpmTimer();
+    if (this.start_time === null) {
+      this._startWpmTimer();
+    }
 
-    var cursor_matches = this.full_string.substr(this.get('cursor_pos'), 1) == chr;
-    var no_mistakes = this.mistakes.length == 0;
+    var cursor_matches = this.full_string.substr(this.get('cursor_pos'), 1) === chr;
+    var no_mistakes = this.mistakes.length === 0;
     if (no_mistakes && cursor_matches) {
       this.set('cursor_pos', this.cursor_pos + 1);
       var skipped = this._skipComments();
@@ -276,14 +284,16 @@ App.models.TypingText = Ember.Object.extend({
         this._autoIndent();
       }
     } else {
-      if (chr != ' ') {
+      if (chr !== ' ') {
         this.set('total_mistakes', this.total_mistakes + 1);
       }
       this.mistakes.pushObject(chr);
     }
 
     // clear the wpm timer if the snippet is finished
-    if (this.cursor_pos === this.full_string.length) this._stopWpmTimer();
+    if (this.cursor_pos === this.full_string.length) {
+      this._stopWpmTimer();
+    }
   },
 
   tabPressed: function () {
@@ -291,11 +301,17 @@ App.models.TypingText = Ember.Object.extend({
   },
 
   backUp: function () {
-    if (this.finished) return;
+    if (this.finished) {
+      return;
+    }
 
-    if (this.cursor_pos === 0 && this.mistakes.length === 0) return;
+    if (this.cursor_pos === 0 && this.mistakes.length === 0) {
+      return;
+    }
 
-    if (!this.mistakes.length && this._cursorInComment(this.cursor_pos - 1)) return;
+    if (!this.mistakes.length && this._cursorInComment(this.cursor_pos - 1)) {
+      return;
+    }
 
     var repeatCount = 1;
 

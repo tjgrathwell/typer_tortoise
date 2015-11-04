@@ -21,7 +21,9 @@ App.TypingAreaController = Ember.Controller.extend({
   },
 
   changeSnippetToCategory: function (category_ids) {
-    if (!this.get('current_snippet')) return;
+    if (!this.get('current_snippet')) {
+      return;
+    }
 
     if (category_ids.indexOf(this.get('current_snippet').get('category_id')) >= 0) {
       // if this snippet is already in the whitelist of categories, nothing to do
