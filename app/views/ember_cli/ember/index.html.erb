@@ -1,0 +1,20 @@
+<%= render_ember_app :frontend do |head, body| %>
+  <% head.append do %>
+    <%= csrf_meta_tags %>
+    <link rel="shortcut icon" href="<%= asset_url(favicon_file) %>">
+    <%= stylesheet_link_tag "application" %>
+  <% end %>
+
+  <% body.append do %>
+    <script>
+      <% if signed_in? %>
+      window.currentUser = {
+        id: '<%= current_user.id %>',
+        name: '<%= current_user.name %>',
+        admin: <%= current_user.is_admin? %>
+      };
+      <% end %>
+      window.snippetCategories = <%= Category.all.to_json.html_safe %>;
+    </script>
+  <% end %>
+<% end %>

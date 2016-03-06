@@ -16,9 +16,10 @@ describe 'routing to rails builtin routes' do
   context 'in non-development envs' do
     it 'uses the normal catch-all route' do
       expect(get: rails_info_path).to route_to(
-                                      controller: "application",
+                                      ember_app: :frontend,
+                                      controller: "ember_cli/ember",
                                       action: "index",
-                                      path: "rails/info"
+                                      rest: "rails/info"
                                     )
     end
   end

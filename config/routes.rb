@@ -1,6 +1,4 @@
 TyperTortoise::Application.routes.draw do
-  root 'application#index'
-
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout'                  => 'sessions#destroy'
 
@@ -20,13 +18,18 @@ TyperTortoise::Application.routes.draw do
     end
   end
 
-  # Serve up the ember app for any other page and allow it to handle errors
-  get '*path' => 'application#index', constraints: (lambda do |request|
-    if Rails.env.development?
-      # Allow helper paths like /rails/info to skip the catchall in development
-      !request.path.start_with?('/rails/')
-    else
-      true
+  class MatchEverythingButRailsInfoConstraint
+    def matches?(request)
+      if Rails.env.development?
+        # Allow helper paths like /rails/info to skip the catchall in development
+        !request.path.start_with?('/rails/')
+      else
+        true
+      end
     end
-  end)
+  end
+
+  scope constraints: MatchEverythingButRailsInfoConstraint.new do
+    mount_ember_app :frontend, to: "/"
+  end
 end

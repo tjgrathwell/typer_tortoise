@@ -6,7 +6,7 @@ describe "home page", js: true do
   end
 
   it "shows a snippet" do
-    visit root_path
+    visit '/'
 
     page.should have_content('hello world')
   end

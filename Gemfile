@@ -12,13 +12,13 @@ gem 'jquery-rails', '4.0.5'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
-gem 'ember-rails', '0.19.3'
+gem 'ember-cli-rails'
+gem 'active_model_serializers'
 gem 'ember-source', '1.12.1'
 gem 'responders'
 gem 'sprockets', '2.12.3'
 
 group :development, :test do
-  gem 'jasmine'
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'capybara'
@@ -40,9 +40,4 @@ end
 group :production do
   gem 'pg'
   gem 'rails_12factor'
-end
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-es5-shim'
-  gem 'rails-assets-highlightjs'
 end

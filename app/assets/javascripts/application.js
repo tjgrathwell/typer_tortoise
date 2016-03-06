@@ -4,21 +4,5 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require es5-shim
-//= require jquery
-//= require jquery_ujs
-//= require ember
-//= require highlightjs
-//= require test_config
-//= require typer_tortoise
-//= require keys
-//= require util
-//= require routes
-//= require storage
-//= require_tree ./mixins
-//= require_tree ./routes
-//= require_tree ./templates
-//= require_tree ./services
-//= require_tree ./models
-//= require_tree ./views
-//= require_tree ./controllers
+// All the JS assets are compiled by the ember-cli app in /frontend,
+// which gets added to the page by the ember-cli-rails gem. Nothing to see here.
