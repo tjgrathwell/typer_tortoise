@@ -4,5 +4,6 @@ log/*.log
 tmp/
 .sass-cache/
 config/settings.yml
+node_modules
 .env
 .idea

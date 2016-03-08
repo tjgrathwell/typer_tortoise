@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "postinstall": "./bin/heroku_install"
+    "postinstall": "./bin/install_js_dependencies"
   },
   "devDependencies": {
     "bower": "*"

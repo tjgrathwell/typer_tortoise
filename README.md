@@ -1,4 +1,10 @@
-Typer Tortoise: A typeracer-like game built with Rails and ember.js
+# Typer Tortoise
+
+[![Build Status](https://travis-ci.org/tjgrathwell/typer_tortoise.svg?branch=master)](http://travis-ci.org/tjgrathwell/typer_tortoise)
+
+A typeracer-like game built with Rails and ember.js
+
+## Tests
 
 `rake` will run the ruby tests and javascript tests
 

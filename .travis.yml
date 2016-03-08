@@ -1,0 +1,20 @@
+language: ruby
+rvm:
+  - 2.2.4
+bundler_args: "--without development --without production --deployment"
+cache: bundler
+before_install:
+  - mkdir custom-phantomjs
+  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/phantomjs-2.1-linux-x86_64.tar.bz2
+  - tar -xvf $PWD/phantomjs-2.1-linux-x86_64.tar.bz2 -C $PWD/custom-phantomjs --strip-components 2 phantomjs-2.1.1-linux-x86_64/bin/phantomjs
+  - chmod +x $PWD/custom-phantomjs/phantomjs
+  - 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
+  - "rvm @global do gem uninstall bundler -x && gem install bundler"
+before_script:
+  - 'npm install'
+  - 'bundle exec rake db:create:all'
+  - 'bundle exec rake db:migrate'
+script:
+  - "PATH=$PWD/custom-phantomjs:$PATH bundle exec rake"
+
+sudo: false
