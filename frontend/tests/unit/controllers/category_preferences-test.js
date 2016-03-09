@@ -11,7 +11,8 @@ const categories_json = [
 const storage_key_name = 'typer_tortoise.category_ids';
 
 moduleFor('controller:category_preferences', 'Controller | category preferences', {
-  unit: true
+  unit: true,
+  needs: ['router:main'] // TODO: maybe remove in later ember
 });
 
 test('can return a list of just the enabled categories', function (assert) {

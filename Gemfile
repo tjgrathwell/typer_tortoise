@@ -2,19 +2,17 @@ source 'https://rubygems.org'
 
 ruby '2.2.4'
 
-gem 'rails', '4.2.5.2'
+gem 'rails', '4.2.6'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'omniauth-twitter'
 gem 'thin'
-gem 'jquery-rails', '4.0.5'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-cli-rails'
 gem 'active_model_serializers'
-gem 'ember-source', '1.12.1'
 gem 'responders'
 gem 'sprockets', '2.12.3'
 
