@@ -14,7 +14,6 @@ gem 'bootstrap-sass'
 gem 'ember-cli-rails'
 gem 'active_model_serializers'
 gem 'responders'
-gem 'sprockets', '2.12.3'
 
 group :development, :test do
   gem 'sqlite3'
