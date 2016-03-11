@@ -6,7 +6,7 @@
     </div>
     <nav>
       <ul>
-        {{#if controllers.session.user}}
+        {{#if session.user}}
           <li>{{#link-to 'users.index'}}Users{{/link-to}}</li>
         {{/if}}
         <li>{{#link-to 'snippets.index'}}Snippets{{/link-to}}</li>
@@ -14,13 +14,13 @@
       </ul>
     </nav>
     <div>
-      {{#if controllers.session.user}}
-        Logged in as <strong>{{#link-to 'user.index' controllers.session.user.id}}{{controllers.session.user.name}}{{/link-to}}</strong>.
+      {{#if session.user}}
+        Logged in as <strong>{{#link-to 'user.index' session.user.id}}{{session.user.name}}{{/link-to}}</strong>.
       {{else}}
         Log in to save your scores.
       {{/if}}
       <ul>
-        {{#if controllers.session.user}}
+        {{#if session.user}}
           <li><a href="/logout">Log out</a></li>
         {{else}}
           <li><a {{bind-attr href=twitterLink}}>Sign in with Twitter</a></li>

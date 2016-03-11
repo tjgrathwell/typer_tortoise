@@ -13,7 +13,7 @@
         Category
         {{view "select"
         prompt="Select a category..."
-        content=controllers.categories
+        content=categories.model
         optionValuePath="content.id"
         optionLabelPath="content.name"
         value=model.category_id}}

@@ -1,23 +1,22 @@
 import Ember from 'ember';
 import KeyHandling from 'frontend/keys';
 
-export default Ember.View.extend({
-  templateName: 'typing-area',
+export default Ember.Component.extend({
   classNames: 'type-area-container',
-  textBinding: Ember.Binding.oneWay('controller.controllers.typing_area.current_snippet'),
+  text: Ember.computed.oneWay('typing_area.current_snippet'),
 
   focused: false,
 
   keyDown: function (e) {
     KeyHandling.setPreventDefaultForKey(e);
     if (e.which === KeyHandling.CODES.BACKSPACE) {
-      this.text.backUp();
+      this.get('text').backUp();
     }
     if (e.which === KeyHandling.CODES.TAB) {
-      this.text.tabPressed();
+      this.get('text').tabPressed();
     }
     if (e.which === KeyHandling.CODES.SPACE) {
-      this.text.typeOn(' ');
+      this.get('text').typeOn(' ');
     }
   },
 
@@ -32,7 +31,7 @@ export default Ember.View.extend({
     // normalize newlines
     if (chr === '\r') { chr = '\n'; }
 
-    this.text.typeOn(chr);
+    this.get('text').typeOn(chr);
   },
 
   didInsertElement: function () {

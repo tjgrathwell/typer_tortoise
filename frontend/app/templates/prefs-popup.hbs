@@ -1,17 +1,17 @@
-{{#view "prefs_popup_background"}}
-  {{#view "prefs_popup_content"}}
+{{#prefs-popup-background}}
+  {{#prefs-popup-content}}
     <h2>
-      {{if controllers.session.user controllers.session.user.name 'Guest'}}'s preferences
+      {{if session.user session.user.name 'Guest'}}'s preferences
     </h2>
     <ul>
-      {{#each category in controllers.category_preferences}}
+      {{#each category in category_preferences.model}}
         <li>
           <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
         </li>
       {{/each}}
     </ul>
     <div class="text-center">
-      <button class="btn btn-primary" disabled={{controllers.category_preferences.noCategoriesSelected}} {{action 'savePreferences'}}>Save Preferences</button>
+      <button class="btn btn-primary" disabled={{category_preferences.noCategoriesSelected}} {{action 'savePreferences'}}>Save Preferences</button>
     </div>
-  {{/view}}
-{{/view}}
+  {{/prefs-popup-content}}
+{{/prefs-popup-background}}

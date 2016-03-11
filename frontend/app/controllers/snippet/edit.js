@@ -1,7 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ['session', 'categories'],
+  session: Ember.inject.controller(),
+  categories: Ember.inject.controller(),
 
   snippetInvalid: function () {
     return !this.get('model.full_string') || !this.get('model.category_id');

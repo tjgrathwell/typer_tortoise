@@ -2,11 +2,11 @@ import Ember from 'ember';
 import Storage from 'frontend/storage';
 
 export default Ember.Controller.extend({
-  needs: ['session'],
+  session: Ember.inject.controller(),
 
   actionsCount: function () {
-    return (this.get('controllers.session.user.admin')) ? 4 : 2;
-  }.property('controllers.session.user'),
+    return (this.get('session.user.admin')) ? 4 : 2;
+  }.property('session.user'),
 
   snippetCategories: function () {
     var categories = {};

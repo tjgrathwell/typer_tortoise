@@ -1,12 +1,12 @@
 <div class="container">
-  {{view "typing_area"}}
+  {{typing-area typing_area=typing_area}}
   <div>
     <div class="full-score-display">
-      {{view "wpm_display"}}
-      {{view "accuracy_display"}}
+      {{wpm-display typing_area=typing_area}}
+      {{accuracy-display typing_area=typing_area}}
     </div>
     <div>
-      {{view "player_scores"}}
+      {{player-scores scores=scores}}
     </div>
   </div>
 </div>

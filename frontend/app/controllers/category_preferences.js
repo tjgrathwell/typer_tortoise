@@ -2,11 +2,12 @@ import Ember from 'ember';
 import Storage from 'frontend/storage'
 import Category from 'frontend/models/category'
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   init: function () {
     this._super();
+    this.set('model', []);
 
-    // TODO: Use controllers.session.user after figuring out how
+    // TODO: Use session.user after figuring out how
     // to instantiate a CategoryPreferencesController in test
     if (window.currentUser && Storage.supported) {
       // Kill localStorage prefs every time someone logs in properly.
@@ -60,7 +61,7 @@ export default Ember.ArrayController.extend({
   },
 
   enabledCategories: function () {
-    return this.get('model').filter(function (el) { return el.enabled });
+    return this.get('model').filterBy('enabled', true);
   },
 
   enabledCategoryIds: function () {

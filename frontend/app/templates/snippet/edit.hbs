@@ -4,7 +4,7 @@
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
       <li>{{#link-to 'snippet.index' model.snippet_id}}View{{/link-to}}</li>
       <li>{{#link-to 'snippet.play' model.snippet_id}}Play{{/link-to}}</li>
-      {{#if controllers.session.user.admin}}
+      {{#if session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
     </ul>
@@ -17,7 +17,7 @@
       <label>
         Category
         {{view "select"
-        content=controllers.categories
+        content=categories.model
         optionValuePath="content.id"
         optionLabelPath="content.name"
         value=model.category_id}}

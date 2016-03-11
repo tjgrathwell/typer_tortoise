@@ -1,17 +1,15 @@
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
-  needs: ['application', 'typing_area', 'scores'],
+  application: Ember.inject.controller(),
+  typing_area: Ember.inject.controller(),
+  scores: Ember.inject.controller(),
 
-  finishedObserver: function () {
-    if (!this.get('isActive')) {
-      return;
-    }
-
-    var typingAreaController = this.get('controllers.typing_area');
+  checkFinishedAndProceed: function () {
+    var typingAreaController = this.get('typing_area');
     if (typingAreaController.get('current_snippet').finished) {
       typingAreaController.saveScore();
-      var routeName = this.get('controllers.application.currentRouteName');
+      var routeName = this.get('application.currentRouteName');
       if (routeName === 'snippet.play') {
         // Go to the root route to indicate "random play mode" has resumed
         this.transitionToRoute('index');
@@ -19,5 +17,5 @@ export default Ember.Mixin.create({
         typingAreaController.newSnippet();
       }
     }
-  }.observes('controllers.typing_area.current_snippet.finished')
+  }
 });

@@ -2,11 +2,11 @@
   <nav class="blue-round">
     <ul class="nav-options">
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
-      {{#if controllers.session.user.admin}}
+      {{#if session.user.admin}}
         <li>{{#link-to 'snippet.edit' model.snippet_id}}Edit{{/link-to}}</li>
       {{/if}}
       <li>{{#link-to 'snippet.play' model.snippet_id}}Play{{/link-to}}</li>
-      {{#if controllers.session.user.admin}}
+      {{#if session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
     </ul>
@@ -21,7 +21,7 @@
     <pre>{{model.full_string}}</pre>
   </div>
 
-  {{#if controllers.session.user}}
+  {{#if session.user}}
     {{#if model.scores.length}}
       <h1>User Scores:</h1>
       <div class="blue-round user-scores">

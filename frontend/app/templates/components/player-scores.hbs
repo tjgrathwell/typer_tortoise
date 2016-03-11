@@ -1,4 +1,4 @@
-{{#if controllers.scores.length}}
+{{#if scores.model.length}}
   <div class="blue-round player-scores">
     <h3>Your Scores</h3>
     <table>
@@ -8,7 +8,7 @@
         <th>Accuracy</th>
       </thead>
       <tbody>
-        {{#each score in controllers.scores}}
+        {{#each score in scores.model}}
           <tr>
             <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
             <td>{{score.wpm}}</td>

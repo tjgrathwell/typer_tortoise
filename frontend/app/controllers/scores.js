@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   init: function () {
     this._super();
     this.loadScores();
@@ -13,6 +13,6 @@ export default Ember.ArrayController.extend({
   },
 
   add: function (score) {
-    this.pushObject(score);
+    this.get('model').pushObject(score);
   }
 });

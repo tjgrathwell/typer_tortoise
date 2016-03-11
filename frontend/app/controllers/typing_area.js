@@ -3,7 +3,9 @@ import Utilities from 'frontend/util'
 import TypingText from 'frontend/models/typing_text'
 
 export default Ember.Controller.extend({
-  needs: ['category_preferences', 'scores', 'session'],
+  category_preferences: Ember.inject.controller(),
+  scores: Ember.inject.controller(),
+  session: Ember.inject.controller(),
 
   init: function () {
     this._super();
@@ -13,8 +15,8 @@ export default Ember.Controller.extend({
 
   saveScore: function () {
     var score = this.get('current_snippet').getScore();
-    this.get('controllers.scores').add(score);
-    if (this.get('controllers.session.user')) {
+    this.get('scores').add(score);
+    if (this.get('session.user')) {
       Ember.$.ajax({
         type: 'POST',
         url: '/scores',
@@ -50,8 +52,8 @@ export default Ember.Controller.extend({
       url = '/snippets/' + snippet_num;
     } else {
       url = '/snippets/random';
-      if (!this.get('controllers.session.user')) {
-        params['category_ids'] = this.get('controllers.category_preferences').enabledCategoryIds();
+      if (!this.get('session.user')) {
+        params['category_ids'] = this.get('category_preferences').enabledCategoryIds();
       }
     }
 
