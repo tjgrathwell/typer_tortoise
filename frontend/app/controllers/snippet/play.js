@@ -1,8 +1,21 @@
 import Ember from 'ember';
-import SnippetPlayingController from 'frontend/mixins/snippet_playing_controller';
 
-export default Ember.Controller.extend(SnippetPlayingController, {
+export default Ember.Controller.extend({
+  application: Ember.inject.controller(),
+  typing_area: Ember.inject.controller(),
+  scores: Ember.inject.controller(),
+
   finishedObserver: function () {
-    this.checkFinishedAndProceed();
+    var typingAreaController = this.get('typing_area');
+    if (typingAreaController.get('current_snippet').finished) {
+      typingAreaController.saveScore();
+      var routeName = this.get('application.currentRouteName');
+      if (routeName === 'snippet.play') {
+        // Go to the root route to indicate "random play mode" has resumed
+        this.transitionToRoute('index');
+      } else {
+        typingAreaController.newSnippet();
+      }
+    }
   }.observes('typing_area.current_snippet.finished')
 });
