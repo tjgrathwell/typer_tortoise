@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
   }.property('model.full_text', 'model.category_id'),
 
   actions: {
-    submitAction: function () {
+    submitAction() {
       Ember.$.ajax({
         type: 'POST',
         url: '/snippets',
@@ -22,6 +22,13 @@ export default Ember.Controller.extend({
       }).then((function (response) {
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));
+    },
+
+    categoryChanged() {
+      // TODO: fix to specify exact select (does this require componentizing <select>?)
+      const selectedEl = $('select');
+      const selectedValue = selectedEl.val();
+      this.set('model.category_id', selectedValue);
     }
   }
 });

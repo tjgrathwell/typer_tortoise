@@ -11,12 +11,14 @@
     <div class="field">
       <label>
         Category
-        {{view "select"
-        prompt="Select a category..."
-        content=categories.model
-        optionValuePath="content.id"
-        optionLabelPath="content.name"
-        value=model.category_id}}
+        <select {{action 'categoryChanged' on='change'}}>
+          <option>Select a category...</option>
+          {{#each categories.model key="@index" as |category|}}
+            <option value="{{category.id}}" selected={{is-equal category.id model.category_id}}>
+              {{category.name}}
+            </option>
+          {{/each}}
+        </select>
       </label>
     </div>
 

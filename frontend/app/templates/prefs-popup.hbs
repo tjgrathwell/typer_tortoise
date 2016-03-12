@@ -4,7 +4,7 @@
       {{if session.user session.user.name 'Guest'}}'s preferences
     </h2>
     <ul>
-      {{#each category in category_preferences.model}}
+      {{#each category_preferences.model as |category|}}
         <li>
           <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
         </li>

@@ -6,12 +6,12 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.resource('users', function () {});
-  this.resource('user', {path: '/users/:user_id'}, function () {});
-  this.resource('snippets', function () {
+  this.route('users', function () {});
+  this.route('user', {path: '/users/:user_id'}, function () {});
+  this.route('snippets', function () {
     this.route('new');
   });
-  this.resource('snippet', {path: '/snippets/:snippet_id'}, function () {
+  this.route('snippet', {path: '/snippets/:snippet_id'}, function () {
     this.route('play');
     this.route('edit');
   });

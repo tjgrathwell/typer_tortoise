@@ -23,7 +23,7 @@
         {{#if session.user}}
           <li><a href="/logout">Log out</a></li>
         {{else}}
-          <li><a {{bind-attr href=twitterLink}}>Sign in with Twitter</a></li>
+          <li><a href={{twitterLink}}>Sign in with Twitter</a></li>
         {{/if}}
       </ul>
     </div>

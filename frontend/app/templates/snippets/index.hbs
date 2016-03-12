@@ -11,13 +11,14 @@
 
   <div class="row">
     <div class="col-md-12">
-      {{view "select"
-      prompt="Select a category..."
-      class="form-control"
-      content=snippetCategories
-      optionValuePath="content.id"
-      optionLabelPath="content.name"
-      value=category_id}}
+      <select {{action 'categoryChanged' on='change'}} class='form-control'>
+        <option>Select a category...</option>
+        {{#each snippetCategories key="@index" as |category|}}
+          <option value="{{category.id}}" selected={{is-equal category.id category_id}}>
+            {{category.name}}
+          </option>
+        {{/each}}
+      </select>
 
       {{#if filteredSnippets.length}}
         <table class="table table-bordered table-striped snippets-table">
@@ -31,7 +32,7 @@
           </thead>
 
           <tbody>
-            {{#each snippet in filteredSnippets}}
+            {{#each filteredSnippets as |snippet|}}
               <tr>
                 <td><strong>{{snippet.category_name}}</strong></td>
                 <td class="snippet-preview">{{snippet.full_text}}</td>

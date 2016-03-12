@@ -3,7 +3,7 @@
   <hr>
 
   {{#if model.score_categories}}
-    {{#each score_category in model.score_categories}}
+    {{#each model.score_categories as |score_category|}}
       <div class="blue-round user-scores">
         <h2>Category: {{score_category.name}}</h2>
 
@@ -17,7 +17,7 @@
           </thead>
 
           <tbody>
-            {{#each score in score_category.scores}}
+            {{#each score_category.scores as |score|}}
               <tr>
                 <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
                 <td>{{score.wpm}}</td>

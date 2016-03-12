@@ -11,7 +11,7 @@
         </thead>
 
         <tbody>
-          {{#each user in model.users}}
+          {{#each model.users as |user|}}
             <tr>
               <td>{{#link-to 'user.index' user.id}}{{user.name}}{{/link-to}}</td>
             </tr>

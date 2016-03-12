@@ -35,7 +35,7 @@
           </thead>
 
           <tbody>
-          {{#each score in model.scores}}
+          {{#each model.scores as |score|}}
             <tr>
               <td>{{#link-to 'user.index' score.user_id}}{{score.user_name}}{{/link-to}}</td>
               <td>{{score.wpm}}</td>

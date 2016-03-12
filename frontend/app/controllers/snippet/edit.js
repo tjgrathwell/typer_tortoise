@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
   }.property('model.full_string', 'model.category_id'),
 
   actions: {
-    submitAction: function () {
+    submitAction() {
       Ember.$.ajax({
         type: 'PUT',
         url: '/snippets/' + this.get('model.snippet_id'),
@@ -23,6 +23,12 @@ export default Ember.Controller.extend({
       }).then((function (response) {
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));
+    },
+
+    categoryChanged() {
+      const selectedEl = $('select');
+      const selectedValue = selectedEl.val();
+      this.set('model.category_id', selectedValue);
     }
   }
 });

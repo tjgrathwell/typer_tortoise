@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
   }.observes('category_id'),
 
   actions: {
-    destroy: function (snippet) {
+    destroy(snippet) {
       var answer = confirm('Are you sure?');
       if (answer) {
         Ember.$.ajax({
@@ -47,6 +47,12 @@ export default Ember.Controller.extend({
           this.set('model.snippets', newSnippets);
         }).bind(this));
       }
+    },
+
+    categoryChanged() {
+      const selectedEl = $('select');
+      const selectedValue = selectedEl.val();
+      this.set('category_id', selectedValue);
     }
   }
 });
