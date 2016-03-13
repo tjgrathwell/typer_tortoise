@@ -33,4 +33,16 @@ describe "changing preferences", js: true do
 
     expect(user.category_preferences.pluck(:category_id)).to match_array([@cat_b.id])
   end
+
+  it 'dismisses the modal when the background is clicked' do
+    popup_selector = '.prefs-popup'
+
+    page.find('.prefs-link').click
+
+    expect(page).to have_css(popup_selector)
+
+    page.find('.prefs-popup-bg').click
+
+    expect(page).to have_no_css(popup_selector)
+  end
 end
