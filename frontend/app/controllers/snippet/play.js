@@ -7,7 +7,8 @@ export default Ember.Controller.extend({
 
   finishedObserver: function () {
     var typingAreaController = this.get('typing_area');
-    if (typingAreaController.get('current_snippet').finished) {
+    var currentSnippet = typingAreaController.get('current_snippet');
+    if (currentSnippet && currentSnippet.finished) {
       typingAreaController.saveScore();
       var routeName = this.get('application.currentRouteName');
       if (routeName === 'snippet.play') {
