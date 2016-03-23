@@ -7,10 +7,7 @@ module.exports = function(environment) {
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
-      // TODO: ideally this would be (environment !== 'test')
-      // so the version would only be hidden during capybara tests,
-      // but I think the 'environment' here is not really the rails env
-      LOG_VERSION: false,
+      LOG_VERSION: process.env.RAILS_ENV !== 'test',
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
