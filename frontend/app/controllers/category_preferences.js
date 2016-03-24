@@ -3,13 +3,13 @@ import Storage from 'frontend/storage'
 import Category from 'frontend/models/category'
 
 export default Ember.Controller.extend({
+  session: Ember.inject.controller(),
+
   init: function () {
     this._super();
     this.set('model', []);
 
-    // TODO: Use session.user after figuring out how
-    // to instantiate a CategoryPreferencesController in test
-    if (window.currentUser && Storage.supported) {
+    if (this.get('session.user') && Storage.supported) {
       // Kill localStorage prefs every time someone logs in properly.
       Storage.remove('typer_tortoise.category_ids');
     }
@@ -24,7 +24,7 @@ export default Ember.Controller.extend({
     // hopefully any discontinuities (a user with discontinued
     //   categories in their localStorage prefs) will be cleared
     //   up when that user next saves their prefs.
-    if (!window.currentUser && Storage.supported) {
+    if (!this.get('session.user') && Storage.supported) {
       var category_ids = Storage.get('typer_tortoise.category_ids');
       if (category_ids) {
         var categories = category_ids.split(',').map(function (cat_id) {
@@ -70,7 +70,7 @@ export default Ember.Controller.extend({
 
   saveCategories: function () {
     var enabledIds = this.enabledCategoryIds();
-    if (window.currentUser) {
+    if (this.get('session.user')) {
       return this._saveCategoriesToServer(enabledIds);
     } else {
       return this._saveCategoriesToStorage(enabledIds);
@@ -107,7 +107,7 @@ export default Ember.Controller.extend({
         self.set('model', json.map(function (el) {
           return Category.create(el);
         }));
-        if (!window.currentUser) {
+        if (!self.get('session.user')) {
           self._loadCategoryPreferencesFromStorage();
         }
         resolve();
