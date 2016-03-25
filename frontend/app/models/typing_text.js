@@ -4,10 +4,24 @@ import SnippetNormalizer from 'frontend/services/snippet_normalizer';
 import CommentParser from 'frontend/services/comment_parser';
 import Score from 'frontend/models/score';
 
+const WpmTimer = Ember.Object.extend({
+  schedule: function (f) {
+    Ember.run.later(this, function () {
+      f();
+      this.set('timer', this.schedule(f));
+    }, 250);
+  },
+
+  stop: function () {
+    Ember.run.cancel(this.get('timer'));
+  }
+});
+
 export default Ember.Object.extend({
   full_string: null,
   snippet_id: null,
   category_id: null,
+  wpm_timer: WpmTimer.create(),
 
   init: function () {
     this._super();
@@ -17,7 +31,6 @@ export default Ember.Object.extend({
     this.set('cursor_pos', 0);
 
     this.set('start_time', null);
-    this.set('wpm_timer_id', null);
     this.set('wpm_ticks', null);
 
     this.set('finished', false);
@@ -207,22 +220,6 @@ export default Ember.Object.extend({
     return (raw_acc * 100).toFixed(0);
   }.property('cursor_pos', 'total_mistakes'),
 
-  _startWpmTimer: function () {
-    this.set('start_time', (new Date()).getTime());
-
-    var self = this;
-    var timer_id = window.setInterval(function () {
-      self.set('wpm_ticks', this.wpm_ticks + 1);
-    }, 250);
-
-    this.set('wpm_timer_id', timer_id);
-  },
-
-  _stopWpmTimer: function () {
-    this.set('finished', true);
-    window.clearInterval(this.wpm_timer_id);
-  },
-
   _previousLineIndent: function () {
     var lines = this.full_string.substr(0, this.cursor_pos).split('\n');
     if (lines.length < 2) {
@@ -277,9 +274,13 @@ export default Ember.Object.extend({
 
     // start the wpm timer if this is the first character typed
     if (this.start_time === null) {
-      // TODO: move the timer code out of the model
       if (this.enableTimer) {
-        this._startWpmTimer();
+        this.set('start_time', (new Date()).getTime());
+
+        var self = this;
+        this.get('wpm_timer').schedule(function () {
+          self.set('wpm_ticks', self.wpm_ticks + 1);
+        });
       }
     }
 
@@ -300,7 +301,8 @@ export default Ember.Object.extend({
 
     // clear the wpm timer if the snippet is finished
     if (this.cursor_pos === this.full_string.length) {
-      this._stopWpmTimer();
+      this.get('wpm_timer').stop();
+      this.set('finished', true);
     }
   },
 
