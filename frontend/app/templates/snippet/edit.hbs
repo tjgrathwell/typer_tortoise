@@ -13,10 +13,10 @@
   <p>A snippet in the <strong>{{model.category_name}}</strong> category.</p>
 
   <div class="edit_snippet">
-    <div class="field">
+    <div class="form-inline">
       <label>
         Category
-        <select {{action 'categoryChanged' on='change'}}>
+        <select {{action 'categoryChanged' on='change'}} class='form-control'>
           {{#each categories.model key="@index" as |category|}}
             <option value="{{category.id}}" selected={{is-equal category.id model.category_id}}>
               {{category.name}}
@@ -26,7 +26,7 @@
       </label>
     </div>
 
-    <div class="field">
+    <div>
       {{textarea value=model.full_string rows=20 class='snippet-editor' name='snippet[full_text]'}}
     </div>
     <div class="actions">
