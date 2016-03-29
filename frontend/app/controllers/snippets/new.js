@@ -24,11 +24,8 @@ export default Ember.Controller.extend({
       }).bind(this));
     },
 
-    categoryChanged() {
-      // TODO: fix to specify exact select (does this require componentizing <select>?)
-      const selectedEl = $('select');
-      const selectedValue = selectedEl.val();
-      this.set('model.category_id', selectedValue);
+    categoryChanged(categoryId) {
+      this.set('model.category_id', categoryId);
     }
   }
 });

@@ -21,14 +21,13 @@ export default Ember.Controller.extend({
         },
         dataType: 'json'
       }).then((function (response) {
+        // TODO: the category doesn't appear changed when saved, but does upon reload
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));
     },
 
-    categoryChanged() {
-      const selectedEl = $('select');
-      const selectedValue = selectedEl.val();
-      this.set('model.category_id', selectedValue);
+    categoryChanged(categoryId) {
+      this.set('model.category_id', categoryId);
     }
   }
 });

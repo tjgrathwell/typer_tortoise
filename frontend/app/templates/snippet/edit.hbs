@@ -16,7 +16,7 @@
     <div class="form-inline">
       <label>
         Category
-        <select {{action 'categoryChanged' on='change'}} class='form-control'>
+        <select onchange={{action 'categoryChanged' value='target.value'}} class='form-control'>
           {{#each categories.model key="@index" as |category|}}
             <option value="{{category.id}}" selected={{is-equal category.id model.category_id}}>
               {{category.name}}
