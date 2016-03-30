@@ -7,28 +7,5 @@
 
   <h1>New snippet</h1>
 
-  <div class="new_snippet">
-    <div class="form-inline">
-      <label>
-        Category
-        <select onchange={{action 'categoryChanged' value='target.value'}} class='form-control'>
-          <option>Select a category...</option>
-          {{#each categories.model key="@index" as |category|}}
-            <option value="{{category.id}}" selected={{is-equal category.id model.category_id}}>
-              {{category.name}}
-            </option>
-          {{/each}}
-        </select>
-      </label>
-    </div>
-
-    <div>
-      {{textarea value=model.full_text rows=20 class='snippet-editor' name='snippet[full_text]'}}
-    </div>
-    <div class="actions">
-      <button class="btn btn-primary" disabled={{snippetInvalid}}
-        {{action 'submitAction'}}>Create Snippet
-      </button>
-    </div>
-  </div>
+  {{partial 'snippets/form'}}
 </div>

@@ -4,8 +4,8 @@ export default Ember.Controller.extend({
   categories: Ember.inject.controller(),
 
   snippetInvalid: function () {
-    return !this.get('model.full_text') || !this.get('model.category_id');
-  }.property('model.full_text', 'model.category_id'),
+    return !this.get('model.full_string') || !this.get('model.category_id');
+  }.property('model.full_string', 'model.category_id'),
 
   actions: {
     submitAction() {
@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
         url: '/snippets',
         data: {
           snippet: {
-            full_text: this.get('model.full_text'),
+            full_text: this.get('model.full_string'),
             category_id: this.get('model.category_id')
           }
         },
