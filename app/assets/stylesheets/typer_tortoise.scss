@@ -226,6 +226,9 @@ textarea.snippet-editor {
   top: 0;
   bottom: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .prefs-link {
@@ -240,7 +243,6 @@ textarea.snippet-editor {
 
 .prefs-popup {
   padding: 10px;
-  position: absolute;
   z-index: 100;
   background-color: rgba(173, 216, 230, .9);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
@@ -257,6 +259,16 @@ textarea.snippet-editor {
     &:focus {
       outline: none;
     }
+  }
+
+  ul {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+
+    -webkit-column-width: 100px;
+    -moz-column-width: 100px;
+    column-width: 100px;
   }
 }
 
