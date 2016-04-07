@@ -93,6 +93,8 @@ GEM
     html_page (0.1.0)
     i18n (0.7.0)
     json (1.8.3)
+    jsonapi-resources (0.7.0)
+      rails (>= 4.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     loofah (2.0.3)
@@ -228,6 +230,7 @@ DEPENDENCIES
   dotenv-rails
   ember-cli-rails
   factory_girl_rails
+  jsonapi-resources
   omniauth-twitter
   pg
   poltergeist

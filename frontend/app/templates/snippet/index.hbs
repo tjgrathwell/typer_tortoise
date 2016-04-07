@@ -3,9 +3,9 @@
     <ul class="nav-options">
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
       {{#if session.user.admin}}
-        <li>{{#link-to 'snippet.edit' model.snippet_id}}Edit{{/link-to}}</li>
+        <li>{{#link-to 'snippet.edit' model.id}}Edit{{/link-to}}</li>
       {{/if}}
-      <li>{{#link-to 'snippet.play' model.snippet_id}}Play{{/link-to}}</li>
+      <li>{{#link-to 'snippet.play' model.id}}Play{{/link-to}}</li>
       {{#if session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
@@ -14,14 +14,15 @@
 
   <div class="snippet-view">
     <div class="snippet-view-header">
-      <span class="snippet-number">#{{model.snippet_id}}</span>
+      <span class="snippet-number">#{{model.id}}</span>
       -
-      <span class="snippet-category">{{model.category_name}}</span>
+      <span class="snippet-category">{{model.categoryName}}</span>
     </div>
-    <pre>{{model.full_string}}</pre>
+    <pre>{{model.fullText}}</pre>
   </div>
 
   {{#if session.user}}
+    <!-- TODO: temporarily stopped showing scores during ember data refactor. fix it! -->
     {{#if model.scores.length}}
       <h1>User Scores:</h1>
       <div class="blue-round user-scores">

@@ -2,7 +2,11 @@ TyperTortoise::Application.routes.draw do
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout'                  => 'sessions#destroy'
 
-  scope constraints: -> (request) { request.accepts.map(&:symbol).include?(:json) } do
+  json_constraint = -> (request) do
+    request.accepts.map(&:to_s).any? { |type| type.match(/json/) }
+  end
+
+  scope constraints: json_constraint do
     resources :scores, only: [:index, :create]
 
     resources :categories, :only => [:index] do

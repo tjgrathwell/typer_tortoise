@@ -2,15 +2,15 @@
   <nav class="blue-round">
     <ul class="nav-options">
       <li>{{#link-to 'snippets.index'}}Index{{/link-to}}</li>
-      <li>{{#link-to 'snippet.index' model.snippet_id}}View{{/link-to}}</li>
-      <li>{{#link-to 'snippet.play' model.snippet_id}}Play{{/link-to}}</li>
+      <li>{{#link-to 'snippet.index' model.id}}View{{/link-to}}</li>
+      <li>{{#link-to 'snippet.play' model.id}}Play{{/link-to}}</li>
       {{#if session.user.admin}}
         <li>{{#link-to 'snippets.new'}}Add a Snippet{{/link-to}}</li>
       {{/if}}
     </ul>
   </nav>
 
-  <p>A snippet in the <strong>{{model.category_name}}</strong> category.</p>
+  <p>A snippet in the <strong>{{model.categoryName}}</strong> category.</p>
 
   {{partial 'snippets/form'}}
 </div>

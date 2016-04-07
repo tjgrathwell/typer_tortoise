@@ -4,8 +4,8 @@ export default Ember.Controller.extend({
   categories: Ember.inject.controller(),
 
   snippetInvalid: function () {
-    return !this.get('model.full_string') || !this.get('model.category_id');
-  }.property('model.full_string', 'model.category_id'),
+    return !this.get('model.fullText') || !this.get('model.categoryId');
+  }.property('model.fullText', 'model.categoryId'),
 
   actions: {
     submitAction() {
@@ -14,8 +14,8 @@ export default Ember.Controller.extend({
         url: '/snippets',
         data: {
           snippet: {
-            full_text: this.get('model.full_string'),
-            category_id: this.get('model.category_id')
+            full_text: this.get('model.fullText'),
+            category_id: this.get('model.categoryId')
           }
         },
         dataType: 'json'
@@ -25,7 +25,7 @@ export default Ember.Controller.extend({
     },
 
     categoryChanged(categoryId) {
-      this.set('model.category_id', categoryId);
+      this.set('model.categoryId', categoryId);
     }
   }
 });

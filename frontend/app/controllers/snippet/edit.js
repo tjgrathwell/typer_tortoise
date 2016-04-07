@@ -4,29 +4,29 @@ export default Ember.Controller.extend({
   categories: Ember.inject.controller(),
 
   snippetInvalid: function () {
-    return !this.get('model.full_string') || !this.get('model.category_id');
-  }.property('model.full_string', 'model.category_id'),
+    return !this.get('model.fullText') || !this.get('model.categoryId');
+  }.property('model.fullText', 'model.categoryId'),
 
   actions: {
     submitAction() {
       Ember.$.ajax({
         type: 'PUT',
-        url: '/snippets/' + this.get('model.snippet_id'),
+        url: '/snippets/' + this.get('model.id'),
         data: {
           snippet: {
-            full_text: this.get('model.full_string'),
-            category_id: this.get('model.category_id')
+            full_text: this.get('model.fullText'),
+            category_id: this.get('model.categoryId')
           }
         },
         dataType: 'json'
       }).then((function (response) {
-        // TODO: the category doesn't appear changed when saved, but does upon reload
+        this.model.reload();
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));
     },
 
     categoryChanged(categoryId) {
-      this.set('model.category_id', categoryId);
+      this.set('model.categoryId', categoryId);
     }
   }
 });

@@ -31,7 +31,7 @@ export default Ember.Controller.extend({
       return;
     }
 
-    if (category_ids.indexOf(this.get('current_snippet').get('category_id')) >= 0) {
+    if (category_ids.indexOf(this.get('current_snippet.snippet.categoryId')) >= 0) {
       // if this snippet is already in the whitelist of categories, nothing to do
       return;
     }
@@ -47,11 +47,11 @@ export default Ember.Controller.extend({
   newSnippet: function (snippet_num) {
     var params = {};
 
-    var url;
+    var id;
     if (snippet_num) {
-      url = '/snippets/' + snippet_num;
+      id = snippet_num;
     } else {
-      url = '/snippets/random';
+      id = 'random';
       if (!this.get('session.user')) {
         params['category_ids'] = this.get('category_preferences').enabledCategoryIds();
       }
@@ -59,19 +59,23 @@ export default Ember.Controller.extend({
 
     var lastSnippet = this.get('current_snippet') || this.get('previous_snippet');
     if (lastSnippet) {
-      params['last_seen'] = lastSnippet.get('snippet_id');
+      params['last_seen'] = lastSnippet.get('snippet.id');
     }
 
-    return Ember.$.getJSON(url, params).then((function (snippet_json) {
-      var snippet = TypingText.create({
-        full_string: Utilities.chomp(snippet_json['full_text']),
-        snippet_id: snippet_json['id'],
-        category_id: snippet_json['category_id'],
-        category_name: snippet_json['category_name'],
-        scores: snippet_json['scores'],
+    var promise;
+    if (id === 'random') {
+      promise = this.store.queryRecord('snippet', Ember.merge(params, {random: true}));
+    } else {
+      promise = this.store.findRecord('snippet', id);
+    }
+
+    return promise.then((function (snippet) {
+      var typingText = TypingText.create({
+        snippet: snippet,
+        //scores: snippet.get('scores'),
         enableTimer: true
       });
-      this.set('current_snippet', snippet);
+      this.set('current_snippet', typingText);
       return snippet;
     }).bind(this));
   }

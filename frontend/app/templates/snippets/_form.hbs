@@ -5,7 +5,7 @@
       <select onchange={{action 'categoryChanged' value='target.value'}} class='form-control'>
         <option>Select a category...</option>
         {{#each categories.model key="@index" as |category|}}
-          <option value="{{category.id}}" selected={{is-equal category.id model.category_id}}>
+          <option value="{{category.id}}" selected={{is-equal category.id model.categoryId}}>
             {{category.name}}
           </option>
         {{/each}}
@@ -14,12 +14,12 @@
   </div>
 
   <div>
-    {{textarea value=model.full_string rows=20 class='snippet-editor' name='snippet[full_text]'}}
+    {{textarea value=model.fullText rows=20 class='snippet-editor' name='snippet[full_text]'}}
   </div>
 
   <div class="actions">
     <button class="btn btn-primary" disabled={{snippetInvalid}} {{action 'submitAction'}}>
-      {{#if model.snippet_id}}
+      {{#if model.id}}
         Update Snippet
       {{else}}
         Create Snippet

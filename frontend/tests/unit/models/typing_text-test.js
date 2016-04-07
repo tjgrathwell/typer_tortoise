@@ -43,7 +43,8 @@ test("guesses the level of indentation for a snippet with 2-space indent", funct
     '    that should be two spaces'
   );
 
-  assert.equal(this.subject({full_string: snippetText, snippet_id: 1}).tabSize(), 2);
+  var snippet = Ember.Object.create({id: 1, fullText: snippetText});
+  assert.equal(this.subject({snippet: snippet}).tabSize(), 2);
 });
 
 test("guesses the level of indentation for a snippet with 3-space indent", function(assert) {
@@ -54,7 +55,8 @@ test("guesses the level of indentation for a snippet with 3-space indent", funct
     '   line indentation'
   );
 
-  assert.equal(this.subject({full_string: snippetText, snippet_id: 1}).tabSize(), 3);
+  var snippet = Ember.Object.create({id: 1, fullText: snippetText})
+  assert.equal(this.subject({snippet: snippet}).tabSize(), 3);
 });
 
 test("guesses the level of indentation for a snippet with 4-space indent", function(assert) {
@@ -64,7 +66,9 @@ test("guesses the level of indentation for a snippet with 4-space indent", funct
     '    for a program',
     '        to have'
   );
-  assert.equal(this.subject({full_string: snippetText, snippet_id: 1}).tabSize(), 4);
+
+  var snippet = Ember.Object.create({id: 1, fullText: snippetText});
+  assert.equal(this.subject({snippet: snippet}).tabSize(), 4);
 });
 
 test("wraps the areas before, in, and after the cursor in special tags", function(assert) {
@@ -73,7 +77,8 @@ test("wraps the areas before, in, and after the cursor in special tags", functio
     '  more than one line'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
 
   typeOnSnippet(text_model, 'this snippet');
 
@@ -141,7 +146,8 @@ test("starts the next line at the same indentation level as the previous line", 
     'and then another that is not'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, "this snippet has\n");
 
   validateSnippetProperties(assert, text_model, {
@@ -187,7 +193,8 @@ test("doesn't consider auto-indentation on empty lines as a 'mistake'", function
     '  third line indented'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, "  first line indented\n");
 
   validateSnippetProperties(assert, text_model, {
@@ -213,7 +220,8 @@ test("escapes snippet text", function (assert) {
     '<span>third</span>'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, "<div>first</div>\n");
 
   validateSnippetProperties(assert, text_model, {
@@ -233,7 +241,8 @@ test("backspacing removes one space when the typed whitespace does not match ind
     'end'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
 
   typeOnSnippet(text_model, "def foo\n  def bar\n "); // note 1 space
 
@@ -253,7 +262,8 @@ test("backspacing removes one indent level worth of spaces when the typed whites
     'end'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
 
   typeOnSnippet(text_model, "def foo\n  def bar\n  "); // note 2 spaces
 
@@ -271,7 +281,8 @@ test("skips leading comments on snippet initialize", function (assert) {
   'a = b + 1'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
 
   validateSnippetProperties(assert, text_model, {
     hasMistakes  : false,
@@ -287,7 +298,8 @@ test("skips inline comments while typing", function (assert) {
   'puts a'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
 
   typeOnSnippet(text_model, "a = b + 1");
 
@@ -308,7 +320,8 @@ test("preserves indent after skipping comments", function (assert) {
   'end'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, "def foo\n  a = 1\n");
 
   validateSnippetProperties(assert, text_model, {
@@ -325,7 +338,8 @@ test("does not skip comments when the comment character is in a string", functio
   'puts x'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, '"round ');
 
   validateSnippetProperties(assert, text_model, {
@@ -342,7 +356,8 @@ test("does not allow backspacing over skipped comments", function (assert) {
   'a = 2 + 2'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, 'a');
 
   validateSnippetProperties(assert, text_model, {beforeCursor : '<span class="comment"># cool code here</span>\na'});
@@ -363,7 +378,8 @@ test("allows backspacing over the first mistake before a comment", function (ass
   'a = 2 + 2'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, 'b = 1zz');
 
   validateSnippetProperties(assert, text_model, {
@@ -392,7 +408,8 @@ test("allows backspacing over the first mistake after a skipped comment", functi
   'a = 2 + 2'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1, category_name: 'ruby'});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text, categoryName: 'ruby'});
+  var text_model = this.subject({snippet: snippet});
   typeOnSnippet(text_model, 'b');
 
   validateSnippetProperties(assert, text_model, {
@@ -416,7 +433,8 @@ test("adds whitespace to empty lines to meet the expected indentation threshold"
   '  that will have two spaces on it'
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
   assert.equal(text_model.get('full_string'), lines(
   'this snippet has',
   '  an empty line',
@@ -431,7 +449,8 @@ test("removes trailing whitespace", function (assert) {
   '  whitespace in this? '
   );
 
-  var text_model = this.subject({full_string: snippet_text, snippet_id: 1});
+  var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
+  var text_model = this.subject({snippet: snippet});
   assert.equal(text_model.get('full_string'), lines(
   'who put the trailing',
   '  whitespace in this?'

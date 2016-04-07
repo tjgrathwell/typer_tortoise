@@ -12,7 +12,7 @@ class SnippetsController < ApplicationController
 
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
 
-    render json: selected_snip
+    render json: serializer.serialize_to_hash(SnippetResource.new(selected_snip, nil))
   end
 
   def index
@@ -27,7 +27,11 @@ class SnippetsController < ApplicationController
   def show
     snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
-    render json: snippet.as_detailed_json
+    render json: serializer.serialize_to_hash(SnippetResource.new(snippet, nil))
+  end
+
+  def serializer
+    JSONAPI::ResourceSerializer.new(SnippetResource)
   end
 
   def create
