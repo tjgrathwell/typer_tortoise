@@ -22,7 +22,6 @@
   </div>
 
   {{#if session.user}}
-    <!-- TODO: temporarily stopped showing scores during ember data refactor. fix it! -->
     {{#if model.scores.length}}
       <h1>User Scores:</h1>
       <div class="blue-round user-scores">
@@ -38,7 +37,7 @@
           <tbody>
           {{#each model.scores as |score|}}
             <tr>
-              <td>{{#link-to 'user.index' score.user_id}}{{score.user_name}}{{/link-to}}</td>
+              <td>{{#link-to 'user.index' score.userId}}{{score.userName}}{{/link-to}}</td>
               <td>{{score.wpm}}</td>
               <td>{{score.accuracy}}</td>
             </tr>

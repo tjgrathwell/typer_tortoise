@@ -27,11 +27,13 @@ class SnippetsController < ApplicationController
   def show
     snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
-    render json: serializer.serialize_to_hash(SnippetResource.new(snippet, nil))
+    json = serializer(include: ['scores'])
+             .serialize_to_hash(SnippetResource.new(snippet, nil))
+    render json: json
   end
 
-  def serializer
-    JSONAPI::ResourceSerializer.new(SnippetResource)
+  def serializer(options = {})
+    JSONAPI::ResourceSerializer.new(SnippetResource, options)
   end
 
   def create

@@ -21,6 +21,32 @@ describe "snippets index", js: true do
   end
 end
 
+describe "as a signed-in user" do
+  before do
+    create(:snippet) # needed for something to render after auth redirect
+    sign_in_with_twitter_as(create(:user))
+  end
+
+  describe "snippets show page", js: true do
+    before do
+      @snippet = create(:snippet, full_text: 'sandySnippet')
+      user = create(:user, name: 'Svangaard')
+      create(:score, snippet: @snippet, user: user, wpm: 65, accuracy: 78.1)
+    end
+
+    it "shows snippet information with scores" do
+      visit "/snippets/#{@snippet.id}"
+      page.should have_content(/sandySnippet/m)
+
+      within '.user-scores' do
+        page.should have_content 'Svangaard'
+        page.should have_content '65'
+        page.should have_content '78.1'
+      end
+    end
+  end
+end
+
 context 'as an admin', js: true do
   let!(:snippet) { create(:snippet, full_text: 'hello world') }
 

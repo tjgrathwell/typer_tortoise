@@ -1,15 +1,12 @@
 import Ember from 'ember';
+import DS from 'ember-data';
 
-export default Ember.Object.extend({
-  wpm: null,
-  accuracy: null,
-  snippet_id: null,
+export default DS.Model.extend({
+  wpm: DS.attr(),
+  accuracy: DS.attr(),
+  userId: DS.attr(),
+  userName: DS.attr(),
+  snippetId: DS.attr(),
 
-  toJson: function () {
-    return {
-      snippet_id: this.get('snippet_id'),
-      wpm: this.get('wpm'),
-      accuracy: this.get('accuracy')
-    }
-  }
+  snippet: DS.belongsTo('snippet')
 });
