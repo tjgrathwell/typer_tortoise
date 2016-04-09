@@ -10,23 +10,23 @@ export default Ember.Controller.extend({
 
   snippetCategories: function () {
     var categories = {};
-    this.get('model.snippets').forEach(function (snippet) {
-      categories[snippet.category_id] = snippet.category_name;
+    this.get('model').forEach(function (snippet) {
+      categories[snippet.get('categoryId')] = snippet.get('categoryName');
     });
     return Object.keys(categories).map(function (id) {
       return {name: categories[id], id: id};
     });
-  }.property('model.snippets'),
+  }.property('model'),
 
   filteredSnippets: function () {
-    return this.get('model.snippets').filter((function (snippet) {
-      return snippet.category_id === parseInt(this.get('category_id'), 10);
+    return this.get('model').filter((function (snippet) {
+      return snippet.get('categoryId') === parseInt(this.get('categoryId'), 10);
     }).bind(this));
-  }.property('model.snippets', 'category_id'),
+  }.property('model', 'categoryId'),
 
   saveCategoryId: function () {
-    Storage.set('typer_tortoise.filtered_category_id', this.get('category_id'));
-  }.observes('category_id'),
+    Storage.set('typer_tortoise.filtered_category_id', this.get('categoryId'));
+  }.observes('categoryId'),
 
   actions: {
     destroy(snippet) {
@@ -37,14 +37,14 @@ export default Ember.Controller.extend({
           method: 'DELETE',
           dataType: 'json'
         }).then((function () {
-          var snippets = this.get('model.snippets');
+          var snippets = this.get('model');
           var newSnippets = [];
           snippets.forEach(function (s) {
             if (s.id !== snippet.id) {
               newSnippets.push(s);
             }
           });
-          this.set('model.snippets', newSnippets);
+          this.set('model', newSnippets);
         }).bind(this));
       }
     },
@@ -52,7 +52,7 @@ export default Ember.Controller.extend({
     categoryChanged() {
       const selectedEl = $('select');
       const selectedValue = selectedEl.val();
-      this.set('category_id', selectedValue);
+      this.set('categoryId', selectedValue);
     }
   }
 });

@@ -3,11 +3,11 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model: function () {
-    return Ember.$.getJSON('/snippets');
+    return this.store.findAll('snippet');
   },
 
   setupController: function (controller, model) {
     controller.set('model', model);
-    controller.set('category_id', Storage.get('typer_tortoise.filtered_category_id'));
+    controller.set('categoryId', Storage.get('typer_tortoise.filtered_category_id'));
   }
 });

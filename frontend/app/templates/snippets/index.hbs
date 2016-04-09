@@ -14,7 +14,7 @@
       <select {{action 'categoryChanged' on='change'}} class='form-control'>
         <option>Select a category...</option>
         {{#each snippetCategories key="@index" as |category|}}
-          <option value="{{category.id}}" selected={{is-equal category.id category_id}}>
+          <option value="{{category.id}}" selected={{is-equal category.id categoryId}}>
             {{category.name}}
           </option>
         {{/each}}
@@ -34,9 +34,9 @@
           <tbody>
             {{#each filteredSnippets as |snippet|}}
               <tr>
-                <td><strong>{{snippet.category_name}}</strong></td>
-                <td class="snippet-preview">{{snippet.full_text}}</td>
-                <td>{{snippet.full_text.length}}</td>
+                <td><strong>{{snippet.categoryName}}</strong></td>
+                <td class="snippet-preview">{{snippet.fullText}}</td>
+                <td>{{snippet.fullText.length}}</td>
                 <td>{{#link-to 'snippet.index' snippet.id}}Show{{/link-to}}</td>
                 <td>{{#link-to 'snippet.play' snippet.id}}Play{{/link-to}}</td>
                 {{#if session.user.admin}}

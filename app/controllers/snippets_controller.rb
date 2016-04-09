@@ -21,7 +21,8 @@ class SnippetsController < ApplicationController
       snippets = snippets.of_category(params[:category_id])
     end
 
-    render json: snippets
+    json = serializer.serialize_to_hash(snippets.map { |s| SnippetResource.new(s, nil) })
+    render json: json
   end
 
   def show
