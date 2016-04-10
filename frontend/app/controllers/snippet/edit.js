@@ -9,18 +9,7 @@ export default Ember.Controller.extend({
 
   actions: {
     submitAction() {
-      Ember.$.ajax({
-        type: 'PUT',
-        url: '/snippets/' + this.get('model.id'),
-        data: {
-          snippet: {
-            full_text: this.get('model.fullText'),
-            category_id: this.get('model.categoryId')
-          }
-        },
-        dataType: 'json'
-      }).then((function (response) {
-        this.model.reload();
+      this.get('model').save().then((function (response) {
         this.transitionToRoute('snippet.index', response.id);
       }).bind(this));
     },

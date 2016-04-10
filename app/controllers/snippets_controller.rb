@@ -12,7 +12,7 @@ class SnippetsController < ApplicationController
 
     selected_snip = Snippet.random(:category_ids => category_ids, :exclude => exclude)
 
-    render json: serializer.serialize_to_hash(SnippetResource.new(selected_snip, nil))
+    render json: simple_snippet_json(selected_snip)
   end
 
   def index
@@ -28,30 +28,24 @@ class SnippetsController < ApplicationController
   def show
     snippet = Snippet.includes(:category, scores: [:user]).find(params[:id])
 
-    json = serializer(include: ['scores'])
-             .serialize_to_hash(SnippetResource.new(snippet, nil))
-    render json: json
-  end
-
-  def serializer(options = {})
-    JSONAPI::ResourceSerializer.new(SnippetResource, options)
+    render json: detailed_snippet_json(snippet)
   end
 
   def create
     snippet = Snippet.new(snippet_params)
 
     if snippet.save
-      render json: snippet.as_detailed_json, status: :created
+      render json: detailed_snippet_json(snippet), status: :created
     else
       render json: snippet.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    snippet = Snippet.find(params[:id])
+    snippet = Snippet.find(params[:data][:id])
 
     if snippet.update_attributes(snippet_params)
-      render json: snippet.as_detailed_json
+      render json: detailed_snippet_json(snippet)
     else
       render json: snippet.errors, status: :unprocessable_entity
     end
@@ -61,12 +55,30 @@ class SnippetsController < ApplicationController
     snippet = Snippet.find(params[:id])
     snippet.destroy
 
-    render json: {}
+    render json: simple_snippet_json(snippet)
   end
 
   private
 
+  def serializer(options = {})
+    JSONAPI::ResourceSerializer.new(SnippetResource, options)
+  end
+
+  def simple_snippet_json(selected_snip)
+    serializer.serialize_to_hash(SnippetResource.new(selected_snip, nil))
+  end
+
+  def detailed_snippet_json(snippet)
+    serializer(include: ['scores']).serialize_to_hash(SnippetResource.new(snippet, nil))
+  end
+
   def snippet_params
-    params.require(:snippet).permit(:full_text, :category_id)
+    attrs = params.require(:data).require(:attributes).permit('full-text', 'category-id')
+
+    # TODO: is there a better way or place to do this transform
+    {
+      full_text: attrs['full-text'],
+      category_id: attrs['category-id']
+    }
   end
 end

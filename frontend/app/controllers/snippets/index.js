@@ -32,11 +32,9 @@ export default Ember.Controller.extend({
     destroy(snippet) {
       var answer = confirm('Are you sure?');
       if (answer) {
-        Ember.$.ajax({
-          url: '/snippets/' + snippet.id,
-          method: 'DELETE',
-          dataType: 'json'
-        }).then((function () {
+        snippet.destroyRecord().then((function () {
+          // TODO: this is probably avoidable now that
+          // the snippets index uses a real list of models
           var snippets = this.get('model');
           var newSnippets = [];
           snippets.forEach(function (s) {

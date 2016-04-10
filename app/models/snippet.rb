@@ -22,14 +22,4 @@ class Snippet < ActiveRecord::Base
 
     return snippets.sample
   end
-
-  def as_json(params = {})
-    super.merge(
-      category_name: category.name
-    )
-  end
-
-  def as_detailed_json
-    as_json.merge(scores: scores.as_json)
-  end
 end
