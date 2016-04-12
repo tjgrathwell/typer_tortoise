@@ -10,7 +10,7 @@
       <tbody>
         {{#each scores.model as |score|}}
           <tr>
-            <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
+            <td>{{#link-to 'snippet.index' score.snippet.id}}{{score.snippet.id}}{{/link-to}}</td>
             <td>{{score.wpm}}</td>
             <td>{{score.accuracy}}</td>
           </tr>

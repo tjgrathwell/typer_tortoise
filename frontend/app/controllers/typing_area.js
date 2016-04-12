@@ -14,15 +14,12 @@ export default Ember.Controller.extend({
   },
 
   saveScore: function () {
-    var score = this.get('current_snippet').getScore();
-    this.get('scores').add(score);
+    var score = this.store.createRecord(
+      'score',
+      this.get('current_snippet').getScoreAttributes()
+    );
     if (this.get('session.user')) {
-      Ember.$.ajax({
-        type: 'POST',
-        url: '/scores',
-        data: {score: score.toJson()},
-        dataType: 'json'
-      });
+      score.save();
     }
   },
 

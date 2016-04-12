@@ -6,8 +6,22 @@ describe ScoresController do
     @snippet = create(:snippet)
     @score_data = {
       'wpm' => 19,
-      'accuracy' => 29,
-      'snippet_id' => @snippet.id,
+      'accuracy' => 29
+    }
+  end
+
+  def score_params
+    {
+      data: {
+        attributes: @score_data,
+        relationships: {
+          snippet: {
+            data: {
+              id: @snippet.id
+            }
+          }
+        }
+      }
     }
   end
 
@@ -25,8 +39,9 @@ describe ScoresController do
       end
 
       it "should not create a score object for data that does not validate" do
+        @score_data.merge!(:wpm => -10)
         lambda do
-          post :create, :score => @score_data.merge(:wpm => -10), format: :json
+          post :create, score_params, format: :json
         end.should_not change(Score, :count)
       end
     end
@@ -34,7 +49,7 @@ describe ScoresController do
     describe "success" do
       it "should create a score object" do
         lambda do
-          post :create, score: @score_data, format: :json
+          post :create, score_params, format: :json
         end.should change(Score, :count).by(1)
       end
     end
@@ -44,7 +59,7 @@ describe ScoresController do
 
     it "should return an empty response" do
       lambda do
-        post :create, score: @score_data.merge(:wpm => -10), format: :json
+        post :create, score_params, format: :json
 
         response.status.should == 403
       end.should_not change(Score, :count)

@@ -3,7 +3,6 @@ import DS from 'ember-data';
 import Utilities from 'frontend/util';
 import SnippetNormalizer from 'frontend/services/snippet_normalizer';
 import CommentParser from 'frontend/services/comment_parser';
-import LegacyScore from 'frontend/models/legacy_score';
 
 const WpmTimer = Ember.Object.extend({
   schedule: function (f) {
@@ -355,11 +354,11 @@ export default Ember.Object.extend({
   //
   // output
   //
-  getScore: function () {
-    return LegacyScore.create({
-      snippet_id: this.get('snippet.id'),
+  getScoreAttributes: function () {
+    return {
+      snippet: this.get('snippet'),
       wpm: this.get('wpm'),
       accuracy: this.get('accuracy')
-    });
+    };
   }
 });

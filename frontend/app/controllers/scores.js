@@ -7,12 +7,8 @@ export default Ember.Controller.extend({
   },
 
   loadScores: function (score) {
-    Ember.$.getJSON('/scores', (function (json) {
-      this.set('model', json);
+    this.store.findAll('score').then((function (scores) {
+      this.set('model', scores);
     }).bind(this));
-  },
-
-  add: function (score) {
-    this.get('model').pushObject(score);
   }
 });
