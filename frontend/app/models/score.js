@@ -8,5 +8,6 @@ export default DS.Model.extend({
   userName: DS.attr(),
   snippetId: DS.attr(),
 
-  snippet: DS.belongsTo('snippet')
+  snippet: DS.belongsTo('snippet'),
+  user: DS.belongsTo('user')
 });

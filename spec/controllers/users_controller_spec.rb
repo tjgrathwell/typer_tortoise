@@ -22,7 +22,7 @@ describe UsersController do
     describe 'GET #index' do
       it 'returns a list of users' do
         get :index, format: :json
-        JSON.parse(response.body)['users'].map { |u| u['name'] }.should == [@user.name]
+        JSON.parse(response.body)['data'].map { |u| u['attributes']['name'] }.should == [@user.name]
       end
     end
 

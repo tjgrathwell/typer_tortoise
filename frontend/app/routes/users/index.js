@@ -8,7 +8,7 @@ export default Ember.Route.extend({
   },
 
   model: function () {
-    return Ember.$.getJSON('/users');
+    return this.store.findAll('user');
   },
 
   setupController: function (controller, model) {

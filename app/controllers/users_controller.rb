@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    render json: User.all
+    render json: serializer.serialize_to_hash(User.all.map { |u| UserResource.new(u, nil) })
   end
 
   def scores
@@ -38,5 +38,11 @@ class UsersController < ApplicationController
     end
 
     render json: user.scores
+  end
+
+  private
+
+  def serializer(options = {})
+    JSONAPI::ResourceSerializer.new(UserResource, options)
   end
 end
