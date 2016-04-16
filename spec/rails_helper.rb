@@ -16,6 +16,7 @@ def choose_javascript_driver
 end
 
 Capybara.javascript_driver = choose_javascript_driver
+Capybara.save_path = Rails.root.join('tmp', 'capybara-screenshots')
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
@@ -29,6 +30,8 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  config.example_status_persistence_file_path = Rails.root.join('tmp', 'rspec_examples.txt')
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Storage from 'frontend/storage'
-import Category from 'frontend/models/category'
+import LegacyCategory from 'frontend/models/legacy_category'
 
 export default Ember.Controller.extend({
   session: Ember.inject.controller(),
@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
       var category_ids = Storage.get('typer_tortoise.category_ids');
       if (category_ids) {
         var categories = category_ids.split(',').map(function (cat_id) {
-          return Category.create({id: parseInt(cat_id, 10), enabled: true});
+          return LegacyCategory.create({id: parseInt(cat_id, 10), enabled: true});
         });
         this.set('model', categories);
       }
@@ -65,7 +65,10 @@ export default Ember.Controller.extend({
   },
 
   enabledCategoryIds: function () {
-    return this.enabledCategories().map(function (cat) { return cat.get('id') });
+    return this.enabledCategories().map(function (cat) {
+      // TODO: get rid of parseint once the server properly sends integer ids
+      return parseInt(cat.get('id'), 10);
+    });
   },
 
   saveCategories: function () {
@@ -103,10 +106,8 @@ export default Ember.Controller.extend({
   loadCategories: function () {
     var self = this;
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      return self._loadCategoriesFromServer().then(function (json) {
-        self.set('model', json.map(function (el) {
-          return Category.create(el);
-        }));
+      return self._loadCategoriesFromServer().then(function (categories) {
+        self.set('model', categories);
         if (!self.get('session.user')) {
           self._loadCategoryPreferencesFromStorage();
         }
@@ -116,11 +117,7 @@ export default Ember.Controller.extend({
   },
 
   _loadCategoriesFromServer: function () {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
-      Ember.$.getJSON('/categories', function (data) {
-        resolve(data);
-      });
-    });
+    return this.store.findAll('category');
   },
 
   _loadCategoryPreferencesFromStorage: function () {

@@ -1,5 +1,5 @@
 import { moduleFor, module, test } from 'ember-qunit';
-import Category from 'frontend/models/category'
+import LegacyCategory from 'frontend/models/legacy_category'
 import Storage from 'frontend/storage'
 
 const categories_json = [
@@ -17,7 +17,7 @@ moduleFor('controller:category_preferences', 'Controller | category preferences'
 test('can return a list of just the enabled categories', function (assert) {
   var catController = this.subject();
   catController.set('model', $.map(categories_json, function (el) {
-    return Category.create(el);
+    return LegacyCategory.create(el);
   }));
   assert.deepEqual(catController.enabledCategoryIds(), [2, 3]);
 });
@@ -25,7 +25,7 @@ test('can return a list of just the enabled categories', function (assert) {
 test('can to toggle categories on and off', function (assert) {
   var catController = this.subject();
   catController.set('model', $.map(categories_json, function (el) {
-    return Category.create(el);
+    return LegacyCategory.create(el);
   }));
   catController.setCategory(2, false);
   assert.deepEqual(catController.enabledCategoryIds(), [3]);
@@ -34,7 +34,7 @@ test('can to toggle categories on and off', function (assert) {
 test('raises errors when you try to toggle a category it does not know', function (assert) {
   var catController = this.subject();
   catController.set('model', $.map(categories_json, function (el) {
-    return Category.create(el);
+    return LegacyCategory.create(el);
   }));
   assert.throws(function () {
     catController.setCategory(4, false);
@@ -69,7 +69,7 @@ test('for an unauthed user, saves the selected categories into localstorage as c
   var catController = this.subject();
 
   catController.set('model', $.map(categories_json, function (el) {
-    return Category.create(el);
+    return LegacyCategory.create(el);
   }));
 
   catController.saveCategories(function () {});

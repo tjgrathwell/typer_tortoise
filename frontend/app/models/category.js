@@ -1,11 +1,7 @@
-import Ember from 'ember'
+import Ember from 'ember';
+import DS from 'ember-data';
 
-export default Ember.Object.extend({
-  id: null,
-  name: null,
-  enabled: null,
-
-  toJson: function () {
-    return {id: this.get('id')};
-  }
+export default DS.Model.extend({
+  name: DS.attr(),
+  enabled: DS.attr()
 });

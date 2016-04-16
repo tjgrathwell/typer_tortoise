@@ -19,15 +19,25 @@ class CategoriesController < ApplicationController
       enabled_categories = []
     end
 
-    all_categories = Category.all.map { |c| c.attributes }
-    all_categories.each do |category|
+    category_resources = Category.all.map { |c| CategoryResource.new(c, nil) }
+    category_resources.each do |category_resource|
       if enabled_categories.empty?
-        category[:enabled] = true
+        category_resource.enabled = true
       else
-        category[:enabled] = enabled_categories.include? category['name']
+        category_resource.enabled = enabled_categories.include?(category_resource.name)
       end
     end
 
-    render json: all_categories, root: false
+    render json: serializer.serialize_to_hash(category_resources)
+  end
+
+  private
+
+  def serializer(options = {})
+    JSONAPI::ResourceSerializer.new(CategoryResource, options)
+  end
+
+  def category_json(score)
+    serializer.serialize_to_hash(CategoryResource.new(score, nil))
   end
 end
