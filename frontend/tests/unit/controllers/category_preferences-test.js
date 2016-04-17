@@ -47,7 +47,10 @@ test('for an unauthed user, loads the selected categories from localstorage if a
   var catController = this.subject();
 
   var categoriesPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-    resolve(categories_json);
+    var categoryModels = $.map(categories_json, function (el) {
+      return LegacyCategory.create(el);
+    });
+    resolve(categoryModels);
   });
 
   sinon.stub(catController, '_loadCategoriesFromServer', function () {
