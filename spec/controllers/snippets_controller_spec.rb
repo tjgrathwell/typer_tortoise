@@ -21,7 +21,6 @@ describe SnippetsController do
 
       10.times do
         get :random, :format => :json, :category_ids => [category.id]
-        # TODO: shouldn't need the to_i for id
         JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
       end      
     end

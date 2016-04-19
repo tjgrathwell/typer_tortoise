@@ -66,7 +66,6 @@ export default Ember.Controller.extend({
 
   enabledCategoryIds: function () {
     return this.enabledCategories().map(function (cat) {
-      // TODO: get rid of parseint once the server properly sends integer ids
       return parseInt(cat.get('id'), 10);
     });
   },
