@@ -8,8 +8,4 @@ class Score < ActiveRecord::Base
   validates :accuracy, numericality: { less_than_or_equal_to: 100 }
 
   validates :wpm, :accuracy, numericality: { greater_than_or_equal_to: 0 }
-
-  def as_json(params: {})
-    super.merge(user_name: user.name)
-  end
 end

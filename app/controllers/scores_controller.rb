@@ -12,7 +12,11 @@ class ScoresController < ApplicationController
   end
 
   def index
-    scores = current_user.try(:scores) || []
+    scores = []
+
+    if current_user
+      scores = current_user.scores.includes(:snippet)
+    end
 
     score_resources = scores.map { |s| ScoreResource.new(s, nil) }
     # TODO: shouldn't need to side-load all the snippets just to link them :|
