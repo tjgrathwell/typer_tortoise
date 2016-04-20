@@ -9,14 +9,8 @@ export default Ember.Controller.extend({
   }.property('session.user'),
 
   snippetCategories: function () {
-    var categories = {};
-    this.get('model').forEach(function (snippet) {
-      categories[snippet.get('categoryId')] = snippet.get('categoryName');
-    });
-    return Object.keys(categories).map(function (id) {
-      return {name: categories[id], id: id};
-    });
-  }.property('model'),
+    return this.store.findAll('category');
+  }.property(),
 
   filteredSnippets: function () {
     return this.get('model').filter((function (snippet) {
@@ -47,10 +41,8 @@ export default Ember.Controller.extend({
       }
     },
 
-    categoryChanged() {
-      const selectedEl = $('select');
-      const selectedValue = selectedEl.val();
-      this.set('categoryId', selectedValue);
+    categoryChanged(categoryId) {
+      this.set('categoryId', categoryId);
     }
   }
 });
