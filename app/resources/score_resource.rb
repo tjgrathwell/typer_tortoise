@@ -2,6 +2,7 @@ class ScoreResource < JSONAPI::Resource
   attribute :wpm
   attribute :accuracy
   attribute :user_id
+  attribute :snippet_id
   attribute :user_name
   has_one :snippet
 

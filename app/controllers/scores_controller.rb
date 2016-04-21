@@ -19,8 +19,7 @@ class ScoresController < ApplicationController
     end
 
     score_resources = scores.map { |s| ScoreResource.new(s, nil) }
-    # TODO: shouldn't need to side-load all the snippets just to link them :|
-    render json: serializer(include: ['snippet']).serialize_to_hash(score_resources), root: false
+    render json: serializer.serialize_to_hash(score_resources), root: false
   end
 
   private
@@ -30,8 +29,7 @@ class ScoresController < ApplicationController
   end
 
   def score_json(score)
-    # TODO: shouldn't need to side-load all the snippets just to link them :|
-    serializer(include: ['snippet']).serialize_to_hash(ScoreResource.new(score, nil))
+    serializer.serialize_to_hash(ScoreResource.new(score, nil))
   end
 
   def score_params
