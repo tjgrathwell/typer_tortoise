@@ -33,12 +33,8 @@ class ScoresController < ApplicationController
   end
 
   def score_params
-    attrs = params.require(:data).require(:attributes).permit([:wpm, :accuracy])
-    id = params.require(:data).require(:relationships).require(:snippet).require(:data).permit([:id])['id']
-    {
-      wpm: attrs['wpm'],
-      accuracy: attrs['accuracy'],
-      snippet_id: id
-    }
+    extracted_attributes(:wpm, :accuracy).merge(
+      snippet_id: relationship_attribute(:snippet, :id)
+    )
   end
 end

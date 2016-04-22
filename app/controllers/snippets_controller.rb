@@ -73,12 +73,6 @@ class SnippetsController < ApplicationController
   end
 
   def snippet_params
-    attrs = params.require(:data).require(:attributes).permit('full-text', 'category-id')
-
-    # TODO: is there a better way or place to do this transform
-    {
-      full_text: attrs['full-text'],
-      category_id: attrs['category-id']
-    }
+    extracted_attributes(:full_text, :category_id)
   end
 end
