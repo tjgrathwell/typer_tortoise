@@ -3,7 +3,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model: function () {
-    return this.store.findAll('snippet');
+    return this.store.findAll('snippet', {reload: true});
   },
 
   setupController: function (controller, model) {
