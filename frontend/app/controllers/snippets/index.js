@@ -27,16 +27,7 @@ export default Ember.Controller.extend({
       var answer = confirm('Are you sure?');
       if (answer) {
         snippet.destroyRecord().then((function () {
-          // TODO: this is probably avoidable now that
-          // the snippets index uses a real list of models
-          var snippets = this.get('model');
-          var newSnippets = [];
-          snippets.forEach(function (s) {
-            if (s.id !== snippet.id) {
-              newSnippets.push(s);
-            }
-          });
-          this.set('model', newSnippets);
+          this.set('model', this.store.findAll('snippet'));
         }).bind(this));
       }
     },
