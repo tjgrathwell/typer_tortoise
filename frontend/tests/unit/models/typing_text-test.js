@@ -55,7 +55,7 @@ test("guesses the level of indentation for a snippet with 3-space indent", funct
     '   line indentation'
   );
 
-  var snippet = Ember.Object.create({id: 1, fullText: snippetText})
+  var snippet = Ember.Object.create({id: 1, fullText: snippetText});
   assert.equal(this.subject({snippet: snippet}).tabSize(), 3);
 });
 
