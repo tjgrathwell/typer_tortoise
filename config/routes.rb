@@ -9,16 +9,16 @@ TyperTortoise::Application.routes.draw do
   scope constraints: json_constraint do
     resources :scores, only: [:index, :create]
 
-    resources :categories, :only => [:index] do
-      post 'set_preferences', :on => :collection
+    resources :categories, only: [:index] do
+      post :set_preferences, on: :collection
     end
 
-    resources :users, :only => [:index, :show] do
-      get 'scores', :on => :member
+    resources :users, only: [:index, :show] do
+      get :scores, on: :member
     end
 
     resources :snippets, except: [:new, :edit] do
-      get 'random', :on => :collection
+      get :random, on: :collection
     end
   end
 
