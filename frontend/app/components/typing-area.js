@@ -7,6 +7,12 @@ export default Ember.Component.extend({
 
   focused: false,
 
+  actions: {
+    showCategory: function (categoryId) {
+      this.sendAction('showCategory', categoryId);
+    },
+  },
+
   keyDown: function (e) {
     KeyHandling.setPreventDefaultForKey(e);
     if (e.which === KeyHandling.CODES.BACKSPACE) {

@@ -45,6 +45,29 @@ describe "as a signed-in user" do
       end
     end
   end
+
+  describe "snippets play page", js: true do
+    before do
+      @cat_a = create(:category, name: 'CategoryA')
+      @cat_b = create(:category, name: 'CategoryB')
+      @snippets = [
+        create(:snippet, full_text: 'catAsnip1', category: @cat_a),
+        create(:snippet, full_text: 'catAsnip2', category: @cat_a),
+        create(:snippet, full_text: 'catBsnip1', category: @cat_b),
+      ]
+    end
+
+    it 'contains a link to show just snippets of that category' do
+      visit "/snippets/#{@snippets.first.id}/play"
+      page.should have_content(/catAsnip1/m)
+
+      page.find('.type-area-category').click
+
+      page.should have_content(/catAsnip2/m)
+      page.should have_content(/catAsnip1/m)
+      page.should have_no_content(/catBsnip1/m)
+    end
+  end
 end
 
 context 'as an admin', js: true do
