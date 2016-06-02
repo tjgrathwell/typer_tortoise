@@ -7,8 +7,8 @@ export default Ember.Controller.extend({
   },
 
   loadScores: function (score) {
-    this.store.findAll('score').then((function (scores) {
+    this.store.findAll('score').then((scores) => {
       this.set('model', scores);
-    }).bind(this));
+    });
   }
 });

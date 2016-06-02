@@ -278,9 +278,8 @@ export default Ember.Object.extend({
       if (this.enableTimer) {
         this.set('start_time', (new Date()).getTime());
 
-        var self = this;
-        this.get('wpm_timer').schedule(function () {
-          self.set('wpm_ticks', self.wpm_ticks + 1);
+        this.get('wpm_timer').schedule(() => {
+          this.set('wpm_ticks', this.wpm_ticks + 1);
         });
       }
     }

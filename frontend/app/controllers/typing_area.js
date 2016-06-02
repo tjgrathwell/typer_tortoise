@@ -66,14 +66,13 @@ export default Ember.Controller.extend({
       promise = this.store.findRecord('snippet', id);
     }
 
-    return promise.then((function (snippet) {
+    return promise.then((snippet) => {
       var typingText = TypingText.create({
         snippet: snippet,
-        //scores: snippet.get('scores'),
         enableTimer: true
       });
       this.set('current_snippet', typingText);
       return snippet;
-    }).bind(this));
+    });
   }
 });

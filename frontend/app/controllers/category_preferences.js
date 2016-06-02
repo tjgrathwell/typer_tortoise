@@ -103,12 +103,11 @@ export default Ember.Controller.extend({
   },
 
   loadCategories: function () {
-    var self = this;
-    return new Ember.RSVP.Promise(function (resolve, reject) {
-      return self._loadCategoriesFromServer().then(function (categories) {
-        self.set('model', categories);
-        if (!self.get('session.user')) {
-          self._loadCategoryPreferencesFromStorage();
+    return new Ember.RSVP.Promise((resolve, reject) => {
+      return this._loadCategoriesFromServer().then((categories) => {
+        this.set('model', categories);
+        if (!this.get('session.user')) {
+          this._loadCategoryPreferencesFromStorage();
         }
         resolve();
       });

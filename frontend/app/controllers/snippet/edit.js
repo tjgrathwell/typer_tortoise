@@ -9,9 +9,9 @@ export default Ember.Controller.extend({
 
   actions: {
     submitAction() {
-      this.get('model').save().then((function (response) {
+      this.get('model').save().then((response) => {
         this.transitionToRoute('snippet.index', response.id);
-      }).bind(this));
+      });
     },
 
     categoryChanged(categoryId) {

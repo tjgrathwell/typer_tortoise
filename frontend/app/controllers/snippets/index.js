@@ -13,9 +13,9 @@ export default Ember.Controller.extend({
   }.property(),
 
   filteredSnippets: function () {
-    return this.get('model').filter((function (snippet) {
+    return this.get('model').filter((snippet) => {
       return snippet.get('categoryId') === parseInt(this.get('categoryId'), 10);
-    }).bind(this));
+    });
   }.property('model', 'categoryId'),
 
   saveCategoryId: function () {
@@ -26,9 +26,9 @@ export default Ember.Controller.extend({
     destroy(snippet) {
       var answer = confirm('Are you sure?');
       if (answer) {
-        snippet.destroyRecord().then((function () {
+        snippet.destroyRecord().then(() => {
           this.set('model', this.store.findAll('snippet'));
-        }).bind(this));
+        });
       }
     },
 
