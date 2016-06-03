@@ -3,9 +3,9 @@ import LegacyCategory from 'frontend/models/legacy_category'
 import Storage from 'frontend/storage'
 
 const categories_json = [
-  {id: 1, name: 'melodramatically-din',   enabled: false},
-  {id: 2, name: 'warrant-individualists', enabled: true},
-  {id: 3, name: 'overlaid-arachnids',     enabled: true}
+  {id: '1', name: 'melodramatically-din',   enabled: false},
+  {id: '2', name: 'warrant-individualists', enabled: true},
+  {id: '3', name: 'overlaid-arachnids',     enabled: true}
 ];
 
 const storage_key_name = 'typer_tortoise.category_ids';

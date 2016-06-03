@@ -27,8 +27,11 @@ export default Ember.Controller.extend({
     if (!this.get('session.user') && Storage.supported) {
       var category_ids = Storage.get('typer_tortoise.category_ids');
       if (category_ids) {
-        var categories = category_ids.split(',').map(function (cat_id) {
-          return LegacyCategory.create({id: parseInt(cat_id, 10), enabled: true});
+        var categories = category_ids.split(',').map(function (categoryId) {
+          return LegacyCategory.create({
+            id: categoryId,
+            enabled: true
+          });
         });
         this.set('model', categories);
       }
@@ -40,14 +43,11 @@ export default Ember.Controller.extend({
   }.property('model.@each.enabled'),
 
   findCategoryById: function (category_id) {
-    var model = this.get('model');
-    var length = model.length;
-    for (var i = 0; i < length; i++) {
-      if (model[i].get('id') === category_id) {
-        return model[i];
-      }
+    var category = this.get('model').findBy('id', category_id.toString());
+    if (!category) {
+      throw new Error("Couldn't find an object with id " + category_id);
     }
-    throw "Couldn't find an object with id " + category_id;
+    return category;
   },
 
   setCategory: function (category_id, enabled) {
@@ -130,9 +130,9 @@ export default Ember.Controller.extend({
 
     this.disableAll();
 
-    var category_ids = category_id_csv.split(',').map(function (id) { return parseInt(id, 10) });
-    category_ids.forEach(function (cat_id) {
-      this.setCategory(cat_id, true);
+    var category_ids = category_id_csv.split(',');
+    category_ids.forEach(function (categoryId) {
+      this.setCategory(categoryId, true);
     }, this);
   }
 });
