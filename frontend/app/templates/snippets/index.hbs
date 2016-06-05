@@ -26,8 +26,10 @@
             <tr>
               <th class="row-category">Category</th>
               <th class="row-text">Text</th>
-              <th class="row-characters" {{action 'toggleSortColumn' 'fullText.length'}}>
+              <th class="row-characters"
+                {{action 'toggleSortColumn' 'fullText.length'}}>
                 Characters
+                <span class={{sort-arrow-class 'fullText.length' sortColumn sortReverse}}></span>
               </th>
               <th class="row-actions" colspan="{{actionsCount}}"></th>
             </tr>

@@ -289,6 +289,14 @@ textarea.snippet-editor {
   }
 }
 
+.sorted-asc:before {
+  content: '▲';
+}
+
+.sorted-desc:before {
+  content: '▼';
+}
+
 select.form-control {
   margin: 10px 0;
 }
