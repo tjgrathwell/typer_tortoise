@@ -278,23 +278,33 @@ textarea.snippet-editor {
 }
 
 .snippets-table {
-  table-layout: fixed;
   .row-text {
     width: 50%;
   }
   .snippet-preview {
+    max-width: 0;
     white-space: pre;
     font-family: $monospace-font-families;
     overflow: hidden;
   }
 }
 
-.sorted-asc:before {
-  content: '▲';
-}
+.row-sortable {
+  cursor: pointer;
+  white-space: nowrap;
 
-.sorted-desc:before {
-  content: '▼';
+  .sort-indicator {
+    display: inline-block;
+    width: 24px;
+  }
+
+  .sorted-asc:after {
+    content: '▲';
+  }
+
+  .sorted-desc:after {
+    content: '▼';
+  }
 }
 
 select.form-control {
