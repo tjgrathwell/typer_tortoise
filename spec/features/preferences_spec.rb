@@ -41,7 +41,7 @@ describe "changing preferences", js: true do
 
     expect(page).to have_css(popup_selector)
 
-    page.find('.prefs-popup-bg').click
+    page.find('.modal-view-bg').trigger('click')
 
     expect(page).to have_no_css(popup_selector)
   end

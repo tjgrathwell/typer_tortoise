@@ -1,17 +1,15 @@
-{{#prefs-popup-background}}
-  {{#prefs-popup-content}}
-    <h2>
-      {{if session.user session.user.name 'Guest'}}'s preferences
-    </h2>
-    <ul>
-      {{#each category_preferences.model as |category|}}
-        <li>
-          <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
-        </li>
-      {{/each}}
-    </ul>
-    <div class="text-center">
-      <button class="btn btn-primary" disabled={{category_preferences.noCategoriesSelected}} {{action 'savePreferences'}}>Save Preferences</button>
-    </div>
-  {{/prefs-popup-content}}
-{{/prefs-popup-background}}
+{{#modal-view contentClass="prefs-popup"}}
+  <h2>
+    {{if session.user session.user.name 'Guest'}}'s preferences
+  </h2>
+  <ul>
+    {{#each category_preferences.model as |category|}}
+      <li>
+        <label>{{input type='checkbox' checked=category.enabled}}{{category.name}}</label>
+      </li>
+    {{/each}}
+  </ul>
+  <div class="text-center">
+    <button class="btn btn-primary" disabled={{category_preferences.noCategoriesSelected}} {{action 'savePreferences'}}>Save Preferences</button>
+  </div>
+{{/modal-view}}

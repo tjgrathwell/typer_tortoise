@@ -218,17 +218,32 @@ textarea.snippet-editor {
   padding: 10px;
 }
 
-.prefs-popup-bg {
-  position: fixed;
-  z-index: 50;
-  background-color: rgba(100, 100, 100, .8);
+.modal-view-container, .modal-view-bg {
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
+  z-index: 50;
+}
+
+.modal-view-container {
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+}
+
+.modal-view-bg {
+  position: absolute;
+  background-color: rgba(100, 100, 100, .8);
+}
+
+.modal-view-content {
+  z-index: 100;
 }
 
 .prefs-link {
@@ -243,7 +258,6 @@ textarea.snippet-editor {
 
 .prefs-popup {
   padding: 10px;
-  z-index: 100;
   background-color: rgba(173, 216, 230, .9);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 
