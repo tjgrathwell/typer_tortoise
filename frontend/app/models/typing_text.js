@@ -29,7 +29,7 @@ export default Ember.Object.extend({
     this.set('cursor_pos', 0);
 
     this.set('start_time', null);
-    this.set('wpm_ticks', null);
+    this.set('wpmTicks', null);
 
     this.set('finished', false);
 
@@ -193,19 +193,27 @@ export default Ember.Object.extend({
   },
 
   wpm: function () {
-    if (this.start_time === null) { return 0; }
-
-    var now = (new Date()).getTime();
-    var minutes = (now - this.start_time) / (1000 * 60);
-
-    if (minutes < 0.05) {
+    var secondsSpentTyping = this.get('secondsSpentTyping');
+    if (secondsSpentTyping === 0) {
       return 0;
     }
 
-    var wpm_raw = (this.realTypedCharacters() / 5.0) / minutes;
+    var minutesSpentTyping = secondsSpentTyping / 60;
+    var wpm_raw = (this.realTypedCharacters() / 5.0) / minutesSpentTyping;
 
     return wpm_raw.toFixed();
-  }.property('wpm_ticks'),
+  }.property('secondsSpentTyping'),
+
+  showWpm: function () {
+    return this.get('secondsSpentTyping') > 3;
+  }.property('secondsSpentTyping'),
+
+  secondsSpentTyping: function () {
+    if (this.start_time === null) { return 0; }
+
+    var now = (new Date()).getTime();
+    return (now - this.start_time) / 1000;
+  }.property('wpmTicks'),
 
   accuracy: function () {
     var realTypedCharacters = this.realTypedCharacters();
@@ -279,7 +287,7 @@ export default Ember.Object.extend({
         this.set('start_time', (new Date()).getTime());
 
         this.get('wpm_timer').schedule(() => {
-          this.set('wpm_ticks', this.wpm_ticks + 1);
+          this.set('wpmTicks', this.wpmTicks + 1);
         });
       }
     }
