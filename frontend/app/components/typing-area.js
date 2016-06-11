@@ -3,7 +3,7 @@ import KeyHandling from 'frontend/keys';
 
 export default Ember.Component.extend({
   classNames: 'type-area-container',
-  text: Ember.computed.oneWay('typing_area.current_snippet'),
+  text: Ember.computed.oneWay('typingArea.currentSnippet'),
 
   focused: false,
 

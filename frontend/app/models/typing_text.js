@@ -19,26 +19,26 @@ const WpmTimer = Ember.Object.extend({
 
 export default Ember.Object.extend({
   snippet: null,
-  wpm_timer: WpmTimer.create(),
+  wpmTimer: WpmTimer.create(),
 
   init: function () {
     this._super();
     this.set('mistakes', []);
 
-    this.set('total_mistakes', 0);
-    this.set('cursor_pos', 0);
+    this.set('totalMistakes', 0);
+    this.set('cursorPos', 0);
 
-    this.set('start_time', null);
+    this.set('startTime', null);
     this.set('wpmTicks', null);
 
     this.set('finished', false);
 
-    this.set('full_string', SnippetNormalizer.normalizeSnippet(this.get('snippet.fullText')));
+    this.set('fullString', SnippetNormalizer.normalizeSnippet(this.get('snippet.fullText')));
 
     if (CommentParser.canParseComments(this.get('snippet.categoryName'))) {
       this.set(
         'comment_ranges',
-        CommentParser.computeCommentRanges(this.get('snippet.categoryName'), this.get('full_string'))
+        CommentParser.computeCommentRanges(this.get('snippet.categoryName'), this.get('fullString'))
       );
       this._skipComments();
     }
@@ -52,7 +52,7 @@ export default Ember.Object.extend({
     var indents = [];
 
     // guess the indent size to be however deeply indented the first indented line is
-    var lines = this.get('full_string').split('\n');
+    var lines = this.get('fullString').split('\n');
     lines.forEach(function (line) {
       var match = line.match('^(\\s+)');
       if (match) {
@@ -82,7 +82,7 @@ export default Ember.Object.extend({
       annotateText(this._afterCursor(), 'after-cursor')
     ];
     return parts.join('');
-  }.property('cursor_pos', 'mistakes.length'),
+  }.property('cursorPos', 'mistakes.length'),
 
   _decoratedSubstring: function (cursorStart, cursorEnd) {
     function escape(text) {
@@ -101,18 +101,18 @@ export default Ember.Object.extend({
         continue;
       }
 
-      result.push(escape(this.get('full_string').substr(index, commentRange[0] - index)));
+      result.push(escape(this.get('fullString').substr(index, commentRange[0] - index)));
       result.push('<span class="comment">');
-      result.push(escape(this.get('full_string').substr(commentRange[0], commentRange[1] - commentRange[0])));
+      result.push(escape(this.get('fullString').substr(commentRange[0], commentRange[1] - commentRange[0])));
       result.push('</span>');
       index = commentRange[1];
     }
-    result.push(escape(this.get('full_string').substr(index, cursorEnd - index)));
+    result.push(escape(this.get('fullString').substr(index, cursorEnd - index)));
     return result.join('');
   },
 
   _beforeCursor: function () {
-    return this._decoratedSubstring(0, this.cursor_pos);
+    return this._decoratedSubstring(0, this.cursorPos);
   },
 
   _atCursor: function () {
@@ -135,7 +135,7 @@ export default Ember.Object.extend({
       }
     }
 
-    return this.get('full_string').substr(this.cursor_pos, 1);
+    return this.get('fullString').substr(this.cursorPos, 1);
   },
 
   _renderedCursor: function () {
@@ -157,33 +157,33 @@ export default Ember.Object.extend({
 
     // For mistakes to not clobber the newline character (which causes
     //   an unpleasant visual effect) we need to make sure to preserve
-    //   any \n between (cursor_pos) and (cursor_pos + mistakes.length)
-    var clobberedArea = this.get('full_string').substr(this.cursor_pos, this.mistakes.length);
+    //   any \n between (cursorPos) and (cursorPos + mistakes.length)
+    var clobberedArea = this.get('fullString').substr(this.cursorPos, this.mistakes.length);
     if (clobberedArea.indexOf('\n') >= 0) {
-      adjustedCursor = this.cursor_pos + clobberedArea.indexOf('\n');
+      adjustedCursor = this.cursorPos + clobberedArea.indexOf('\n');
     } else {
-      adjustedCursor = this.cursor_pos + this.mistakes.length;
+      adjustedCursor = this.cursorPos + this.mistakes.length;
     }
 
-    var this_char = this.get('full_string').substr(this.cursor_pos, 1);
+    var this_char = this.get('fullString').substr(this.cursorPos, 1);
     if (this.mistakes.length === 0 && this_char !== '\n') {
       // If we have no mistakes, one character is reserved for the 'atCursor' point.
       // EXCEPT if that character is a newline: the newline always comes in the
       //   afterCursor section, so we leave the cursor alone.
       adjustedCursor += 1;
     }
-    return this._decoratedSubstring(adjustedCursor, this.get('full_string').length);
+    return this._decoratedSubstring(adjustedCursor, this.get('fullString').length);
   },
 
   //
   // synthesized typing quality data
   //
   realTypedCharacters: function () {
-    var characters = this.cursor_pos;
+    var characters = this.cursorPos;
     var commentRanges = this.get('comment_ranges') || [];
     for (var i = 0; i < commentRanges.length; i++) {
       var commentRange = commentRanges[i];
-      if (this.cursor_pos < commentRange[0]) {
+      if (this.cursorPos < commentRange[0]) {
         break;
       }
 
@@ -209,10 +209,10 @@ export default Ember.Object.extend({
   }.property('secondsSpentTyping'),
 
   secondsSpentTyping: function () {
-    if (this.start_time === null) { return 0; }
+    if (this.startTime === null) { return 0; }
 
     var now = (new Date()).getTime();
-    return (now - this.start_time) / 1000;
+    return (now - this.startTime) / 1000;
   }.property('wpmTicks'),
 
   accuracy: function () {
@@ -221,16 +221,16 @@ export default Ember.Object.extend({
       return 100;
     }
 
-    if (realTypedCharacters < this.total_mistakes) {
+    if (realTypedCharacters < this.totalMistakes) {
       return 0;
     }
 
-    var raw_acc = (realTypedCharacters - this.total_mistakes) / realTypedCharacters;
+    var raw_acc = (realTypedCharacters - this.totalMistakes) / realTypedCharacters;
     return (raw_acc * 100).toFixed(0);
-  }.property('cursor_pos', 'total_mistakes'),
+  }.property('cursorPos', 'totalMistakes'),
 
   _previousLineIndent: function () {
-    var lines = this.get('full_string').substr(0, this.cursor_pos).split('\n');
+    var lines = this.get('fullString').substr(0, this.cursorPos).split('\n');
     if (lines.length < 2) {
       return;
     }
@@ -250,8 +250,8 @@ export default Ember.Object.extend({
     if (this.comment_ranges) {
       for (var i = 0; i < this.comment_ranges.length; i++) {
         var commentRange = this.comment_ranges[i];
-        if (this.cursor_pos === commentRange[0]) {
-          this.set('cursor_pos', commentRange[1] + 1);
+        if (this.cursorPos === commentRange[0]) {
+          this.set('cursorPos', commentRange[1] + 1);
           skipped = true;
         }
       }
@@ -282,34 +282,34 @@ export default Ember.Object.extend({
     }
 
     // start the wpm timer if this is the first character typed
-    if (this.start_time === null) {
+    if (this.startTime === null) {
       if (this.enableTimer) {
-        this.set('start_time', (new Date()).getTime());
+        this.set('startTime', (new Date()).getTime());
 
-        this.get('wpm_timer').schedule(() => {
+        this.get('wpmTimer').schedule(() => {
           this.set('wpmTicks', this.wpmTicks + 1);
         });
       }
     }
 
-    var cursor_matches = this.get('full_string').substr(this.get('cursor_pos'), 1) === chr;
+    var cursor_matches = this.get('fullString').substr(this.get('cursorPos'), 1) === chr;
     var no_mistakes = this.mistakes.length === 0;
     if (no_mistakes && cursor_matches) {
-      this.set('cursor_pos', this.cursor_pos + 1);
+      this.set('cursorPos', this.cursorPos + 1);
       var skipped = this._skipComments();
       if (skipped || (chr === '\n')) {
         this._autoIndent();
       }
     } else {
       if (chr !== ' ') {
-        this.set('total_mistakes', this.total_mistakes + 1);
+        this.set('totalMistakes', this.totalMistakes + 1);
       }
       this.mistakes.pushObject(chr);
     }
 
     // clear the wpm timer if the snippet is finished
-    if (this.cursor_pos === this.get('full_string').length) {
-      this.get('wpm_timer').stop();
+    if (this.cursorPos === this.get('fullString').length) {
+      this.get('wpmTimer').stop();
       this.set('finished', true);
     }
   },
@@ -323,11 +323,11 @@ export default Ember.Object.extend({
       return;
     }
 
-    if (this.cursor_pos === 0 && this.mistakes.length === 0) {
+    if (this.cursorPos === 0 && this.mistakes.length === 0) {
       return;
     }
 
-    if (!this.mistakes.length && this._cursorInComment(this.cursor_pos - 1)) {
+    if (!this.mistakes.length && this._cursorInComment(this.cursorPos - 1)) {
       return;
     }
 
@@ -344,7 +344,7 @@ export default Ember.Object.extend({
       if (this.mistakes.length > 0) {
         this.mistakes.popObject();
       } else {
-        this.set('cursor_pos', this.cursor_pos - 1);
+        this.set('cursorPos', this.cursorPos - 1);
       }
     }, repeatCount, this);
   },

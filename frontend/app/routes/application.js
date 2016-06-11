@@ -4,7 +4,7 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   actions: {
     showPreferences: function () {
-      this.controllerFor('category_preferences').loadCategories().then(() => {
+      this.controllerFor('categoryPreferences').loadCategories().then(() => {
         this.render('prefs-popup', {
           into: 'application',
           outlet: 'modal'
@@ -13,10 +13,10 @@ export default Ember.Route.extend({
     },
 
     savePreferences: function () {
-      var pref_controller = this.controllerFor('category_preferences');
-      pref_controller.saveCategories().then(() => {
+      var prefController = this.controllerFor('categoryPreferences');
+      prefController.saveCategories().then(() => {
         this.send('closeModal');
-        this.controllerFor('typing_area').changeSnippetToCategory(pref_controller.enabledCategoryIds());
+        this.controllerFor('typingArea').changeSnippetToCategory(prefController.enabledCategoryIds());
       });
     },
 

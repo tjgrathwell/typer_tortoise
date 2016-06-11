@@ -435,7 +435,7 @@ test("adds whitespace to empty lines to meet the expected indentation threshold"
 
   var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
   var text_model = this.subject({snippet: snippet});
-  assert.equal(text_model.get('full_string'), lines(
+  assert.equal(text_model.get('fullString'), lines(
   'this snippet has',
   '  an empty line',
   '  ',
@@ -451,7 +451,7 @@ test("removes trailing whitespace", function (assert) {
 
   var snippet = Ember.Object.create({id: 1, fullText: snippet_text});
   var text_model = this.subject({snippet: snippet});
-  assert.equal(text_model.get('full_string'), lines(
+  assert.equal(text_model.get('fullString'), lines(
   'who put the trailing',
   '  whitespace in this?'
   ));

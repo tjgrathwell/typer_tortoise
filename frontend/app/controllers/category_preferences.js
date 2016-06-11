@@ -25,9 +25,9 @@ export default Ember.Controller.extend({
     //   categories in their localStorage prefs) will be cleared
     //   up when that user next saves their prefs.
     if (!this.get('session.user') && Storage.supported) {
-      var category_ids = Storage.get('typer_tortoise.category_ids');
-      if (category_ids) {
-        var categories = category_ids.split(',').map(function (categoryId) {
+      var categoryIds = Storage.get('typer_tortoise.category_ids');
+      if (categoryIds) {
+        var categories = categoryIds.split(',').map(function (categoryId) {
           return LegacyCategory.create({
             id: categoryId,
             enabled: true
@@ -42,16 +42,16 @@ export default Ember.Controller.extend({
     return this.enabledCategories().length === 0;
   }.property('model.@each.enabled'),
 
-  findCategoryById: function (category_id) {
-    var category = this.get('model').findBy('id', category_id.toString());
+  findCategoryById: function (categoryId) {
+    var category = this.get('model').findBy('id', categoryId.toString());
     if (!category) {
-      throw new Error("Couldn't find an object with id " + category_id);
+      throw new Error("Couldn't find an object with id " + categoryId);
     }
     return category;
   },
 
-  setCategory: function (category_id, enabled) {
-    this.findCategoryById(category_id).set('enabled', enabled);
+  setCategory: function (categoryId, enabled) {
+    this.findCategoryById(categoryId).set('enabled', enabled);
   },
 
   disableAll: function () {
@@ -123,14 +123,14 @@ export default Ember.Controller.extend({
       return;
     }
 
-    var category_id_csv = Storage.get('typer_tortoise.category_ids');
-    if (!category_id_csv) {
+    var categoryIdCsv = Storage.get('typer_tortoise.category_ids');
+    if (!categoryIdCsv) {
       return;
     }
 
     this.disableAll();
 
-    var category_ids = category_id_csv.split(',');
+    var category_ids = categoryIdCsv.split(',');
     category_ids.forEach(function (categoryId) {
       this.setCategory(categoryId, true);
     }, this);

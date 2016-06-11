@@ -10,7 +10,7 @@ const categories_json = [
 
 const storage_key_name = 'typer_tortoise.category_ids';
 
-moduleFor('controller:category_preferences', 'Controller | category preferences', {
+moduleFor('controller:categoryPreferences', 'Controller | category preferences', {
   unit: true
 });
 

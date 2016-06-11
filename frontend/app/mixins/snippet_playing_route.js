@@ -7,7 +7,7 @@ export default Ember.Mixin.create({
 
   actions: {
     willTransition: function () {
-      return this.controllerFor('typing_area').clearSnippet();
+      return this.controllerFor('typingArea').clearSnippet();
     }
   }
 });

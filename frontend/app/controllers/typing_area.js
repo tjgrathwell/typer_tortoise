@@ -3,32 +3,32 @@ import Utilities from 'frontend/util'
 import TypingText from 'frontend/models/typing_text'
 
 export default Ember.Controller.extend({
-  category_preferences: Ember.inject.controller(),
+  categoryPreferences: Ember.inject.controller(),
   scores: Ember.inject.controller(),
   session: Ember.inject.controller(),
 
   init: function () {
     this._super();
 
-    this.set('current_snippet', null);
+    this.set('currentSnippet', null);
   },
 
   saveScore: function () {
     var score = this.store.createRecord(
       'score',
-      this.get('current_snippet').getScoreAttributes()
+      this.get('currentSnippet').getScoreAttributes()
     );
     if (this.get('session.user')) {
       score.save();
     }
   },
 
-  changeSnippetToCategory: function (category_ids) {
-    if (!this.get('current_snippet')) {
+  changeSnippetToCategory: function (categoryIds) {
+    if (!this.get('currentSnippet')) {
       return;
     }
 
-    if (category_ids.indexOf(this.get('current_snippet.snippet.categoryId')) >= 0) {
+    if (categoryIds.indexOf(this.get('currentSnippet.snippet.categoryId')) >= 0) {
       // if this snippet is already in the whitelist of categories, nothing to do
       return;
     }
@@ -37,24 +37,24 @@ export default Ember.Controller.extend({
   },
 
   clearSnippet: function () {
-    this.set('previous_snippet', this.get('current_snippet'));
-    this.set('current_snippet', null);
+    this.set('previousSnippet', this.get('currentSnippet'));
+    this.set('currentSnippet', null);
   },
 
-  newSnippet: function (snippet_num) {
+  newSnippet: function (snippetNum) {
     var params = {};
 
     var id;
-    if (snippet_num) {
-      id = snippet_num;
+    if (snippetNum) {
+      id = snippetNum;
     } else {
       id = 'random';
       if (!this.get('session.user')) {
-        params['category_ids'] = this.get('category_preferences').enabledCategoryIds();
+        params['category_ids'] = this.get('categoryPreferences').enabledCategoryIds();
       }
     }
 
-    var lastSnippet = this.get('current_snippet') || this.get('previous_snippet');
+    var lastSnippet = this.get('currentSnippet') || this.get('previousSnippet');
     if (lastSnippet) {
       params['last_seen'] = lastSnippet.get('snippet.id');
     }
@@ -71,7 +71,7 @@ export default Ember.Controller.extend({
         snippet: snippet,
         enableTimer: true
       });
-      this.set('current_snippet', typingText);
+      this.set('currentSnippet', typingText);
       return snippet;
     });
   }
