@@ -43,7 +43,7 @@ export default Ember.Component.extend({
   didInsertElement: function () {
     this._super();
     this.$().fadeIn();
-    this.$().find('.type-panel').focus();
+    this.refocus();
     $(document).on('keypress.typingArea keydown.typingArea', function (e) {
       KeyHandling.setPreventDefaultForKey(e);
     });
@@ -53,6 +53,17 @@ export default Ember.Component.extend({
     $(document).off('.typingArea');
   },
 
+  refocus: function () {
+    this.$().find('.type-panel').focus();
+    this.get('typingArea').set('refocus', false);
+  },
+
   focusIn: function (e) { this.set('focused', true); },
-  focusOut: function (e) { this.set('focused', false); }
+  focusOut: function (e) { this.set('focused', false); },
+
+  focusWatcher: Ember.observer('typingArea.refocus', function () {
+    if (this.get('typingArea').get('refocus')) {
+      this.refocus();
+    }
+  })
 });

@@ -26,7 +26,8 @@ export default Ember.Route.extend({
     },
 
     closeModal: function () {
-      return this.disconnectOutlet({
+      this.controllerFor('typingArea').set('refocus', true);
+      this.disconnectOutlet({
         outlet: 'modal',
         parentView: 'application'
       });
