@@ -15,7 +15,7 @@ export default Ember.Controller.extend({
   }.property(),
 
   filteredSnippets: function () {
-    let unsortedSnippets = this.get('model').filter((snippet) => {
+    let unsortedSnippets = this.get('model').filter(snippet => {
       return snippet.get('categoryId') === parseInt(this.get('categoryId'), 10);
     });
     if (!this.get('sortColumn')) {

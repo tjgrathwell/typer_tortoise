@@ -69,7 +69,7 @@ export default Ember.Object.extend({
   //
   renderedText: function () {
     function annotateText(text, klass) {
-      return "<span class='" + klass + "'>" + text + "</span>";
+      return `<span class='${klass}'>${text}</span>`;
     }
 
     var cursorClasses = ['type-cursor'];
@@ -120,7 +120,7 @@ export default Ember.Object.extend({
       var mistakesString = this.mistakes.join('');
       if (this._onlySpacesOnCurrentLine() && (mistakesString.length >= this.tabSize())) {
         var arrayOfCharacter = function (chr, count) {
-          return Array.apply(null, new Array(count)).map(function() { return chr; });
+          return Array.apply(null, new Array(count)).map(() => chr);
         };
 
         // TODO: find a way to draw long arrows that works in firefox
@@ -140,7 +140,7 @@ export default Ember.Object.extend({
 
   _renderedCursor: function () {
     var cursorStr = this._atCursor();
-    return cursorStr.split('').map(function (chr) {
+    return cursorStr.split('').map(chr => {
       if (chr === '\n') {
         // show the "return key" symbol instead of just the (invisible) newline char
         return "\u21b5";

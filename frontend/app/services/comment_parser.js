@@ -6,7 +6,7 @@ export default {
 
   computeCommentRanges: function (categoryName, fullString) {
     var highlighted = hljs.highlight(categoryName, fullString).value;
-    var $highlighted = $('<div>' + highlighted + '</div>');
+    var $highlighted = $(`<div>${highlighted}</div>`);
     var TEXT_NODE = 3;
     var index = 0;
     var commentRanges = [];

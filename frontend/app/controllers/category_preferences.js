@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
     if (!this.get('session.user') && Storage.supported) {
       var categoryIds = Storage.get('typer_tortoise.category_ids');
       if (categoryIds) {
-        var categories = categoryIds.split(',').map(function (categoryId) {
+        var categories = categoryIds.split(',').map(categoryId => {
           return LegacyCategory.create({
             id: categoryId,
             enabled: true
@@ -65,9 +65,7 @@ export default Ember.Controller.extend({
   },
 
   enabledCategoryIds: function () {
-    return this.enabledCategories().map(function (cat) {
-      return parseInt(cat.get('id'), 10);
-    });
+    return this.enabledCategories().map(cat => parseInt(cat.get('id'), 10))
   },
 
   saveCategories: function () {
