@@ -1,5 +1,5 @@
 class SnippetsController < ApplicationController
-  before_filter :admin_user, only: [:destroy, :create, :update]
+  before_action :admin_user, only: [:destroy, :create, :update]
   respond_to :json
 
   def random

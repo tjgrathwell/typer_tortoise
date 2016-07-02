@@ -39,7 +39,7 @@ describe ScoresController do
       end
 
       it "should not create a score object for data that does not validate" do
-        @score_data.merge!(:wpm => -10)
+        @score_data.merge!('wpm' => -10)
         lambda do
           post :create, score_params, format: :json
         end.should_not change(Score, :count)

@@ -26,10 +26,7 @@ RSpec.configure do |config|
   # Add in the short method names from FactoryGirl ('build', 'create' ...)
   config.include FactoryGirl::Syntax::Methods
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   config.example_status_persistence_file_path = Rails.root.join('tmp', 'rspec_examples.txt')
 
@@ -38,12 +35,17 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
-  # Monkey-patch to force single DB connection even in multithreaded
-  #   tests (selenium/capybara-webkit/poltergeist)
-  ActiveRecord::ConnectionAdapters::ConnectionPool.class_eval do
-    def current_connection_id
-      Thread.main.object_id
-    end
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do |example|
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   def test_sign_in(user)

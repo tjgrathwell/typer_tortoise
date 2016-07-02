@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  before_filter :authenticate, only: [:set_preferences]
+  before_action :authenticate, only: [:set_preferences]
   respond_to :json
 
   def set_preferences

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', '~> 4.2.7'
+gem 'rails', '~> 5.0.0'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
@@ -14,7 +14,7 @@ gem 'bootstrap-sass'
 gem 'ember-cli-rails'
 gem 'active_model_serializers'
 gem 'responders'
-gem 'jsonapi-resources'
+gem 'jsonapi-resources', git: 'https://github.com/cerebris/jsonapi-resources.git'
 
 group :development, :test do
   gem 'sqlite3'
@@ -25,10 +25,6 @@ group :development, :test do
   gem 'selenium-webdriver', require: false
   gem 'database_cleaner'
   gem 'awesome_print'
-end
-
-group :development do
-  gem 'quiet_assets'
 end
 
 group :test do
