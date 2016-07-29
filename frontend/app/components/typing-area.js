@@ -54,8 +54,10 @@ export default Ember.Component.extend({
   },
 
   refocus: function () {
-    this.$().find('.type-panel').focus();
-    this.get('typingArea').set('refocus', false);
+    setTimeout(() => {
+      this.$().find('.type-panel').focus();
+      this.get('typingArea').set('refocus', false);
+    });
   },
 
   focusIn: function (e) { this.set('focused', true); },

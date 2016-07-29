@@ -4,5 +4,5 @@ export default Ember.Component.extend({
   classNameBindings: ['focusNagClass', 'isFocused:hidden'],
   focusNagClass: 'focus-nag',
 
-  isFocusedBinding: 'parentView.focused'
+  isFocused: Ember.computed.alias('parentView.focused')
 });
