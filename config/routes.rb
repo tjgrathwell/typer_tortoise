@@ -22,18 +22,5 @@ TyperTortoise::Application.routes.draw do
     end
   end
 
-  class MatchEverythingButRailsInfoConstraint
-    def matches?(request)
-      if Rails.env.development?
-        # Allow helper paths like /rails/info to skip the catchall in development
-        !request.path.start_with?('/rails/')
-      else
-        true
-      end
-    end
-  end
-
-  scope constraints: MatchEverythingButRailsInfoConstraint.new do
-    mount_ember_app :frontend, to: "/"
-  end
+  mount_ember_app :frontend, to: "/"
 end
