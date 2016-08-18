@@ -8,7 +8,7 @@ describe UsersController do
     end
 
     it 'disallows access to user info' do
-      get :show, id: 999, format: :json
+      get :show, params: { id: 999 }, format: :json
       response.should be_forbidden
     end
   end
@@ -28,7 +28,7 @@ describe UsersController do
 
     describe 'GET #show' do
       it 'returns user info' do
-        get :show, id: @user.id, format: :json
+        get :show, params: { id: @user.id }, format: :json
         JSON.parse(response.body)['name'].should == @user.name
       end
     end

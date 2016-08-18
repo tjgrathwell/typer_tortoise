@@ -34,14 +34,14 @@ describe ScoresController do
     describe "failure" do
       it "should not create a score object for empty data" do
         expect {
-          post :create, score: { }, format: :json
+          post :create, params: { score: { } }, format: :json
         }.to raise_error(ActionController::ParameterMissing)
       end
 
       it "should not create a score object for data that does not validate" do
         @score_data.merge!('wpm' => -10)
         lambda do
-          post :create, score_params, format: :json
+          post :create, params: score_params, headers: { format: :json }
         end.should_not change(Score, :count)
       end
     end
@@ -49,7 +49,7 @@ describe ScoresController do
     describe "success" do
       it "should create a score object" do
         lambda do
-          post :create, score_params, format: :json
+          post :create, params: score_params, headers: { format: :json }
         end.should change(Score, :count).by(1)
       end
     end
@@ -59,7 +59,7 @@ describe ScoresController do
 
     it "should return an empty response" do
       lambda do
-        post :create, score_params, format: :json
+        post :create, params: score_params, headers: { format: :json }
 
         response.status.should == 403
       end.should_not change(Score, :count)

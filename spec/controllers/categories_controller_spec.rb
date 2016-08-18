@@ -66,7 +66,7 @@ describe CategoriesController do
     it "completely replaces a user's existing preferences" do
       @user.category_preferences.map { |p| p.category_id }.should == [@cat_a[:id], @cat_b[:id]]
 
-      post :set_preferences, :categories => [@cat_c[:id]], :format => :json
+      post :set_preferences, params: { :categories => [@cat_c[:id]] }, :format => :json
 
       @user.category_preferences.map { |p| p.category_id }.should == [@cat_c[:id]]
     end
@@ -77,11 +77,11 @@ describe CategoriesController do
       end.should_not change(CategoryPreference, :count)
 
       lambda do
-        post :set_preferences, :categories => [], :format => :json
+        post :set_preferences, params: { :categories => [] }, :format => :json
       end.should_not change(CategoryPreference, :count)
 
       lambda do
-        post :set_preferences, :categories => ['huskily-interchanging'], :format => :json
+        post :set_preferences, params: { :categories => ['huskily-interchanging'] }, :format => :json
       end.should raise_error(ArgumentError)
     end
   end

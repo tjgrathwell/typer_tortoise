@@ -20,7 +20,7 @@ describe SnippetsController do
       )
 
       10.times do
-        get :random, :format => :json, :category_ids => [category.id]
+        get :random, params: { :category_ids => [category.id] }, :format => :json
         JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
       end      
     end
@@ -59,7 +59,7 @@ describe SnippetsController do
       )
 
       10.times do
-        get :random, :format => :json, :last_seen => @snippet.id
+        get :random, params: { :last_seen => @snippet.id }, :format => :json
         JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
       end      
     end
@@ -68,7 +68,7 @@ describe SnippetsController do
 
   describe "GET '/snippets/:id'" do
     it "should return a particular snippet" do
-      get :show, :format => :json, :id => @snippet.id
+      get :show, params: { :id => @snippet.id }, :format => :json
       JSON.parse(response.body)['data']['id'].to_i.should == @snippet.id
     end
   end
