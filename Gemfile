@@ -14,7 +14,7 @@ gem 'bootstrap-sass'
 gem 'ember-cli-rails'
 gem 'active_model_serializers'
 gem 'responders'
-gem 'jsonapi-resources', git: 'https://github.com/cerebris/jsonapi-resources.git'
+gem 'jsonapi-resources', '~> 0.8.0.beta2'
 
 group :development, :test do
   gem 'sqlite3'
