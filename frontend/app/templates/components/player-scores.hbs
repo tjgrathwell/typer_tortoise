@@ -1,6 +1,6 @@
 {{#if scores.model.length}}
   <div class="blue-round player-scores">
-    <h3>Your Scores</h3>
+    <h3>Recent Scores</h3>
     <table>
       <thead>
         <th>Snippet</th>
@@ -8,7 +8,7 @@
         <th>Accuracy</th>
       </thead>
       <tbody>
-        {{#each scores.model as |score|}}
+        {{#each scores.recent as |score|}}
           <tr>
             <td>{{#link-to 'snippet.index' score.snippetId}}{{score.snippetId}}{{/link-to}}</td>
             <td>{{score.wpm}}</td>

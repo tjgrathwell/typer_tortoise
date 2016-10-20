@@ -6,6 +6,13 @@ export default Ember.Controller.extend({
     this.loadScores();
   },
 
+  recent: function() {
+    if (!this.get('model')) {
+      return [];
+    }
+    return this.get('model').slice(Math.max(this.get('model.length') - 5));
+  }.property('model.@each'),
+
   loadScores: function (score) {
     this.store.findAll('score').then((scores) => {
       this.set('model', scores);
