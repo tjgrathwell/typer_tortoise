@@ -14,8 +14,8 @@ export default Ember.Controller.extend({
   }.property('model.@each'),
 
   loadScores: function (score) {
-    this.store.findAll('score').then((scores) => {
-      this.set('model', scores);
+    this.store.query('score', {limit: 5}).then((scores) => {
+      this.set('model', this.store.peekAll('score'));
     });
   }
 });

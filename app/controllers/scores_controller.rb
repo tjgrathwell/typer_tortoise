@@ -16,6 +16,9 @@ class ScoresController < ApplicationController
 
     if current_user
       scores = current_user.scores.includes(:snippet)
+      if params[:limit]
+        scores = scores.order('id DESC').limit(params[:limit])
+      end
     end
 
     score_resources = scores.map { |s| ScoreResource.new(s, nil) }
