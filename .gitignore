@@ -7,3 +7,4 @@ config/settings.yml
 node_modules
 .env
 .idea
+.byebug_history

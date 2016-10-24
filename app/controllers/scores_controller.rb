@@ -22,7 +22,7 @@ class ScoresController < ApplicationController
     end
 
     score_resources = scores.map { |s| ScoreResource.new(s, nil) }
-    render json: serializer.serialize_to_hash(score_resources), root: false
+    render json: serializer(include: ['snippet']).serialize_to_hash(score_resources), root: false
   end
 
   private
