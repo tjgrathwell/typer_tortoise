@@ -11,7 +11,11 @@
         {{#each scores.recent as |score|}}
           <tr>
             <td>{{#link-to 'snippet.index' score.snippet.id}}{{score.snippet.id}}{{/link-to}}</td>
-            <td>{{score.wpm}}</td>
+            {{#if score.wpm}}
+              <td>{{score.wpm}}</td>
+            {{else}}
+              <td>-</td>
+            {{/if}}
             <td>{{score.accuracy}}</td>
           </tr>
         {{/each}}

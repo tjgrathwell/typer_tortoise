@@ -38,7 +38,11 @@
           {{#each model.scores as |score|}}
             <tr>
               <td>{{#link-to 'user.index' score.userId}}{{score.userName}}{{/link-to}}</td>
-              <td>{{score.wpm}}</td>
+              {{#if score.wpm}}
+                <td>{{score.wpm}}</td>
+              {{else}}
+                <td>-</td>
+              {{/if}}
               <td>{{score.accuracy}}</td>
             </tr>
           {{/each}}

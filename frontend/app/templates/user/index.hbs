@@ -20,7 +20,11 @@
             {{#each score_category.scores as |score|}}
               <tr>
                 <td>{{#link-to 'snippet.index' score.snippet_id}}{{score.snippet_id}}{{/link-to}}</td>
-                <td>{{score.wpm}}</td>
+                {{#if score.wpm}}
+                  <td>{{score.wpm}}</td>
+                {{else}}
+                  <td>-</td>
+                {{/if}}
                 <td>{{score.accuracy}}%</td>
               </tr>
             {{/each}}
