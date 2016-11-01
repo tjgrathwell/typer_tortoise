@@ -16,7 +16,9 @@
     <div class="snippet-view-header">
       <span class="snippet-number">#{{model.id}}</span>
       -
-      <span class="snippet-category">{{model.categoryName}}</span>
+      <a href="" class="snippet-category flat-link" {{action 'showCategory' model.categoryId}}>
+        {{model.categoryName}}
+      </a>
     </div>
     <pre>{{model.fullText}}</pre>
   </div>

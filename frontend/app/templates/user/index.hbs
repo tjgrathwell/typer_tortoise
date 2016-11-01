@@ -5,7 +5,12 @@
   {{#if model.score_categories}}
     {{#each model.score_categories as |score_category|}}
       <div class="blue-round user-scores">
-        <h2>Category: {{score_category.name}}</h2>
+        <h2>
+          Category:
+          <a class='flat-link' href="" {{action 'showCategory' score_category.id}}>
+            {{score_category.name}}
+          </a>
+        </h2>
 
         <table class="thin-border scores">
           <thead>
