@@ -20,7 +20,7 @@ describe "signing in with omniauth", js: true do
       credentials: {
         token: "a1b2c3d4",
         secret: "abcdef1234"
-      },
+      }
     }
   end
 

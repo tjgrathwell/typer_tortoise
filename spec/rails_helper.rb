@@ -18,7 +18,7 @@ end
 Capybara.javascript_driver = choose_javascript_driver
 Capybara.save_path = Rails.root.join('tmp', 'capybara-screenshots')
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!

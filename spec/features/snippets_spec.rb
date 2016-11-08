@@ -7,7 +7,7 @@ describe "snippets index", js: true do
     @snippets = [
       create(:snippet, full_text: 'catAsnip1', category: @cat_a),
       create(:snippet, full_text: 'catAsnip2', category: @cat_a),
-      create(:snippet, full_text: 'catBsnip1', category: @cat_b),
+      create(:snippet, full_text: 'catBsnip1', category: @cat_b)
     ]
   end
 
@@ -53,7 +53,7 @@ describe "as a signed-in user" do
       @snippets = [
         create(:snippet, full_text: 'catAsnip1', category: @cat_a),
         create(:snippet, full_text: 'catAsnip2', category: @cat_a),
-        create(:snippet, full_text: 'catBsnip1', category: @cat_b),
+        create(:snippet, full_text: 'catBsnip1', category: @cat_b)
       ]
     end
 

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Snippet do
-
   before do
     @category1, @category2, @category3 = create_list(:category, 3)
     @snippet1 = create(:snippet, full_text: 'editorship-contradictory', category: @category1)
@@ -30,5 +29,4 @@ describe Snippet do
       end
     end
   end
-
 end

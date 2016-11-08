@@ -19,7 +19,7 @@ module SessionsHelper
     redirect_to :root
   end
 
-  def sign_in (user)
+  def sign_in(user)
     @current_user = user
   end
 

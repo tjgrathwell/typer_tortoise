@@ -23,24 +23,22 @@ class SessionsController < ApplicationController
         @identity.save
         redirect_to return_path, notice: "Successfully linked that account!"
       end
+    elsif @identity.user.present?
+      # The identity we found had a user associated with it so let's
+      # just log them in here
+      self.current_user = @identity.user
+      redirect_to return_path, notice: "Signed in!"
     else
-      if @identity.user.present?
-        # The identity we found had a user associated with it so let's
-        # just log them in here
-        self.current_user = @identity.user
-        redirect_to return_path, notice: "Signed in!"
-      else
-        # No user associated with the identity so we need to create a new one
+      # No user associated with the identity so we need to create a new one
 
-        new_user = User.create_with_omniauth(auth)
+      new_user = User.create_with_omniauth(auth)
 
-        @identity.user = new_user
-        @identity.save
+      @identity.user = new_user
+      @identity.save
 
-        self.current_user = new_user
+      self.current_user = new_user
 
-        redirect_to return_path, notice: "User created! Signed in!"
-      end
+      redirect_to return_path, notice: "User created! Signed in!"
     end
   end
 

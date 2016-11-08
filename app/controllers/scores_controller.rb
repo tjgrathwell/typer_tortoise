@@ -1,5 +1,5 @@
 class ScoresController < ApplicationController
-  before_action :authenticate, :only => [:create]
+  before_action :authenticate, only: [:create]
   respond_to :json
 
   def create

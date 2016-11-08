@@ -2,7 +2,7 @@ TyperTortoise::Application.routes.draw do
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout'                  => 'sessions#destroy'
 
-  json_constraint = -> (request) do
+  json_constraint = lambda do |request|
     request.accepts.map(&:to_s).any? { |type| type.match(/json/) }
   end
 

@@ -1,0 +1,63 @@
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/Void:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/BlockLength:
+  Max: 40
+
+Metrics/LineLength:
+  Max: 130
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Style/AccessorMethodName:
+  Enabled: false
+
+Style/AlignArray:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Exclude:
+    - 'db/schema.rb'
+
+Style/ExtraSpacing:
+  Exclude:
+    - 'config.ru'
+    - 'db/schema.rb'
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/SpaceInsideBrackets:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false

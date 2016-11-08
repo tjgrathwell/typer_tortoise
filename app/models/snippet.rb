@@ -5,10 +5,10 @@ class Snippet < ActiveRecord::Base
   validates_presence_of :category, :full_text
 
   default_scope { includes(:category).order("#{table_name}.id") }
-  scope :of_category, -> (category_id) { where(category_id: category_id) }
+  scope :of_category, ->(category_id) { where(category_id: category_id) }
 
-  def self.random(options={})
-    defaults = {category_ids: [], exclude: []}
+  def self.random(options = {})
+    defaults = { category_ids: [], exclude: [] }
     options = defaults.merge(options)
 
     ParamChecker.new(__method__).force_integers!(options[:exclude], options[:category_ids])
@@ -20,6 +20,6 @@ class Snippet < ActiveRecord::Base
 
     return nil if snippets.empty?
 
-    return snippets.sample
+    snippets.sample
   end
 end

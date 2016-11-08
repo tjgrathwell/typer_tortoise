@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe ScoresController do
-
   before(:each) do
     @snippet = create(:snippet)
     @score_data = {
@@ -26,20 +25,19 @@ describe ScoresController do
   end
 
   describe "POST 'scores'" do
-
     before(:each) do
       @user = test_sign_in(create(:user))
     end
 
     describe "failure" do
       it "should not create a score object for empty data" do
-        expect {
-          post :create, params: { score: { } }, format: :json
-        }.to raise_error(ActionController::ParameterMissing)
+        expect do
+          post :create, params: { score: {} }, format: :json
+        end.to raise_error(ActionController::ParameterMissing)
       end
 
       it "should not create a score object for data that does not validate" do
-        @score_data.merge!('wpm' => -10)
+        @score_data['wpm'] = -10
         lambda do
           post :create, params: score_params, headers: { format: :json }
         end.should_not change(Score, :count)
@@ -56,7 +54,6 @@ describe ScoresController do
   end
 
   describe "when not signed in" do
-
     it "should return an empty response" do
       lambda do
         post :create, params: score_params, headers: { format: :json }
