@@ -10,12 +10,12 @@ describe "users", js: true do
   describe "as an unauthenticated user" do
     it "redirects the user list to the home page" do
       visit '/users'
-      page.should have_content('HelloWorld')
+      expect(page).to have_content('HelloWorld')
     end
 
     it "redirects individual user pages to the home page" do
       visit "/users/#{@user1.id}"
-      page.should have_content('HelloWorld')
+      expect(page).to have_content('HelloWorld')
     end
   end
 
@@ -27,8 +27,8 @@ describe "users", js: true do
     describe "index" do
       it "shows a list of users" do
         visit '/users'
-        page.should have_content(@user1.name)
-        page.should have_content(@user2.name)
+        expect(page).to have_content(@user1.name)
+        expect(page).to have_content(@user2.name)
       end
     end
 
@@ -39,9 +39,9 @@ describe "users", js: true do
       it "shows user info and previous scores" do
         visit "/users/#{@user1.id}"
 
-        page.should have_content(@user1.name)
-        page.should have_content(snippet.category.name)
-        page.should have_content(71)
+        expect(page).to have_content(@user1.name)
+        expect(page).to have_content(snippet.category.name)
+        expect(page).to have_content(71)
       end
     end
   end

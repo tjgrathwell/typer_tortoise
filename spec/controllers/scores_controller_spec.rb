@@ -38,28 +38,28 @@ describe ScoresController do
 
       it "should not create a score object for data that does not validate" do
         @score_data['wpm'] = -10
-        lambda do
+        expect do
           post :create, params: score_params, headers: { format: :json }
-        end.should_not change(Score, :count)
+        end.not_to change(Score, :count)
       end
     end
 
     describe "success" do
       it "should create a score object" do
-        lambda do
+        expect do
           post :create, params: score_params, headers: { format: :json }
-        end.should change(Score, :count).by(1)
+        end.to change(Score, :count).by(1)
       end
     end
   end
 
   describe "when not signed in" do
     it "should return an empty response" do
-      lambda do
+      expect do
         post :create, params: score_params, headers: { format: :json }
 
-        response.status.should == 403
-      end.should_not change(Score, :count)
+        expect(response.status).to eq(403)
+      end.not_to change(Score, :count)
     end
   end
 end

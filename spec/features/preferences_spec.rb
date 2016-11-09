@@ -13,7 +13,7 @@ describe "changing preferences", js: true do
   end
 
   it "updates the database and shows a new snippet when appropriate" do
-    page.should have_content(/catAsnip/m)
+    expect(page).to have_content(/catAsnip/m)
 
     page.find('.prefs-link').click
     check 'Category B'
@@ -23,13 +23,13 @@ describe "changing preferences", js: true do
       user.category_preferences.pluck(:category_id).try(:sort) == [@cat_a.id, @cat_b.id].sort
     end
 
-    page.should have_content(/catAsnip/m)
+    expect(page).to have_content(/catAsnip/m)
 
     page.find('.prefs-link').click
     uncheck 'Category A'
     click_on 'Save Preferences'
 
-    page.should have_content(/catBsnip/m)
+    expect(page).to have_content(/catBsnip/m)
 
     expect(user.category_preferences.pluck(:category_id)).to match_array([@cat_b.id])
   end

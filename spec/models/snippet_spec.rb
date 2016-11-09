@@ -10,22 +10,22 @@ describe Snippet do
 
   describe 'random' do
     it "doesn't freak out when given no arguments" do
-      Category.pluck(:id).should include(Snippet.random.category_id)
+      expect(Category.pluck(:id)).to include(Snippet.random.category_id)
     end
 
     it 'gives you a snippet from the category you ask for' do
-      Snippet.random(category_ids: [@category2.id]).should == @snippet2
+      expect(Snippet.random(category_ids: [@category2.id])).to eq(@snippet2)
     end
 
     it 'asserts if given anything other than an integer' do
       [:category_ids, :exclude].each do |arg|
-        lambda do
+        expect do
           Snippet.random(arg => [nil])
-        end.should raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
 
-        lambda do
+        expect do
           Snippet.random(arg => ['qualified-pleasant'])
-        end.should raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
       end
     end
   end

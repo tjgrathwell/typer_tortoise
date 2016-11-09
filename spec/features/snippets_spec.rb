@@ -14,10 +14,10 @@ describe "snippets index", js: true do
   it "shows all the snippets in the database" do
     visit '/snippets'
     select @cat_a.name
-    page.should have_content(/catAsnip1.*catAsnip2/m)
+    expect(page).to have_content(/catAsnip1.*catAsnip2/m)
 
     select @cat_b.name
-    page.should have_content(/catBsnip/m)
+    expect(page).to have_content(/catBsnip/m)
   end
 end
 
@@ -36,12 +36,12 @@ describe "as a signed-in user" do
 
     it "shows snippet information with scores" do
       visit "/snippets/#{@snippet.id}"
-      page.should have_content(/sandySnippet/m)
+      expect(page).to have_content(/sandySnippet/m)
 
       within '.user-scores' do
-        page.should have_content 'Svangaard'
-        page.should have_content '65'
-        page.should have_content '78.1'
+        expect(page).to have_content 'Svangaard'
+        expect(page).to have_content '65'
+        expect(page).to have_content '78.1'
       end
     end
   end
@@ -59,13 +59,13 @@ describe "as a signed-in user" do
 
     it 'contains a link to show just snippets of that category' do
       visit "/snippets/#{@snippets.first.id}/play"
-      page.should have_content(/catAsnip1/m)
+      expect(page).to have_content(/catAsnip1/m)
 
       page.find('.type-area-category').click
 
-      page.should have_content(/catAsnip2/m)
-      page.should have_content(/catAsnip1/m)
-      page.should have_no_content(/catBsnip1/m)
+      expect(page).to have_content(/catAsnip2/m)
+      expect(page).to have_content(/catAsnip1/m)
+      expect(page).to have_no_content(/catBsnip1/m)
     end
   end
 end
@@ -76,7 +76,7 @@ context 'as an admin', js: true do
   before do
     admin_user = create(:user, is_admin: true)
     sign_in_with_twitter_as(admin_user)
-    page.should have_content(snippet.full_text)
+    expect(page).to have_content(snippet.full_text)
   end
 
   describe "destroying a snippet" do
@@ -84,11 +84,11 @@ context 'as an admin', js: true do
       visit "/snippets"
 
       select snippet.category.name
-      page.should have_content(snippet.full_text)
+      expect(page).to have_content(snippet.full_text)
 
       expect {
         click_on "Destroy"
-        page.should_not have_content(snippet.full_text)
+        expect(page).not_to have_content(snippet.full_text)
       }.to change(Snippet, :count).by(-1)
     end
   end
@@ -104,11 +104,11 @@ context 'as an admin', js: true do
       expect {
         click_on 'Create Snippet'
         within 'pre' do
-          page.should have_content 'interesting code'
+          expect(page).to have_content 'interesting code'
         end
       }.to change(Snippet, :count).by(1)
 
-      Snippet.last.full_text.should == 'interesting code'
+      expect(Snippet.last.full_text).to eq('interesting code')
     end
   end
 
@@ -119,10 +119,10 @@ context 'as an admin', js: true do
       fill_in 'snippet[full_text]', with: 'interesting code'
       click_on 'Update Snippet'
       within 'pre' do
-        page.should have_content 'interesting code'
+        expect(page).to have_content 'interesting code'
       end
 
-      snippet.reload.full_text.should == 'interesting code'
+      expect(snippet.reload.full_text).to eq('interesting code')
     end
   end
 end

@@ -18,14 +18,14 @@ describe CategoriesController do
 
     it 'lists all categories as "enabled"' do
       get :index, format: :json
-      JSON.parse(response.body)['data'].map { |c| c['attributes']['enabled'] }.uniq.should == [true]
+      expect(JSON.parse(response.body)['data'].map { |c| c['attributes']['enabled'] }.uniq).to eq([true])
     end
   end
 
   describe 'index' do
     it 'lists all categories as "enabled" for users with no category prefs' do
       get :index, format: :json
-      JSON.parse(response.body)['data'].map { |c| c['attributes']['enabled'] }.uniq.should == [true]
+      expect(JSON.parse(response.body)['data'].map { |c| c['attributes']['enabled'] }.uniq).to eq([true])
     end
 
     it 'lists only the preferred categories as "enabled" for users with category prefs' do
@@ -45,11 +45,11 @@ describe CategoriesController do
       category_selections = Hash[JSON.parse(response.body)['data'].map do |c|
         [c['id'].to_i, c['attributes']['enabled']]
       end]
-      category_selections.should == {
+      expect(category_selections).to eq({
         @cat_a.id => true,
         @cat_b.id => true,
         @cat_c.id => false
-      }
+      })
     end
   end
 
@@ -62,25 +62,25 @@ describe CategoriesController do
     end
 
     it "completely replaces a user's existing preferences" do
-      @user.category_preferences.map(&:category_id).should == [@cat_a[:id], @cat_b[:id]]
+      expect(@user.category_preferences.map(&:category_id)).to eq([@cat_a[:id], @cat_b[:id]])
 
       post :set_preferences, params: { categories: [@cat_c[:id]] }, format: :json
 
-      @user.category_preferences.map(&:category_id).should == [@cat_c[:id]]
+      expect(@user.category_preferences.map(&:category_id)).to eq([@cat_c[:id]])
     end
 
     it "doesn't do anything for invalid inputs" do
-      lambda do
+      expect do
         post :set_preferences, format: :json
-      end.should_not change(CategoryPreference, :count)
+      end.not_to change(CategoryPreference, :count)
 
-      lambda do
+      expect do
         post :set_preferences, params: { categories: [] }, format: :json
-      end.should_not change(CategoryPreference, :count)
+      end.not_to change(CategoryPreference, :count)
 
-      lambda do
+      expect do
         post :set_preferences, params: { categories: ['huskily-interchanging'] }, format: :json
-      end.should raise_error(ArgumentError)
+      end.to raise_error(ArgumentError)
     end
   end
 end

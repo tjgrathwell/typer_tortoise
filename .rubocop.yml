@@ -1,10 +1,6 @@
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Lint/Void:
-  Exclude:
-    - 'spec/**/*_spec.rb'
-
 Metrics/AbcSize:
   Max: 30
 

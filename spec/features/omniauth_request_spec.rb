@@ -36,13 +36,13 @@ describe "signing in with omniauth", js: true do
     it 'creates an identity and signs you in' do
       visit "/snippets/#{snippet.id}"
 
-      page.should have_content snippet.full_text
+      expect(page).to have_content snippet.full_text
 
       click_on 'Sign in with Twitter'
 
-      page.should have_content "Logged in as John Q Public."
-      page.should have_content snippet.full_text
-      page.current_path.should == "/snippets/#{snippet.id}"
+      expect(page).to have_content "Logged in as John Q Public."
+      expect(page).to have_content snippet.full_text
+      expect(page.current_path).to eq("/snippets/#{snippet.id}")
     end
   end
 end

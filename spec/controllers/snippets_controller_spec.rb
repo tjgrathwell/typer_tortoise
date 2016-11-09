@@ -8,7 +8,7 @@ describe SnippetsController do
   describe "GET '/snippets/random'" do
     it "should return a random snippet as json" do
       get :random, format: :json
-      JSON.parse(response.body)['data']['attributes']['full-text'].should == @snippet.full_text
+      expect(JSON.parse(response.body)['data']['attributes']['full-text']).to eq(@snippet.full_text)
     end
 
     it "accepts a whitelist of categories" do
@@ -19,7 +19,7 @@ describe SnippetsController do
 
       10.times do
         get :random, params: { category_ids: [category.id] }, format: :json
-        JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
+        expect(JSON.parse(response.body)['data']['id'].to_i).to eq(snippet_too.id)
       end
     end
 
@@ -28,7 +28,7 @@ describe SnippetsController do
       test_sign_in(user)
 
       get :random, format: :json
-      JSON.parse(response.body)['data']['id'].to_i.should == @snippet.id
+      expect(JSON.parse(response.body)['data']['id'].to_i).to eq(@snippet.id)
     end
 
     it "should only return snippets in the user's preferences" do
@@ -44,7 +44,7 @@ describe SnippetsController do
       # let's play fight the randomness
       10.times do
         get :random, format: :json
-        JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
+        expect(JSON.parse(response.body)['data']['id'].to_i).to eq(snippet_too.id)
       end
     end
 
@@ -56,7 +56,7 @@ describe SnippetsController do
 
       10.times do
         get :random, params: { last_seen: @snippet.id }, format: :json
-        JSON.parse(response.body)['data']['id'].to_i.should == snippet_too.id
+        expect(JSON.parse(response.body)['data']['id'].to_i).to eq(snippet_too.id)
       end
     end
   end
@@ -64,7 +64,7 @@ describe SnippetsController do
   describe "GET '/snippets/:id'" do
     it "should return a particular snippet" do
       get :show, params: { id: @snippet.id }, format: :json
-      JSON.parse(response.body)['data']['id'].to_i.should == @snippet.id
+      expect(JSON.parse(response.body)['data']['id'].to_i).to eq(@snippet.id)
     end
   end
 end

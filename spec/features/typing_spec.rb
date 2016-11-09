@@ -4,7 +4,7 @@ describe "typing a snippet", js: true do
   def type_on_snippet(snippet)
     visit "/snippets/#{snippet.id}/play"
 
-    page.should have_content(snippet.full_text)
+    expect(page).to have_content(snippet.full_text)
 
     page.find('.type-panel').native.send_key(snippet.full_text)
   end
@@ -17,7 +17,7 @@ describe "typing a snippet", js: true do
   it "proceeds to another random snippet" do
     type_on_snippet(@snippet)
 
-    page.should have_content('another snippet')
+    expect(page).to have_content('another snippet')
   end
 
   context 'when signed in' do
@@ -29,7 +29,7 @@ describe "typing a snippet", js: true do
       type_on_snippet(@snippet)
 
       within('.player-scores tbody td', match: :first) do
-        page.should have_content(@snippet.id)
+        expect(page).to have_content(@snippet.id)
       end
 
       expect(User.last.scores.length).to eq(1)
