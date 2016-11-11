@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_many :scores
   has_many :category_preferences
 
-  def set_category_preferences(categories)
+  def prefer_categories!(categories)
     ParamChecker.new(__method__).force_integers!(categories)
 
     category_preferences.destroy_all

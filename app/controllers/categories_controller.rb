@@ -7,7 +7,7 @@ class CategoriesController < ApplicationController
       return head :bad_request
     end
 
-    current_user.set_category_preferences(params[:categories])
+    current_user.prefer_categories!(params[:categories])
 
     render json: {}, status: :ok
   end

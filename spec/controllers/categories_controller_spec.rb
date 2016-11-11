@@ -45,11 +45,11 @@ describe CategoriesController do
       category_selections = Hash[JSON.parse(response.body)['data'].map do |c|
         [c['id'].to_i, c['attributes']['enabled']]
       end]
-      expect(category_selections).to eq({
+      expect(category_selections).to eq(
         @cat_a.id => true,
         @cat_b.id => true,
         @cat_c.id => false
-      })
+      )
     end
   end
 

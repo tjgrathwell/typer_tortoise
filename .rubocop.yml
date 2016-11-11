@@ -16,9 +16,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-Style/AccessorMethodName:
-  Enabled: false
-
 Style/AlignArray:
   Enabled: false
 
@@ -47,6 +44,9 @@ Style/GuardClause:
   Enabled: false
 
 Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/NumericLiterals:

@@ -9,7 +9,7 @@ before_install:
   - 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
   - "rvm @global do gem uninstall bundler -x && gem install bundler"
 before_script:
-  - 'nvm install 5'
+  - 'nvm install 6'
   - 'npm install'
   - 'bundle exec rake db:create:all'
   - 'bundle exec rake db:migrate'
