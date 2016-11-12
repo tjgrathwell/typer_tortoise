@@ -22,13 +22,7 @@ Style/AlignArray:
 Style/BlockDelimiters:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
   Enabled: false
 
 Style/EmptyLinesAroundBlockBody:

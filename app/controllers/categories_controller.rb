@@ -13,25 +13,31 @@ class CategoriesController < ApplicationController
   end
 
   def index
-    if signed_in?
-      enabled_categories = current_user.category_preferences.map { |pref| pref.category.name }.to_set
-    else
-      enabled_categories = []
-    end
-
     category_resources = Category.all.map { |c| CategoryResource.new(c, nil) }
     category_resources.each do |category_resource|
-      if enabled_categories.empty?
-        category_resource.enabled = true
-      else
-        category_resource.enabled = enabled_categories.include?(category_resource.name)
-      end
+      category_resource.enabled = category_resource_enabled?(category_resource)
     end
 
     render json: serializer.serialize_to_hash(category_resources)
   end
 
   private
+
+  def enabled_categories
+    if signed_in?
+      current_user.category_preferences.map { |pref| pref.category.name }.to_set
+    else
+      []
+    end
+  end
+
+  def category_resource_enabled?(category_resource)
+    if enabled_categories.empty?
+      true
+    else
+      enabled_categories.include?(category_resource.name)
+    end
+  end
 
   def serializer(options = {})
     JSONAPI::ResourceSerializer.new(CategoryResource, options)
