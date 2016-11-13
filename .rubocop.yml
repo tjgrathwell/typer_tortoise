@@ -31,7 +31,6 @@ Style/EmptyLinesAroundBlockBody:
 
 Style/ExtraSpacing:
   Exclude:
-    - 'config.ru'
     - 'db/schema.rb'
 
 Style/GuardClause:
@@ -44,7 +43,8 @@ Style/MultilineBlockChain:
   Enabled: false
 
 Style/NumericLiterals:
-  Enabled: false
+  Exclude:
+    - 'db/schema.rb'
 
 Style/SpaceInsideBrackets:
   Enabled: false
