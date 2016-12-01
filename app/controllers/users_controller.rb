@@ -10,11 +10,8 @@ class UsersController < ApplicationController
 
     scores_by_category = Hash.new { |h, k| h[k] = [] }
     user.scores.includes(snippet: :category).each do |score|
-      Rails.logger.error score.snippet.id
       scores_by_category[score.snippet.category].push(score)
     end
-
-    Rails.logger.error scores_by_category.inspect
 
     score_categories = scores_by_category.map do |category, scores|
       {
