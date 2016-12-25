@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.1'
+ruby '2.4.0'
 
 gem 'rails', '~> 5.0.1'
 
@@ -12,7 +12,9 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-cli-rails'
-gem 'active_model_serializers'
+# Bump this when active_model_serializers starts depending
+# on a modern version of jsonapi
+gem 'active_model_serializers', '0.10.0'
 gem 'responders'
 gem 'jsonapi-resources'
 
