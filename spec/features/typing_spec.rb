@@ -21,8 +21,10 @@ describe "typing a snippet", js: true do
   end
 
   context 'when signed in' do
+    let(:user) { create(:user) }
+
     before do
-      sign_in_with_twitter_as create(:user)
+      sign_in_with_twitter_as user
     end
 
     it "saves the user's WPM and error rate" do
@@ -32,7 +34,10 @@ describe "typing a snippet", js: true do
         expect(page).to have_content(@snippet.id)
       end
 
-      expect(User.last.scores.length).to eq(1)
+      # TODO: anything but this
+      sleep 2 if ENV['CI']
+
+      expect(user.reload.scores.length).to eq(1)
     end
   end
 end
