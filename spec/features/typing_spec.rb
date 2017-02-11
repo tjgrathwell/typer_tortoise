@@ -34,8 +34,9 @@ describe "typing a snippet", js: true do
         expect(page).to have_content(@snippet.id)
       end
 
-      # TODO: anything but this
-      sleep 2 if ENV['CI']
+      wait_for_condition do
+        user.reload.scores.length > 0
+      end
 
       expect(user.reload.scores.length).to eq(1)
     end
