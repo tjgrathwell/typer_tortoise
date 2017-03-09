@@ -12,9 +12,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'bootstrap-sass'
 gem 'ember-cli-rails'
-# Bump this when active_model_serializers starts depending
-# on a modern version of jsonapi
-gem 'active_model_serializers', '0.10.0'
+gem 'active_model_serializers'
 gem 'responders'
 gem 'jsonapi-resources'
 
