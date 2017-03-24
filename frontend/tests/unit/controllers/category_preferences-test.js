@@ -11,7 +11,8 @@ const categories_json = [
 const storage_key_name = 'typer_tortoise.category_ids';
 
 moduleFor('controller:categoryPreferences', 'Controller | category preferences', {
-  unit: true
+  unit: true,
+  needs: ['controller:session']
 });
 
 test('can return a list of just the enabled categories', function (assert) {
